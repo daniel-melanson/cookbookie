@@ -108,7 +108,8 @@ model Unit {
   name         String     @unique
   system       UnitSystem
 
-  IngredientQuantity IngredientQuantity[] @ignore
+  usUnit      IngredientQuantity[] @relation("QUANTITY_TO_US_UNITS") @ignore
+  mentricUnit IngredientQuantity[] @relation("QUANTITY_TO_METRIC_UNITS") @ignore
 }
 
 model Ingredient {
@@ -173,9 +174,13 @@ model IngredientQuantity {
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
   ingredientId String
 
-  quantity         Float
-  unit             Unit   @relation(fields: [unitAbbreviation], references: [abbreviation])
-  unitAbbreviation String
+  usQuantity         Float
+  usUnit             Unit   @relation("QUANTITY_TO_US_UNITS", fields: [usUnitAbbreviation], references: [abbreviation])
+  usUnitAbbreviation String
+
+  mentricQuantity         Float
+  mentricUnit             Unit   @relation("QUANTITY_TO_METRIC_UNITS", fields: [mentricUnitAbbreviation], references: [abbreviation])
+  mentricUnitAbbreviation String
 
   Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
   recipeId String? @ignore
