@@ -76,25 +76,11 @@ model User {
 
   // Application
   unitSystem         UnitSystem
-  allergens          UserAllergens?
-  diataryPreferences UserDietaryPreferences?
+  allergens          Tag[]         @relation("USER_TO_ALLERGEN_TAGS")
+  diataryPreferences Tag[]         @relation("USER_TO_DIATARY_PREFERENCE_TAGS")
   pantry             Pantry?
   shoppingList       ShoppingList?
   savedRecipes       Recipe[]
-}
-
-model UserAllergens {
-  userId String @id
-  user   User   @relation(fields: [userId], references: [id])
-
-  tags Tag[]
-}
-
-model UserDietaryPreferences {
-  userId String @id
-  user   User   @relation(fields: [userId], references: [id])
-
-  tags Tag[]
 }
 
 // Main objects
@@ -206,10 +192,10 @@ model Tag {
   kind     TagKind @relation(fields: [kindName], references: [name])
   kindName String
 
-  userAllergens          UserAllergens[]          @ignore
-  UserDietaryPreferences UserDietaryPreferences[] @ignore
-  ingredients            Ingredient[]             @ignore
-  recipes                Recipe[]                 @ignore
+  userAllergens          User[]       @relation("USER_TO_ALLERGEN_TAGS") @ignore
+  userDietaryPreferences User[]       @relation("USER_TO_DIATARY_PREFERENCE_TAGS") @ignore
+  ingredients            Ingredient[] @ignore
+  recipes                Recipe[]     @ignore
 
   @@unique([name, kindName])
 }
