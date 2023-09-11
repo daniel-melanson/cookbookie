@@ -79,12 +79,12 @@ model User {
   unitSystem         UnitSystem
 
   // Tags
-  allergens          Tag[]                @relation("USER_TO_ALLERGEN_TAGS")
-  diataryPreferences Tag[]                @relation("USER_TO_DIATARY_PREFERENCE_TAGS")
+  allergens          Tag[]                @relation("UserAllergens")
+  diataryPreferences Tag[]                @relation("UserDietaryPreferences")
 
   // Ingredient lists
-  pantry             IngredientQuantity[] @relation("USER_PANTRY")
-  shoppingList       IngredientQuantity[] @relation("USER_SHOPPING_LIST")
+  pantry             IngredientQuantity[] @relation("UserPantry")
+  shoppingList       IngredientQuantity[] @relation("UserShoppingList")
 }
 
 // Main objects
@@ -98,8 +98,8 @@ model Unit {
   name         String     @unique
   system       UnitSystem
 
-  usUnit      IngredientQuantity[] @relation("QUANTITY_TO_US_UNITS") @ignore
-  mentricUnit IngredientQuantity[] @relation("QUANTITY_TO_METRIC_UNITS") @ignore
+  usUnit      IngredientQuantity[] @relation("QuantityUSUnits") @ignore
+  mentricUnit IngredientQuantity[] @relation("QuantityMentricUnits") @ignore
 }
 
 model Ingredient {
@@ -141,20 +141,20 @@ model IngredientQuantity {
   ingredientId String
 
   usQuantity         Float
-  usUnit             Unit   @relation("QUANTITY_TO_US_UNITS", fields: [usUnitAbbreviation], references: [abbreviation])
+  usUnit             Unit   @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
   usUnitAbbreviation String
 
   mentricQuantity         Float
-  mentricUnit             Unit   @relation("QUANTITY_TO_METRIC_UNITS", fields: [mentricUnitAbbreviation], references: [abbreviation])
+  mentricUnit             Unit   @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
   mentricUnitAbbreviation String
 
   Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
   recipeId String? @ignore
 
-  pantryUser       User? @relation("USER_PANTRY", fields: [pantryUserId], references: [id]) @ignore
+  pantryUser       User? @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
   pantryUserId String? @ignore
 
-  shoppingListUser User? @relation("USER_SHOPPING_LIST", fields: [shoppingListUserId], references: [id]) @ignore
+  shoppingListUser User? @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
   shoppingListUserId String? @ignore
 }
 
@@ -172,8 +172,8 @@ model Tag {
   kind     TagKind @relation(fields: [kindName], references: [name])
   kindName String
 
-  userAllergens          User[]       @relation("USER_TO_ALLERGEN_TAGS") @ignore
-  userDietaryPreferences User[]       @relation("USER_TO_DIATARY_PREFERENCE_TAGS") @ignore
+  userAllergens          User[]       @relation("UserAllergens") @ignore
+  userDietaryPreferences User[]       @relation("UserDietaryPreferences") @ignore
   ingredients            Ingredient[] @ignore
   recipes                Recipe[]     @ignore
 
