@@ -75,12 +75,16 @@ model User {
   sessions      Session[]
 
   // Application
-  unitSystem         UnitSystem
-  allergens          Tag[]         @relation("USER_TO_ALLERGEN_TAGS")
-  diataryPreferences Tag[]         @relation("USER_TO_DIATARY_PREFERENCE_TAGS")
-  pantry             Pantry?
-  shoppingList       ShoppingList?
   savedRecipes       Recipe[]
+  unitSystem         UnitSystem
+
+  // Tags
+  allergens          Tag[]                @relation("USER_TO_ALLERGEN_TAGS")
+  diataryPreferences Tag[]                @relation("USER_TO_DIATARY_PREFERENCE_TAGS")
+
+  // Ingredient lists
+  pantry             IngredientQuantity[] @relation("USER_PANTRY")
+  shoppingList       IngredientQuantity[] @relation("USER_SHOPPING_LIST")
 }
 
 // Main objects
@@ -130,30 +134,6 @@ model Recipe {
   users User[] @ignore
 }
 
-// Lists
-model Pantry {
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @id
-
-  // Time and date
-  updatedAt DateTime @updatedAt
-
-  // Basic
-  ingredients IngredientQuantity[]
-}
-
-model ShoppingList {
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @id
-
-  // Time and date
-  updatedAt DateTime @updatedAt
-
-  // Basic
-  ingredients IngredientQuantity[]
-}
-
-// List Items
 model IngredientQuantity {
   id String @id @default(cuid())
 
@@ -171,11 +151,11 @@ model IngredientQuantity {
   Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
   recipeId String? @ignore
 
-  Pantry       Pantry? @relation(fields: [pantryUserId], references: [userId]) @ignore
+  pantryUser       User? @relation("USER_PANTRY", fields: [pantryUserId], references: [id]) @ignore
   pantryUserId String? @ignore
 
-  ShoppingList       ShoppingList? @relation(fields: [shoppingListUserId], references: [userId]) @ignore
-  shoppingListUserId String?       @ignore
+  shoppingListUser User? @relation("USER_SHOPPING_LIST", fields: [shoppingListUserId], references: [id]) @ignore
+  shoppingListUserId String? @ignore
 }
 
 // Tags
