@@ -174,8 +174,8 @@ model IngredientQuantity {
   ingredientId String
 
   quantity         Float
-  unit             Unit?   @relation(fields: [unitAbbreviation], references: [abbreviation])
-  unitAbbreviation String?
+  unit             Unit   @relation(fields: [unitAbbreviation], references: [abbreviation])
+  unitAbbreviation String
 
   Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
   recipeId String? @ignore
