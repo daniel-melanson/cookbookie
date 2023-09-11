@@ -77,7 +77,7 @@ model User {
   // Application
   unitSystem         UnitSystem
   allergens          UserAllergens?
-  diataryProferences UserDietaryPreferences?
+  diataryPreferences UserDietaryPreferences?
   pantry             Pantry?
   shoppingList       ShoppingList?
   savedRecipes       Recipe[]
