@@ -161,7 +161,6 @@ model IngredientQuantity {
 // Tags
 model TagKind {
   name String @id
-
   tags Tag[]
 }
 
