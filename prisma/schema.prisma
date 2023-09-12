@@ -16,7 +16,7 @@ datasource db {
 
 // Necessary for Next auth
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(cuid()) @db.VarChar(32)
   userId            String
   type              String
   provider          String
@@ -34,7 +34,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(cuid()) @db.VarChar(32)
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -56,35 +56,29 @@ enum UserRole {
 }
 
 model User {
-  id String @id @default(cuid())
-
+  id                 String               @id @default(cuid()) @db.VarChar(32)
   // Time and date
-  createdAt DateTime @default(now())
-
+  createdAt          DateTime             @default(now())
   // Basic
-  firstName   String
-  lastName    String
-  email       String   @unique
-  dateOfBirth DateTime
-  image       String
-  role        UserRole @default(USER)
-
+  firstName          String               @db.VarChar(64)
+  lastName           String               @db.VarChar(64)
+  email              String               @unique @db.VarChar(512)
+  dateOfBirth        DateTime
+  image              String               @db.VarChar(1024)
+  role               UserRole             @default(USER)
   // Authentication
-  emailVerified DateTime?
-  accounts      Account[]
-  sessions      Session[]
-
+  emailVerified      DateTime?
+  accounts           Account[]
+  sessions           Session[]
   // Application
-  savedRecipes Recipe[]
-  unitSystem   UnitSystem
-
+  savedRecipes       Recipe[]
+  unitSystem         UnitSystem
   // Tags
-  allergens          Tag[] @relation("UserAllergens")
-  diataryPreferences Tag[] @relation("UserDietaryPreferences")
-
+  allergens          Tag[]                @relation("UserAllergens")
+  diataryPreferences Tag[]                @relation("UserDietaryPreferences")
   // Ingredient lists
-  pantry       IngredientQuantity[] @relation("UserPantry")
-  shoppingList IngredientQuantity[] @relation("UserShoppingList")
+  pantry             IngredientQuantity[] @relation("UserPantry")
+  shoppingList       IngredientQuantity[] @relation("UserShoppingList")
 }
 
 // Main objects
@@ -94,93 +88,98 @@ enum UnitSystem {
 }
 
 model Unit {
-  abbreviation String     @id
-  name         String     @unique
+  abbreviation String               @id @db.VarChar(8)
+  name         String               @unique @db.VarChar(32)
   system       UnitSystem
-
-  usUnit      IngredientQuantity[] @relation("QuantityUSUnits") @ignore
-  mentricUnit IngredientQuantity[] @relation("QuantityMentricUnits") @ignore
+  // Relations
+  usUnit       IngredientQuantity[] @relation("QuantityUSUnits") @ignore
+  mentricUnit  IngredientQuantity[] @relation("QuantityMentricUnits") @ignore
 }
 
 model Ingredient {
-  id String @id @default(cuid())
-
+  id                 String               @id @default(cuid()) @db.VarChar(32)
   // Time and date
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   // Basic
-  name String @unique
-  tags Tag[]
-
+  name               String               @unique @db.VarChar(128)
+  tags               Tag[]
+  // Relations
   IngredientQuantity IngredientQuantity[] @ignore
 }
 
-model Recipe {
-  id String @id @default(cuid())
+enum RecipeDifficulty {
+  EASY
+  INTERMEDIATE
+  HARD
+}
 
-  // Time and date
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+model RecipeDuration {
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String @id
   // Basic
-  name        String
-  description String
-  source      String @unique
+  hours    Int    @db.SmallInt
+  minutes  Int    @db.SmallInt
+}
+
+model Recipe {
+  id          String               @id @default(cuid()) @db.VarChar(32)
+  // Time and date
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  // Basic
+  name        String               @db.VarChar(64)
+  description String               @db.VarChar(512)
+  source      String               @unique @db.VarChar(1024)
+  // Scraped information
+  difficulty  RecipeDifficulty
+  duration    RecipeDuration?
   tags        Tag[]
   ingredients IngredientQuantity[]
-
-  users User[] @ignore
+  // Ignored
+  users       User[]               @ignore
 }
 
 model IngredientQuantity {
-  id String @id @default(cuid())
-
+  id                      String     @id @default(cuid()) @db.VarChar(32)
   // Basic
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
-  ingredientId String
-
+  ingredient              Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId            String
   // Quantities
-  usQuantity         Float
-  usUnit             Unit   @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
-  usUnitAbbreviation String
-
-  mentricQuantity         Float
-  mentricUnit             Unit   @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
+  usQuantity              Decimal    @db.Decimal(10, 2)
+  usUnit                  Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
+  usUnitAbbreviation      String
+  mentricQuantity         Decimal    @db.Decimal(10, 2)
+  mentricUnit             Unit       @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
   mentricUnitAbbreviation String
-
   // Relations
-  Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
-  recipeId String? @ignore
-
-  pantryUser   User?   @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
-  pantryUserId String? @ignore
-
-  shoppingListUser   User?   @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
-  shoppingListUserId String? @ignore
+  recipe                  Recipe?    @relation(fields: [recipeId], references: [id]) @ignore
+  recipeId                String?    @ignore
+  pantryUser              User?      @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
+  pantryUserId            String?    @ignore
+  shoppingListUser        User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
+  shoppingListUserId      String?    @ignore
 
   @@unique([ingredientId, recipeId, pantryUserId, shoppingListUserId])
 }
 
 // Tags
 model TagKind {
-  name String @id
+  name String @id @db.VarChar(64)
   tags Tag[]
 }
 
 model Tag {
-  id String @id
-
+  id                     String       @id @default(cuid()) @db.VarChar(32)
   // Basic
-  name     String
-  kind     TagKind @relation(fields: [kindName], references: [name])
-  kindName String
-
+  name                   String       @db.VarChar(64)
+  kind                   TagKind      @relation(fields: [kindName], references: [name])
+  kindName               String
   // Relations
   userAllergens          User[]       @relation("UserAllergens") @ignore
   userDietaryPreferences User[]       @relation("UserDietaryPreferences") @ignore
   ingredients            Ingredient[] @ignore
   recipes                Recipe[]     @ignore
 
-  @@unique([name, kindName])
+  @@unique([kindName, name])
 }
