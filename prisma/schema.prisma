@@ -158,6 +158,8 @@ model IngredientQuantity {
 
   shoppingListUser   User?   @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
   shoppingListUserId String? @ignore
+
+  @@unique([ingredientId, recipeId, pantryUserId, shoppingListUserId])
 }
 
 // Tags
