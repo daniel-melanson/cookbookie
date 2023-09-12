@@ -128,7 +128,6 @@ model Recipe {
   description String
   source      String @unique
   tags        Tag[]
-
   ingredients IngredientQuantity[]
 
   users User[] @ignore
@@ -137,9 +136,11 @@ model Recipe {
 model IngredientQuantity {
   id String @id @default(cuid())
 
+  // Basic
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
   ingredientId String
 
+  // Quantities
   usQuantity         Float
   usUnit             Unit   @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
   usUnitAbbreviation String
@@ -148,6 +149,7 @@ model IngredientQuantity {
   mentricUnit             Unit   @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
   mentricUnitAbbreviation String
 
+  // Relations
   Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
   recipeId String? @ignore
 
@@ -167,10 +169,12 @@ model TagKind {
 model Tag {
   id String @id
 
+  // Basic
   name     String
   kind     TagKind @relation(fields: [kindName], references: [name])
   kindName String
 
+  // Relations
   userAllergens          User[]       @relation("UserAllergens") @ignore
   userDietaryPreferences User[]       @relation("UserDietaryPreferences") @ignore
   ingredients            Ingredient[] @ignore
