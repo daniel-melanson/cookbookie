@@ -75,16 +75,16 @@ model User {
   sessions      Session[]
 
   // Application
-  savedRecipes       Recipe[]
-  unitSystem         UnitSystem
+  savedRecipes Recipe[]
+  unitSystem   UnitSystem
 
   // Tags
-  allergens          Tag[]                @relation("UserAllergens")
-  diataryPreferences Tag[]                @relation("UserDietaryPreferences")
+  allergens          Tag[] @relation("UserAllergens")
+  diataryPreferences Tag[] @relation("UserDietaryPreferences")
 
   // Ingredient lists
-  pantry             IngredientQuantity[] @relation("UserPantry")
-  shoppingList       IngredientQuantity[] @relation("UserShoppingList")
+  pantry       IngredientQuantity[] @relation("UserPantry")
+  shoppingList IngredientQuantity[] @relation("UserShoppingList")
 }
 
 // Main objects
@@ -151,10 +151,10 @@ model IngredientQuantity {
   Recipe   Recipe? @relation(fields: [recipeId], references: [id]) @ignore
   recipeId String? @ignore
 
-  pantryUser       User? @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
+  pantryUser   User?   @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
   pantryUserId String? @ignore
 
-  shoppingListUser User? @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
+  shoppingListUser   User?   @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
   shoppingListUserId String? @ignore
 }
 
