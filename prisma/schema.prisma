@@ -2,65 +2,184 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
-}
-
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  provider = "postgresql"
+  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url      = env("DATABASE_URL")
 }
 
 // Necessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid()) @db.VarChar(32)
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+  id           String   @id @default(cuid()) @db.VarChar(32)
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
+}
+
+// User
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id                 String               @id @default(cuid()) @db.VarChar(32)
+  // Time and date
+  createdAt          DateTime             @default(now())
+  // Basic
+  firstName          String               @db.VarChar(64)
+  lastName           String               @db.VarChar(64)
+  email              String               @unique @db.VarChar(512)
+  dateOfBirth        DateTime
+  image              String               @db.VarChar(1024)
+  role               UserRole             @default(USER)
+  // Authentication
+  emailVerified      DateTime?
+  accounts           Account[]
+  sessions           Session[]
+  // Application
+  savedRecipes       Recipe[]
+  unitSystem         UnitSystem
+  // Tags
+  allergens          Tag[]                @relation("UserAllergens")
+  diataryPreferences Tag[]                @relation("UserDietaryPreferences")
+  // Ingredient lists
+  pantry             IngredientQuantity[] @relation("UserPantry")
+  shoppingList       IngredientQuantity[] @relation("UserShoppingList")
+}
+
+// Main objects
+enum UnitSystem {
+  US
+  METRIC
+}
+
+model Unit {
+  abbreviation String               @id @db.VarChar(8)
+  name         String               @unique @db.VarChar(32)
+  system       UnitSystem
+  // Relations
+  usUnit       IngredientQuantity[] @relation("QuantityUSUnits") @ignore
+  mentricUnit  IngredientQuantity[] @relation("QuantityMentricUnits") @ignore
+}
+
+model Ingredient {
+  id                 String               @id @default(cuid()) @db.VarChar(32)
+  // Time and date
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  // Basic
+  name               String               @unique @db.VarChar(128)
+  tags               Tag[]
+  // Relations
+  IngredientQuantity IngredientQuantity[] @ignore
+}
+
+enum RecipeDifficulty {
+  EASY
+  INTERMEDIATE
+  HARD
+}
+
+model RecipeDuration {
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String @id
+  // Basic
+  hours    Int    @db.SmallInt
+  minutes  Int    @db.SmallInt
+}
+
+model Recipe {
+  id          String               @id @default(cuid()) @db.VarChar(32)
+  // Time and date
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  // Basic
+  name        String               @db.VarChar(128)
+  description String               @db.VarChar(512)
+  source      String               @unique @db.VarChar(1024)
+  // Scraped information
+  difficulty  RecipeDifficulty
+  duration    RecipeDuration?
+  tags        Tag[]
+  ingredients IngredientQuantity[]
+  // Ignored
+  users       User[]               @ignore
+}
+
+model IngredientQuantity {
+  id                      String     @id @default(cuid()) @db.VarChar(32)
+  // Basic
+  ingredient              Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId            String
+  // Quantities
+  usQuantity              Decimal    @db.Decimal(10, 2)
+  usUnit                  Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
+  usUnitAbbreviation      String
+  mentricQuantity         Decimal    @db.Decimal(10, 2)
+  mentricUnit             Unit       @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
+  mentricUnitAbbreviation String
+  // Relations
+  recipe                  Recipe?    @relation(fields: [recipeId], references: [id]) @ignore
+  recipeId                String?    @ignore
+  pantryUser              User?      @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
+  pantryUserId            String?    @ignore
+  shoppingListUser        User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
+  shoppingListUserId      String?    @ignore
+
+  @@unique([ingredientId, recipeId, pantryUserId, shoppingListUserId])
+}
+
+// Tags
+model TagKind {
+  name String @id @db.VarChar(64)
+  tags Tag[]
+}
+
+model Tag {
+  id                     String       @id @default(cuid()) @db.VarChar(32)
+  // Basic
+  name                   String       @db.VarChar(64)
+  kind                   TagKind      @relation(fields: [kindName], references: [name])
+  kindName               String
+  // Relations
+  userAllergens          User[]       @relation("UserAllergens") @ignore
+  userDietaryPreferences User[]       @relation("UserDietaryPreferences") @ignore
+  ingredients            Ingredient[] @ignore
+  recipes                Recipe[]     @ignore
+
+  @@unique([kindName, name])
 }
