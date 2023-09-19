@@ -116,7 +116,7 @@ enum RecipeDifficulty {
 }
 
 model RecipeDuration {
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId String @id
   // Basic
   hours    Int    @db.SmallInt
@@ -145,21 +145,21 @@ model Recipe {
 model IngredientQuantity {
   id                     String     @id @default(cuid()) @db.VarChar(32)
   // Basic
-  ingredient             Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredient             Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
   ingredientId           String
   // Quantities
   usQuantity             Decimal    @db.Decimal(10, 2)
-  usUnit                 Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
+  usUnit                 Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation], onDelete: Cascade)
   usUnitAbbreviation     String
   metricQuantity         Decimal    @db.Decimal(10, 2)
-  metricUnit             Unit       @relation("QuantityMetricUnits", fields: [metricUnitAbbreviation], references: [abbreviation])
+  metricUnit             Unit       @relation("QuantityMetricUnits", fields: [metricUnitAbbreviation], references: [abbreviation], onDelete: Cascade)
   metricUnitAbbreviation String
   // Relations
-  recipe                 Recipe?    @relation(fields: [recipeId], references: [id])
+  recipe                 Recipe?    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId               String?
-  pantryUser             User?      @relation("UserPantry", fields: [pantryUserId], references: [id])
+  pantryUser             User?      @relation("UserPantry", fields: [pantryUserId], references: [id], onDelete: Cascade)
   pantryUserId           String?
-  shoppingListUser       User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id])
+  shoppingListUser       User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id], onDelete: Cascade)
   shoppingListUserId     String?
 
   @@unique([ingredientId, recipeId, pantryUserId, shoppingListUserId])
@@ -175,7 +175,7 @@ model Tag {
   id                     String       @id @default(cuid()) @db.VarChar(32)
   // Basic
   name                   String       @db.VarChar(64)
-  kind                   TagKind      @relation(fields: [kindName], references: [name])
+  kind                   TagKind      @relation(fields: [kindName], references: [name], onDelete: Cascade)
   kindName               String
   // Relations
   userAllergens          User[]       @relation("UserAllergens")
