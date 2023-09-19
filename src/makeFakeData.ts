@@ -5,13 +5,20 @@ import { faker } from "@faker-js/faker";
 import type { UnitSystem } from "@prisma/client";
 import { prisma } from "./server/db";
 
-function uniqueWords(count: number): string[] {
+function uniqueWords(
+  count: number,
+  wordOptions = { min: 1, max: 3 },
+): string[] {
   const set = new Set<string>();
   for (let i = 0; i < count; i++) {
-    set.add(faker.lorem.words({ min: 1, max: 3 }));
+    set.add(faker.lorem.words(wordOptions));
   }
 
   return [...set];
+}
+
+function randomInt(min = 1, max = 100): number {
+  return faker.number.int({ min, max });
 }
 
 async function makeUnits() {
@@ -43,29 +50,120 @@ async function makeUnits() {
       },
     });
   }
+
+  return units.map(([abbreviation, _, system]) => ({ system, abbreviation }));
 }
 
 async function makeTags() {
-  const tagCount = await prisma.tag.count();
-  if (tagCount !== 0) return;
-
-  const tagKinds = uniqueWords(faker.number.int({ min: 5, max: 15 }));
+  const tagKinds = uniqueWords(randomInt(5, 15));
   await prisma.tagKind.createMany({
     data: tagKinds.map((name) => ({ name })),
   });
 
-  const tags = uniqueWords(faker.number.int({ min: 30, max: 70 }));
+  const tagData = uniqueWords(randomInt(25, 50));
   await prisma.tag.createMany({
-    data: tags.map((name) => ({
+    data: tagData.map((name) => ({
       kindName: faker.helpers.arrayElement(tagKinds),
       name,
+    })),
+  });
+
+  const created = await prisma.tag.findMany({ select: { id: true } });
+  return created.map((tag) => ({
+    id: tag.id,
+  }));
+}
+
+type GetRandom = (type?: string) => string;
+type GetRandomIds = () => { id: string }[];
+
+async function makeIngredients(getRandomTags: GetRandomIds) {
+  const ingredients = uniqueWords(randomInt(100, 200));
+  await prisma.ingredient.createMany({
+    data: ingredients.map((name) => ({
+      name,
+      tags: getRandomTags(),
+      icon: faker.image.urlLoremFlickr({
+        width: 64,
+        height: 64,
+        category: "food",
+      }),
+    })),
+  });
+
+  const created = await prisma.ingredient.findMany({ select: { id: true } });
+  return created.map((ingredient) => ingredient.id);
+}
+async function makeQuantities(
+  getRandomUnit: GetRandom,
+  getRandomIngredient: GetRandom,
+) {
+  const numQuantities = randomInt(100, 500);
+  const quantityData = [];
+  for (let i = 0; i < numQuantities; i++) {
+    quantityData.push({
+      ingredientId: getRandomIngredient(),
+      usQuantity: randomInt(),
+      usUnitAbbreviation: getRandomUnit("US"),
+      metricQuantity: faker.number.float({ min: 1, max: 10, precision: 0.01 }),
+      metricUnitAbbreviation: getRandomUnit("METRIC"),
+    });
+  }
+
+  await prisma.ingredientQuantity.createMany({
+    data: quantityData,
+  });
+
+  return await prisma.ingredientQuantity.findMany({
+    select: { id: true },
+  });
+}
+
+async function makeRecipes(
+  getRandomTags: GetRandomIds,
+  getRandomQuantities: GetRandomIds,
+) {
+  const recipes = uniqueWords(randomInt(100, 300));
+  await prisma.recipe.createMany({
+    data: recipes.map((name) => ({
+      name,
+      description: faker.lorem.paragraphs(randomInt(1, 3)),
+      source: faker.internet.url() + faker.lorem.slug(),
+      difficulty: faker.helpers.arrayElement(["EASY", "INTERMEDIATE", "HARD"]),
+      duration: {
+        hours: randomInt(0, 2),
+        minutes: randomInt(0, 59),
+      },
+      tags: getRandomTags(),
+      icon: faker.image.urlLoremFlickr({
+        width: 256,
+        height: 256,
+        category: "food",
+      }),
+      ingredient: getRandomQuantities(),
     })),
   });
 }
 
 async function main() {
-  await makeUnits();
-  await makeTags();
+  const units = await makeUnits();
+  const getRandomUnit: GetRandom = (kind) =>
+    faker.helpers.shuffle(
+      kind ? units.filter(({ system }) => system === kind) : units,
+    )[0]!.abbreviation;
+
+  const tags = await makeTags();
+  const getRandomTags: GetRandomIds = () =>
+    faker.helpers.shuffle(tags).slice(0, randomInt(5, 10));
+
+  const ingredients = await makeIngredients(getRandomTags);
+  const getRandomIngredient = () => faker.helpers.shuffle(ingredients)[0]!;
+
+  const quantities = await makeQuantities(getRandomUnit, getRandomIngredient);
+  const getRandomQuantity = () =>
+    faker.helpers.shuffle(quantities).slice(0, randomInt(5, 20));
+
+  await makeRecipes(getRandomTags, getRandomQuantity);
 }
 
 void main();

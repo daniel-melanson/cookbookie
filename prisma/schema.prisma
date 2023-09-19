@@ -93,7 +93,7 @@ model Unit {
   system       UnitSystem
   // Relations
   usUnit       IngredientQuantity[] @relation("QuantityUSUnits") @ignore
-  mentricUnit  IngredientQuantity[] @relation("QuantityMentricUnits") @ignore
+  metricUnit  IngredientQuantity[] @relation("QuantityMetricUnits") @ignore
 }
 
 model Ingredient {
@@ -103,6 +103,7 @@ model Ingredient {
   updatedAt          DateTime             @updatedAt
   // Basic
   name               String               @unique @db.VarChar(128)
+  icon               String
   tags               Tag[]
   // Relations
   IngredientQuantity IngredientQuantity[] @ignore
@@ -131,6 +132,7 @@ model Recipe {
   name        String               @db.VarChar(128)
   description String               @db.VarChar(512)
   source      String               @unique @db.VarChar(1024)
+  icon        String
   // Scraped information
   difficulty  RecipeDifficulty
   duration    RecipeDuration?
@@ -149,9 +151,9 @@ model IngredientQuantity {
   usQuantity              Decimal    @db.Decimal(10, 2)
   usUnit                  Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
   usUnitAbbreviation      String
-  mentricQuantity         Decimal    @db.Decimal(10, 2)
-  mentricUnit             Unit       @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
-  mentricUnitAbbreviation String
+  metricQuantity         Decimal    @db.Decimal(10, 2)
+  metricUnit             Unit       @relation("QuantityMetricUnits", fields: [metricUnitAbbreviation], references: [abbreviation])
+  metricUnitAbbreviation String
   // Relations
   recipe                  Recipe?    @relation(fields: [recipeId], references: [id]) @ignore
   recipeId                String?    @ignore
