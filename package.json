@@ -27,6 +27,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@types/eslint": "^8.44.2",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.20",
@@ -37,7 +38,6 @@
     "dotenv": "^16.3.1",
     "eslint": "^8.47.0",
     "eslint-config-next": "^13.4.13",
-    "faker": "^6.6.6",
     "postcss": "^8.4.27",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.1",
