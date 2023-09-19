@@ -91,9 +91,9 @@ model Unit {
   abbreviation String               @id @db.VarChar(8)
   name         String               @unique @db.VarChar(32)
   system       UnitSystem
-  // Relations
-  usUnit       IngredientQuantity[] @relation("QuantityUSUnits") @ignore
-  metricUnit  IngredientQuantity[] @relation("QuantityMetricUnits") @ignore
+  // dRelations
+  usUnit       IngredientQuantity[] @relation("QuantityUSUnits")
+  metricUnit   IngredientQuantity[] @relation("QuantityMetricUnits")
 }
 
 model Ingredient {
@@ -106,7 +106,7 @@ model Ingredient {
   icon               String
   tags               Tag[]
   // Relations
-  IngredientQuantity IngredientQuantity[] @ignore
+  ingredientQuantity IngredientQuantity[]
 }
 
 enum RecipeDifficulty {
@@ -138,29 +138,29 @@ model Recipe {
   duration    RecipeDuration?
   tags        Tag[]
   ingredients IngredientQuantity[]
-  // Ignored
-  users       User[]               @ignore
+  // Relations
+  users       User[]               
 }
 
 model IngredientQuantity {
-  id                      String     @id @default(cuid()) @db.VarChar(32)
+  id                     String     @id @default(cuid()) @db.VarChar(32)
   // Basic
-  ingredient              Ingredient @relation(fields: [ingredientId], references: [id])
-  ingredientId            String
+  ingredient             Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId           String
   // Quantities
-  usQuantity              Decimal    @db.Decimal(10, 2)
-  usUnit                  Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
-  usUnitAbbreviation      String
+  usQuantity             Decimal    @db.Decimal(10, 2)
+  usUnit                 Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
+  usUnitAbbreviation     String
   metricQuantity         Decimal    @db.Decimal(10, 2)
   metricUnit             Unit       @relation("QuantityMetricUnits", fields: [metricUnitAbbreviation], references: [abbreviation])
   metricUnitAbbreviation String
   // Relations
-  recipe                  Recipe?    @relation(fields: [recipeId], references: [id]) @ignore
-  recipeId                String?    @ignore
-  pantryUser              User?      @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
-  pantryUserId            String?    @ignore
-  shoppingListUser        User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
-  shoppingListUserId      String?    @ignore
+  recipe                 Recipe?    @relation(fields: [recipeId], references: [id])
+  recipeId               String?
+  pantryUser             User?      @relation("UserPantry", fields: [pantryUserId], references: [id])
+  pantryUserId           String?
+  shoppingListUser       User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id])
+  shoppingListUserId     String?
 
   @@unique([ingredientId, recipeId, pantryUserId, shoppingListUserId])
 }
@@ -178,10 +178,10 @@ model Tag {
   kind                   TagKind      @relation(fields: [kindName], references: [name])
   kindName               String
   // Relations
-  userAllergens          User[]       @relation("UserAllergens") @ignore
-  userDietaryPreferences User[]       @relation("UserDietaryPreferences") @ignore
-  ingredients            Ingredient[] @ignore
-  recipes                Recipe[]     @ignore
+  userAllergens          User[]       @relation("UserAllergens")
+  userDietaryPreferences User[]       @relation("UserDietaryPreferences")
+  ingredients            Ingredient[]
+  recipes                Recipe[]
 
   @@unique([kindName, name])
 }

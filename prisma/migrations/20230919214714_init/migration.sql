@@ -73,6 +73,7 @@ CREATE TABLE "Ingredient" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" VARCHAR(128) NOT NULL,
+    "icon" TEXT NOT NULL,
 
     CONSTRAINT "Ingredient_pkey" PRIMARY KEY ("id")
 );
@@ -94,6 +95,7 @@ CREATE TABLE "Recipe" (
     "name" VARCHAR(128) NOT NULL,
     "description" VARCHAR(512) NOT NULL,
     "source" VARCHAR(1024) NOT NULL,
+    "icon" TEXT NOT NULL,
     "difficulty" "RecipeDifficulty" NOT NULL,
 
     CONSTRAINT "Recipe_pkey" PRIMARY KEY ("id")
@@ -105,8 +107,8 @@ CREATE TABLE "IngredientQuantity" (
     "ingredientId" TEXT NOT NULL,
     "usQuantity" DECIMAL(10,2) NOT NULL,
     "usUnitAbbreviation" TEXT NOT NULL,
-    "mentricQuantity" DECIMAL(10,2) NOT NULL,
-    "mentricUnitAbbreviation" TEXT NOT NULL,
+    "metricQuantity" DECIMAL(10,2) NOT NULL,
+    "metricUnitAbbreviation" TEXT NOT NULL,
     "recipeId" TEXT,
     "pantryUserId" TEXT,
     "shoppingListUserId" TEXT,
@@ -236,7 +238,7 @@ ALTER TABLE "IngredientQuantity" ADD CONSTRAINT "IngredientQuantity_ingredientId
 ALTER TABLE "IngredientQuantity" ADD CONSTRAINT "IngredientQuantity_usUnitAbbreviation_fkey" FOREIGN KEY ("usUnitAbbreviation") REFERENCES "Unit"("abbreviation") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "IngredientQuantity" ADD CONSTRAINT "IngredientQuantity_mentricUnitAbbreviation_fkey" FOREIGN KEY ("mentricUnitAbbreviation") REFERENCES "Unit"("abbreviation") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "IngredientQuantity" ADD CONSTRAINT "IngredientQuantity_metricUnitAbbreviation_fkey" FOREIGN KEY ("metricUnitAbbreviation") REFERENCES "Unit"("abbreviation") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "IngredientQuantity" ADD CONSTRAINT "IngredientQuantity_recipeId_fkey" FOREIGN KEY ("recipeId") REFERENCES "Recipe"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -22,6 +22,8 @@ function randomInt(min = 1, max = 100): number {
 }
 
 async function makeUnits() {
+  await prisma.unit.deleteMany();
+
   const units = [
     ["tsp", "teaspoon", "US"],
     ["tbsp", "tablespoon", "US"],
@@ -55,6 +57,9 @@ async function makeUnits() {
 }
 
 async function makeTags() {
+  await prisma.tag.deleteMany();
+  await prisma.tagKind.deleteMany();
+
   const tagKinds = uniqueWords(randomInt(5, 15));
   await prisma.tagKind.createMany({
     data: tagKinds.map((name) => ({ name })),
@@ -78,18 +83,22 @@ type GetRandom = (type?: string) => string;
 type GetRandomIds = () => { id: string }[];
 
 async function makeIngredients(getRandomTags: GetRandomIds) {
+  await prisma.ingredient.deleteMany();
+
   const ingredients = uniqueWords(randomInt(100, 200));
-  await prisma.ingredient.createMany({
-    data: ingredients.map((name) => ({
-      name,
-      tags: getRandomTags(),
-      icon: faker.image.urlLoremFlickr({
-        width: 64,
-        height: 64,
-        category: "food",
-      }),
-    })),
-  });
+  for (const name of ingredients) {
+    await prisma.ingredient.create({
+      data: {
+        name,
+        tags: { connect: getRandomTags() },
+        icon: faker.image.urlLoremFlickr({
+          width: 64,
+          height: 64,
+          category: "food",
+        }),
+      },
+    });
+  }
 
   const created = await prisma.ingredient.findMany({ select: { id: true } });
   return created.map((ingredient) => ingredient.id);
@@ -98,6 +107,8 @@ async function makeQuantities(
   getRandomUnit: GetRandom,
   getRandomIngredient: GetRandom,
 ) {
+  await prisma.ingredientQuantity.deleteMany();
+
   const numQuantities = randomInt(100, 500);
   const quantityData = [];
   for (let i = 0; i < numQuantities; i++) {
@@ -123,6 +134,8 @@ async function makeRecipes(
   getRandomTags: GetRandomIds,
   getRandomQuantities: GetRandomIds,
 ) {
+  await prisma.recipe.deleteMany();
+
   const recipes = uniqueWords(randomInt(100, 300));
   await prisma.recipe.createMany({
     data: recipes.map((name) => ({
@@ -131,16 +144,18 @@ async function makeRecipes(
       source: faker.internet.url() + faker.lorem.slug(),
       difficulty: faker.helpers.arrayElement(["EASY", "INTERMEDIATE", "HARD"]),
       duration: {
-        hours: randomInt(0, 2),
-        minutes: randomInt(0, 59),
+        create: {
+          hours: randomInt(0, 2),
+          minutes: randomInt(0, 59),
+        },
       },
-      tags: getRandomTags(),
+      tags: { connent: getRandomTags() },
       icon: faker.image.urlLoremFlickr({
         width: 256,
         height: 256,
         category: "food",
       }),
-      ingredient: getRandomQuantities(),
+      ingredients: { connect: getRandomQuantities() },
     })),
   });
 }
