@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { UnitSystem } from "@prisma/client";
+import type { UnitSystem } from "@prisma/client";
 import { prisma } from "./server/db";
 
 async function makeUnits() {
