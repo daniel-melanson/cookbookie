@@ -136,28 +136,34 @@ async function makeRecipes(
 ) {
   await prisma.recipe.deleteMany();
 
-  const recipes = uniqueWords(randomInt(100, 300));
-  await prisma.recipe.createMany({
-    data: recipes.map((name) => ({
-      name,
-      description: faker.lorem.paragraphs(randomInt(1, 3)),
-      source: faker.internet.url() + faker.lorem.slug(),
-      difficulty: faker.helpers.arrayElement(["EASY", "INTERMEDIATE", "HARD"]),
-      duration: {
-        create: {
-          hours: randomInt(0, 2),
-          minutes: randomInt(0, 59),
+  const recipes = uniqueWords(randomInt(100, 300), { min: 1, max: 5 });
+  for (const name of recipes) {
+    await prisma.recipe.create({
+      data: {
+        name,
+        description: faker.lorem.paragraphs(randomInt(1, 3)),
+        source: faker.internet.url() + faker.lorem.slug(),
+        difficulty: faker.helpers.arrayElement([
+          "EASY",
+          "INTERMEDIATE",
+          "HARD",
+        ]),
+        duration: {
+          create: {
+            hours: randomInt(0, 2),
+            minutes: randomInt(0, 59),
+          },
         },
+        tags: { connect: getRandomTags() },
+        icon: faker.image.urlLoremFlickr({
+          width: 256,
+          height: 256,
+          category: "food",
+        }),
+        ingredients: { connect: getRandomQuantities() },
       },
-      tags: { connent: getRandomTags() },
-      icon: faker.image.urlLoremFlickr({
-        width: 256,
-        height: 256,
-        category: "food",
-      }),
-      ingredients: { connect: getRandomQuantities() },
-    })),
-  });
+    });
+  }
 }
 
 async function main() {

@@ -116,30 +116,31 @@ enum RecipeDifficulty {
 }
 
 model RecipeDuration {
+  id       String @id @default(cuid()) @db.VarChar(32)
   recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  recipeId String @id
+  recipeId String @unique
   // Basic
   hours    Int    @db.SmallInt
   minutes  Int    @db.SmallInt
 }
 
 model Recipe {
-  id          String               @id @default(cuid()) @db.VarChar(32)
+  id               String               @id @default(cuid()) @db.VarChar(32)
   // Time and date
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
   // Basic
-  name        String               @db.VarChar(128)
-  description String               @db.VarChar(512)
-  source      String               @unique @db.VarChar(1024)
-  icon        String
+  name             String               @db.VarChar(128)
+  description      String               @db.VarChar(2048)
+  source           String               @unique @db.VarChar(1024)
+  icon             String
   // Scraped information
-  difficulty  RecipeDifficulty
-  duration    RecipeDuration?
-  tags        Tag[]
-  ingredients IngredientQuantity[]
+  difficulty       RecipeDifficulty
+  duration         RecipeDuration?
+  tags             Tag[]
+  ingredients      IngredientQuantity[]
   // Relations
-  users       User[]               
+  users            User[]
 }
 
 model IngredientQuantity {
