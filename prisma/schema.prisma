@@ -92,8 +92,8 @@ model Unit {
   name         String               @unique @db.VarChar(32)
   system       UnitSystem
   // Relations
-  usUnit       IngredientQuantity[] @relation("QuantityUSUnits") @ignore
-  mentricUnit  IngredientQuantity[] @relation("QuantityMentricUnits") @ignore
+  usUnit       IngredientQuantity[] @relation("QuantityUSUnits")
+  metricUnit   IngredientQuantity[] @relation("QuantityMetricUnits")
 }
 
 model Ingredient {
@@ -103,9 +103,10 @@ model Ingredient {
   updatedAt          DateTime             @updatedAt
   // Basic
   name               String               @unique @db.VarChar(128)
+  icon               String
   tags               Tag[]
   // Relations
-  IngredientQuantity IngredientQuantity[] @ignore
+  ingredientQuantity IngredientQuantity[]
 }
 
 enum RecipeDifficulty {
@@ -115,8 +116,9 @@ enum RecipeDifficulty {
 }
 
 model RecipeDuration {
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
-  recipeId String @id
+  id       String @id @default(cuid()) @db.VarChar(32)
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId String @unique
   // Basic
   hours    Int    @db.SmallInt
   minutes  Int    @db.SmallInt
@@ -129,36 +131,37 @@ model Recipe {
   updatedAt   DateTime             @updatedAt
   // Basic
   name        String               @db.VarChar(128)
-  description String               @db.VarChar(512)
+  description String               @db.VarChar(2048)
   source      String               @unique @db.VarChar(1024)
+  icon        String
   // Scraped information
-  difficulty  RecipeDifficulty
+  difficulty  RecipeDifficulty?
   duration    RecipeDuration?
   tags        Tag[]
   ingredients IngredientQuantity[]
-  // Ignored
-  users       User[]               @ignore
+  // Relations
+  users       User[]
 }
 
 model IngredientQuantity {
-  id                      String     @id @default(cuid()) @db.VarChar(32)
+  id                     String     @id @default(cuid()) @db.VarChar(32)
   // Basic
-  ingredient              Ingredient @relation(fields: [ingredientId], references: [id])
-  ingredientId            String
+  ingredient             Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  ingredientId           String
   // Quantities
-  usQuantity              Decimal    @db.Decimal(10, 2)
-  usUnit                  Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation])
-  usUnitAbbreviation      String
-  mentricQuantity         Decimal    @db.Decimal(10, 2)
-  mentricUnit             Unit       @relation("QuantityMentricUnits", fields: [mentricUnitAbbreviation], references: [abbreviation])
-  mentricUnitAbbreviation String
+  usQuantity             Decimal    @db.Decimal(10, 2)
+  usUnit                 Unit       @relation("QuantityUSUnits", fields: [usUnitAbbreviation], references: [abbreviation], onDelete: Cascade)
+  usUnitAbbreviation     String
+  metricQuantity         Decimal    @db.Decimal(10, 2)
+  metricUnit             Unit       @relation("QuantityMetricUnits", fields: [metricUnitAbbreviation], references: [abbreviation], onDelete: Cascade)
+  metricUnitAbbreviation String
   // Relations
-  recipe                  Recipe?    @relation(fields: [recipeId], references: [id]) @ignore
-  recipeId                String?    @ignore
-  pantryUser              User?      @relation("UserPantry", fields: [pantryUserId], references: [id]) @ignore
-  pantryUserId            String?    @ignore
-  shoppingListUser        User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id]) @ignore
-  shoppingListUserId      String?    @ignore
+  recipe                 Recipe?    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId               String?
+  pantryUser             User?      @relation("UserPantry", fields: [pantryUserId], references: [id], onDelete: Cascade)
+  pantryUserId           String?
+  shoppingListUser       User?      @relation("UserShoppingList", fields: [shoppingListUserId], references: [id], onDelete: Cascade)
+  shoppingListUserId     String?
 
   @@unique([ingredientId, recipeId, pantryUserId, shoppingListUserId])
 }
@@ -173,13 +176,13 @@ model Tag {
   id                     String       @id @default(cuid()) @db.VarChar(32)
   // Basic
   name                   String       @db.VarChar(64)
-  kind                   TagKind      @relation(fields: [kindName], references: [name])
+  kind                   TagKind      @relation(fields: [kindName], references: [name], onDelete: Cascade)
   kindName               String
   // Relations
-  userAllergens          User[]       @relation("UserAllergens") @ignore
-  userDietaryPreferences User[]       @relation("UserDietaryPreferences") @ignore
-  ingredients            Ingredient[] @ignore
-  recipes                Recipe[]     @ignore
+  userAllergens          User[]       @relation("UserAllergens")
+  userDietaryPreferences User[]       @relation("UserDietaryPreferences")
+  ingredients            Ingredient[]
+  recipes                Recipe[]
 
   @@unique([kindName, name])
 }
