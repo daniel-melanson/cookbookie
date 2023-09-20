@@ -91,7 +91,7 @@ model Unit {
   abbreviation String               @id @db.VarChar(8)
   name         String               @unique @db.VarChar(32)
   system       UnitSystem
-  // dRelations
+  // Relations
   usUnit       IngredientQuantity[] @relation("QuantityUSUnits")
   metricUnit   IngredientQuantity[] @relation("QuantityMetricUnits")
 }
@@ -125,22 +125,22 @@ model RecipeDuration {
 }
 
 model Recipe {
-  id               String               @id @default(cuid()) @db.VarChar(32)
+  id          String               @id @default(cuid()) @db.VarChar(32)
   // Time and date
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
   // Basic
-  name             String               @db.VarChar(128)
-  description      String               @db.VarChar(2048)
-  source           String               @unique @db.VarChar(1024)
-  icon             String
+  name        String               @db.VarChar(128)
+  description String               @db.VarChar(2048)
+  source      String               @unique @db.VarChar(1024)
+  icon        String
   // Scraped information
-  difficulty       RecipeDifficulty
-  duration         RecipeDuration?
-  tags             Tag[]
-  ingredients      IngredientQuantity[]
+  difficulty  RecipeDifficulty?
+  duration    RecipeDuration?
+  tags        Tag[]
+  ingredients IngredientQuantity[]
   // Relations
-  users            User[]
+  users       User[]
 }
 
 model IngredientQuantity {
