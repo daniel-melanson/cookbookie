@@ -17,3 +17,17 @@ body {
 h1 {
   font-family: "Vujahday Script", cursive;
 }
+
+/* For ./components/HoverIcon.tsx  */
+.hover-icon svg {
+  transition: opacity 0.3s ease;
+}
+
+.hover-icon .fill,
+.hover-icon:hover .line {
+  opacity: 0;
+}
+
+.hover-icon:hover .fill {
+  opacity: 1;
+}
