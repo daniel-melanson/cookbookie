@@ -63,7 +63,7 @@ export default function NavigationBar(props: NavigationBarProps) {
             <div className="h-8 w-8 rounded-full bg-blue" />
           </>
         ) : (
-          <Link className="text-lg" href="/signin">
+          <Link className="text-lg rounded hover:bg-neutral-200 p-2" href="/signin">
             Sign In
           </Link>
         )}
