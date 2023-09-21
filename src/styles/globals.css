@@ -10,7 +10,8 @@
 
 body {
   @apply bg-white text-black;
-  background-color: #f8f4f4;
+  /* neutral-100 */
+  background-color: #f5f5f5;
 }
 
 h1 {
