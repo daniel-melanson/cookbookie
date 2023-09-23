@@ -14,6 +14,9 @@ export default {
       'gray': '#b2a9a9',
       'light-gray': '#e7dada',
       },
+      fontFamily: {
+        cursive: ['Lucida Handwriting', 'cursive'],
+      }
     },
   },
   plugins: [],
