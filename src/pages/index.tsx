@@ -4,8 +4,6 @@ import Link from "next/link";
 import Login from "~/pages/login";
 import { Theme } from '@radix-ui/themes';
 
-
-
 import { api } from "~/utils/api";
 import NavigationBar from "~/components/NavigationBar";
 import Footer from "~/components/Footer";
