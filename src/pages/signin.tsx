@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import {Button} from "@radix-ui/themes"
+import {Button} from "@radix-ui/themes";
 
 export default function Login() {
 
