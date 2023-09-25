@@ -1,7 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import Login from "~/pages/login";
+import Script from "next/script";
+import Login from "~/pages/signin";
 import { Theme } from '@radix-ui/themes';
 
 import { api } from "~/utils/api";
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <Head>
         <title>CookBookie</title>
+        <Script src="https://accounts.google.com/gsi/client" async defer></Script>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavigationBar />
