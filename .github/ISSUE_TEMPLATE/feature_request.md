@@ -10,7 +10,7 @@ assignees: ''
 **Describe the solution you'd like as a user story**
 A clear and concise description of what you want to happen.
 
-**Describe alternatives you've considered**
+**Definition of Done**
 A list of requirements that satisfy the request.
 
 **Additional context**
