@@ -62,5 +62,5 @@ export const TagKindCreateInput = z.object({
 
 export const TagCreateInput = z.object({
   name: name(),
-  kind: name(),
-});
+  kindName: name(),
+}) satisfies z.Schema<Prisma.TagUncheckedCreateInput>;
