@@ -31,7 +31,7 @@ export const ProvidedUserCreateInput = UserCreateInput.pick({
 });
 
 export const IngredientCreateInput = z.object({
-  name: z.string().min(2).max(128),
+  name: name(128),
   icon: url(),
 }) satisfies z.Schema<Prisma.IngredientUncheckedCreateInput>;
 
