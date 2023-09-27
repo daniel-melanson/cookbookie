@@ -1,6 +1,6 @@
 import {
   type Prisma,
-  UnitSystem,
+  UnitSystem as PrismaUnitSystem,
   UserRole as PrismaUserRole,
   RecipeDifficulty,
 } from "@prisma/client";
@@ -13,6 +13,8 @@ const quantity = () => z.number().min(0).max(10000);
 
 export const UserRole = z.nativeEnum(PrismaUserRole);
 
+export const UnitSystem = z.nativeEnum(PrismaUnitSystem);
+
 export const UserCreateInput = z.object({
   firstName: name(),
   lastName: name(),
@@ -21,7 +23,7 @@ export const UserCreateInput = z.object({
   avatar: url().optional(),
   role: UserRole,
   emailVerified: z.date().optional(),
-  unitSystem: z.nativeEnum(UnitSystem),
+  unitSystem: UnitSystem,
 }) satisfies z.Schema<Prisma.UserUncheckedCreateInput>;
 
 export const ProvidedUserCreateInput = UserCreateInput.pick({
@@ -30,6 +32,12 @@ export const ProvidedUserCreateInput = UserCreateInput.pick({
   email: true,
   dateOfBirth: true,
   unitSystem: true,
+});
+
+export const Unit = z.object({
+  abbreviation: unitAbbr(),
+  name: name(32),
+  system: UnitSystem,
 });
 
 export const IngredientCreateInput = z.object({
