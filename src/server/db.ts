@@ -12,17 +12,6 @@ import {
   TagCreateInput,
 } from "~/utils/validators";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
-
 const validate = (Model) => ({
   create({ args, query }) {
     args.data = Model.parse(args.data);
@@ -47,7 +36,17 @@ const validate = (Model) => ({
   },
 });
 
-prisma.$extends({
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+export const prisma = (
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log:
+      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+  })
+).$extends({
   query: {
     user: validate(UserCreateInput),
     ingredient: validate(IngredientCreateInput),
