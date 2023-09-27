@@ -1,7 +1,7 @@
 import {
   type Prisma,
   UnitSystem,
-  UserRole,
+  UserRole as PrismaUserRole,
   RecipeDifficulty,
 } from "@prisma/client";
 import { z } from "zod";
@@ -11,13 +11,15 @@ const url = () => z.string().url().min(5).max(1024);
 const unitAbbr = () => z.string().min(1).max(5);
 const quantity = () => z.number().min(0).max(10000);
 
+export const UserRole = z.nativeEnum(PrismaUserRole);
+
 export const UserCreateInput = z.object({
   firstName: name(),
   lastName: name(),
   email: z.string().email().min(3).max(512),
   dateOfBirth: z.date(),
   avatar: url().optional(),
-  role: z.nativeEnum(UserRole),
+  role: UserRole,
   emailVerified: z.date().optional(),
   unitSystem: z.nativeEnum(UnitSystem),
 }) satisfies z.Schema<Prisma.UserUncheckedCreateInput>;
