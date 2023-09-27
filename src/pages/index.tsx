@@ -12,7 +12,7 @@ export default function Home() {
       <Head>
         <title>CookBookie</title>
       </Head>
-      <NavigationBar />
+      <NavigationBar user={true} includeSearch={true} />
       <HomeMain />
       <Footer />
     </>

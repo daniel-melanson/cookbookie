@@ -9,7 +9,7 @@ import {
 } from "react-icons/ri";
 import IconLink from "./IconLink";
 import Link from "next/link";
-import SearchBar from "./SearchBar";
+import SearchBar, { SearchBarStyle } from "./SearchBar";
 
 interface NavigationBarProps {
   includeSearch?: boolean;
@@ -23,7 +23,9 @@ export default function NavigationBar(props: NavigationBarProps) {
       <h1 className="text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
-      {props.includeSearch && <SearchBar />}
+      {props.includeSearch && (
+        <SearchBar style={SearchBarStyle.NavigationBar} />
+      )}
       <div className="flex items-center justify-end space-x-4 text-3xl">
         {props.user ? (
           <>
