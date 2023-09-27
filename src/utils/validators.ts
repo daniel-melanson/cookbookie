@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const name = (max = 64) => z.string().min(2).max(max);
 const url = () => z.string().url().min(5).max(1024);
-const unitAbbreviation = () => z.string().min(1).max(5);
+const unitAbbr = () => z.string().min(1).max(5);
 const quantity = () => z.number().min(0).max(10000);
 
 export const UserCreateInput = z.object({
@@ -35,11 +35,6 @@ export const IngredientCreateInput = z.object({
   icon: url(),
 }) satisfies z.Schema<Prisma.IngredientUncheckedCreateInput>;
 
-export const ProvidedIngredientCreateInput = IngredientCreateInput.pick({
-  name: true,
-  icon: true,
-});
-
 export const RecipeCreateInput = z.object({
   name: name(128),
   description: z.string().max(2048),
@@ -51,9 +46,9 @@ export const RecipeCreateInput = z.object({
 export const IngredientQuantityCreateInput = z.object({
   ingredientId: z.string().cuid(),
   usQuantity: quantity(),
-  usUnitAbbreviation: unitAbbreviation(),
+  usUnitAbbreviation: unitAbbr(),
   metricQuantity: quantity(),
-  metricUnitAbbreviation: unitAbbreviation(),
+  metricUnitAbbreviation: unitAbbr(),
 }) satisfies z.Schema<Prisma.IngredientQuantityUncheckedCreateInput>;
 
 export const TagKindCreateInput = z.object({
