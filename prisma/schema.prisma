@@ -64,7 +64,7 @@ model User {
   lastName           String               @db.VarChar(64)
   email              String               @unique @db.VarChar(512)
   dateOfBirth        DateTime
-  image              String               @db.VarChar(1024)
+  avatar             String?              @db.VarChar(1024)
   role               UserRole             @default(USER)
   // Authentication
   emailVerified      DateTime?
@@ -103,7 +103,7 @@ model Ingredient {
   updatedAt          DateTime             @updatedAt
   // Basic
   name               String               @unique @db.VarChar(128)
-  icon               String
+  icon               String               @db.VarChar(1024)
   tags               Tag[]
   // Relations
   ingredientQuantity IngredientQuantity[]
@@ -133,7 +133,7 @@ model Recipe {
   name        String               @db.VarChar(128)
   description String               @db.VarChar(2048)
   source      String               @unique @db.VarChar(1024)
-  icon        String
+  icon        String               @db.VarChar(1024)
   // Scraped information
   difficulty  RecipeDifficulty?
   duration    RecipeDuration?

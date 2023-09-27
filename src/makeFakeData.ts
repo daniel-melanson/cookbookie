@@ -10,8 +10,11 @@ function uniqueWords(
   wordOptions = { min: 1, max: 3 },
 ): string[] {
   const set = new Set<string>();
-  for (let i = 0; i < count; i++) {
-    set.add(faker.lorem.words(wordOptions));
+  while (set.size < count) {
+    const words = faker.lorem.words(wordOptions);
+    if (words.length < 2) continue;
+
+    set.add(words);
   }
 
   return [...set];
