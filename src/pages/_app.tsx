@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import "@radix-ui/themes/styles.css";
+import { Theme } from '@radix-ui/themes';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -13,7 +14,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <Theme>
+        <Component {...pageProps} />
+      </Theme>
     </SessionProvider>
   );
 };
