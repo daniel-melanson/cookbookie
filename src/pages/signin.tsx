@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import { FcGoogle } from "react-icons/fc";
 import { /* useSession, */ signIn /*, signOut */ } from "next-auth/react";
 import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
@@ -9,7 +9,7 @@ function FormInput({ type }: { type: string }) {
     <Form.Control asChild>
       <input
         type={type}
-        className="h-[35px] w-full rounded border-2 border-neutral-200 bg-neutral-100 px-2 text-sm leading-none"
+        className="h-[35px] w-full rounded border-2 border-neutral-200 bg-neutral-100 px-2 text-sm leading-none hover:border-neutral-300"
         required
       />
     </Form.Control>
@@ -41,19 +41,25 @@ function LoginForm() {
         <FormInput type="password" />
       </Form.Field>
       <Form.Submit className="mt-3 w-full" asChild>
-        <button className="inline-flex h-[35px] w-full items-center justify-center rounded bg-neutral-950 text-white">
+        <button
+          className="h-[35px] w-full items-center justify-center rounded bg-neutral-950 text-white hover:shadow-sm hover:shadow-neutral-400"
+          type="submit"
+        >
           Sign In
         </button>
       </Form.Submit>
+      <button
+        className="mt-2 flex h-[35px] w-full items-center rounded border-2 border-neutral-100 px-1 hover:bg-neutral-100"
+        type="button"
+      >
+        <FcGoogle className="me-2 h-[18px] w-[18px]" />
+        Sign in with Google
+      </button>
     </Form.Root>
   );
 }
 
 export default function Login() {
-  const handleClick = async () => {
-    await signIn("google");
-  };
-
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
       <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
