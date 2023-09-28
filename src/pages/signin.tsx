@@ -69,7 +69,7 @@ export default function Login() {
                 Placeholder Continue with Google
               </Button>
               <div>
-                <Text>Don&apos;t have an accounts? </Text>
+                <Text>Don&apos;t have an account? </Text>
                 <Link>Register here</Link>
               </div>
             </Flex>
