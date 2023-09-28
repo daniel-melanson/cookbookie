@@ -1,5 +1,7 @@
 import React from "react";
 import { RiSearchLine } from "react-icons/ri";
+import { Select } from "@radix-ui/themes";
+
 
 export enum SearchBarStyle {
   Home = "home",
@@ -24,14 +26,13 @@ function SearchInput() {
 
 function SearchSelect({ onChange }: { onChange: (value: string) => void }) {
   return (
-    <select
-      className="bg-none"
-      defaultValue="recipes"
-      onChange={(event) => onChange(event.target.value)}
-    >
-      <option value="recipes">Recipes</option>
-      <option value="ingredients">Ingredients</option>
-    </select>
+    <Select.Root defaultValue="recipes">
+      <Select.Trigger variant="ghost" />
+      <Select.Content>
+        <Select.Item value="recipes">Recipes</Select.Item>
+        <Select.Item value="ingredients">Ingredients</Select.Item>
+      </Select.Content>
+    </Select.Root>
   );
 }
 
