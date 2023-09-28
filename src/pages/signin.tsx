@@ -70,7 +70,6 @@ export default function Login() {
               </Button>
               <div>
                 <Text>Don&apos;t have an accounts? </Text>
-
                 <Link>Register here</Link>
               </div>
             </Flex>
