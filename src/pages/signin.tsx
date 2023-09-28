@@ -8,6 +8,7 @@ import {
   Flex,
   Theme,
   Heading,
+  Link,
 } from "@radix-ui/themes";
 import * as Form from "@radix-ui/react-form";
 
@@ -26,10 +27,10 @@ export default function Login() {
             </h2>
           </div>
           <div className="mt-6 w-full">
-            <Flex direction="column" gap="4">
-              <Form.Root>
-                <Flex direction="column" gap="6">
-                  <Form.Field className="Form" name="email">
+            <Flex direction="column" gap="4" className="items-center">
+              <Form.Root className="w-full">
+                <Flex direction="column" gap="4" className="items-center">
+                  <Form.Field className="w-full" name="email">
                     <div className="flex justify-between">
                       <Form.Label>Email</Form.Label>
                       <Form.Message match="valueMissing">
@@ -43,7 +44,7 @@ export default function Login() {
                       <TextFieldInput size="3" required />
                     </Form.Control>
                   </Form.Field>
-                  <Form.Field className="Form" name="password">
+                  <Form.Field className="w-full" name="password">
                     <div className="flex justify-between">
                       <Form.Label>Password</Form.Label>
                       <Form.Message match="valueMissing">
@@ -59,6 +60,7 @@ export default function Login() {
                       Sign In
                     </Button>
                   </Form.Submit>
+                  <Link weight="medium">Forgot Password?</Link>
                 </Flex>
               </Form.Root>
               <Heading className="w-full text-center">or</Heading>
@@ -66,6 +68,11 @@ export default function Login() {
                 <Image src="" alt="Google Logo" />
                 Placeholder Continue with Google
               </Button>
+              <div>
+                <Text>Don&apos;t have an accounts? </Text>
+
+                <Link>Register here</Link>
+              </div>
             </Flex>
           </div>
         </Theme>
