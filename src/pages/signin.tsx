@@ -1,80 +1,81 @@
 import React from "react";
-import Image from "next/image";
+import { FcGoogle } from "react-icons/fc";
 import { /* useSession, */ signIn /*, signOut */ } from "next-auth/react";
-import {
-  Button,
-  TextFieldInput,
-  Text,
-  Flex,
-  Theme,
-  Heading,
-  Link,
-} from "@radix-ui/themes";
 import * as Form from "@radix-ui/react-form";
+import Link from "next/link";
+
+function FormInput({ type }: { type: string }) {
+  return (
+    <Form.Control asChild>
+      <input
+        type={type}
+        className="h-[35px] w-full rounded border-2 border-neutral-200 bg-neutral-100 px-2 text-sm leading-none hover:border-neutral-300"
+        required
+      />
+    </Form.Control>
+  );
+}
+
+function LoginForm() {
+  return (
+    <Form.Root className="w-full">
+      <Form.Field className="mb-3 w-full" name="email">
+        <div className="flex items-baseline justify-between">
+          <Form.Label className="leading-9">Email</Form.Label>
+          <Form.Message className="text-sm font-light" match="valueMissing">
+            Please enter your email
+          </Form.Message>
+          <Form.Message className="text-sm font-light" match="typeMismatch">
+            Please enter a valid email
+          </Form.Message>
+        </div>
+        <FormInput type="email" />
+      </Form.Field>
+      <Form.Field className="mb-3 w-full" name="password">
+        <div className="flex items-baseline justify-between">
+          <Form.Label className="leading-9">Password</Form.Label>
+          <Form.Message className="text-sm font-light" match="valueMissing">
+            Please enter your password
+          </Form.Message>
+        </div>
+        <FormInput type="password" />
+      </Form.Field>
+      <Form.Submit className="mt-3 w-full" asChild>
+        <button
+          className="h-[35px] w-full items-center justify-center rounded bg-neutral-950 text-white hover:shadow-sm hover:shadow-neutral-400"
+          type="submit"
+        >
+          Sign In
+        </button>
+      </Form.Submit>
+      <button
+        className="mt-2 flex h-[35px] w-full items-center rounded border-2 border-neutral-100 px-1 hover:bg-neutral-100"
+        type="button"
+      >
+        <FcGoogle className="me-2 h-[18px] w-[18px]" />
+        Sign in with Google
+      </button>
+    </Form.Root>
+  );
+}
 
 export default function Login() {
-  const handleClick = async () => {
-    await signIn("google");
-  };
-
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex h-max w-96 flex-col items-center rounded-md border-2 border-neutral-300 bg-neutral-200 px-4 py-4 md:px-8 md:py-8">
-        <Theme accentColor="green">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="text-neutral-1000 text-center font-cursive text-2xl font-bold">
-              CookBookie
-            </h2>
-          </div>
-          <div className="mt-6 w-full">
-            <Flex direction="column" gap="4" className="items-center">
-              <Form.Root className="w-full">
-                <Flex direction="column" gap="4" className="items-center">
-                  <Form.Field className="w-full" name="email">
-                    <div className="flex justify-between">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Message match="valueMissing">
-                        <Text color="red">Please enter your email</Text>
-                      </Form.Message>
-                      <Form.Message match="typeMismatch">
-                        <Text color="red">Please enter a valid email</Text>
-                      </Form.Message>
-                    </div>
-                    <Form.Control asChild>
-                      <TextFieldInput size="3" required />
-                    </Form.Control>
-                  </Form.Field>
-                  <Form.Field className="w-full" name="password">
-                    <div className="flex justify-between">
-                      <Form.Label>Password</Form.Label>
-                      <Form.Message match="valueMissing">
-                        <Text color="red">Please enter your password</Text>
-                      </Form.Message>
-                    </div>
-                    <Form.Control asChild>
-                      <TextFieldInput size="3" required />
-                    </Form.Control>
-                  </Form.Field>
-                  <Form.Submit className="w-full">
-                    <Button variant="solid" size="3" className="w-full">
-                      Sign In
-                    </Button>
-                  </Form.Submit>
-                  <Link weight="medium">Forgot Password?</Link>
-                </Flex>
-              </Form.Root>
-              <Heading className="w-full text-center">or</Heading>
-              <Button onClick={void handleClick} size="3" className="w-full">
-                <Image src="" alt="Google Logo" />
-                Placeholder Continue with Google
-              </Button>
-              <div>
-                <Text>Don&apos;t have an account? </Text>
-                <Link>Register here</Link>
-              </div>
-            </Flex>
-          </div>
-        </Theme>
+    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
+      <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
+        CookBookie
+      </h2>
+      <div className="flex h-max w-96 flex-col items-center rounded-md  bg-white px-4 py-4 md:px-8 md:py-8">
+        <LoginForm />
+        <div className="mt-8 text-xs font-light">
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link className=" underline" href="/signup">
+              Sign up here
+            </Link>
+            .
+          </p>
+        </div>
       </div>
     </div>
   );
