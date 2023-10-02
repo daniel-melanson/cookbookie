@@ -1,22 +1,12 @@
 import React from "react";
-import { FcGoogle } from "react-icons/fc";
-import { /* useSession, */ signIn /*, signOut */ } from "next-auth/react";
+// import { /* useSession, */ signIn /*, signOut */ } from "next-auth/react";
 import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
+import { ContinueWithGoogle } from "~/components/form/ContinueWith";
+import FormInput from "~/components/form/FormInput";
+import FormButton from "~/components/form/FormButton";
 
-function FormInput({ type }: { type: string }) {
-  return (
-    <Form.Control asChild>
-      <input
-        type={type}
-        className="h-[35px] w-full rounded border-2 border-neutral-200 bg-neutral-100 px-2 text-sm leading-none hover:border-neutral-300"
-        required
-      />
-    </Form.Control>
-  );
-}
-
-function LoginForm() {
+function SignInForm() {
   return (
     <Form.Root className="w-full">
       <Form.Field className="mb-3 w-full" name="email">
@@ -48,25 +38,19 @@ function LoginForm() {
           Sign In
         </button>
       </Form.Submit>
-      <button
-        className="mt-2 flex h-[35px] w-full items-center rounded border-2 border-neutral-100 px-1 hover:bg-neutral-100"
-        type="button"
-      >
-        <FcGoogle className="me-2 h-[18px] w-[18px]" />
-        Sign in with Google
-      </button>
+      <ContinueWithGoogle />
     </Form.Root>
   );
 }
 
-export default function Login() {
+export default function SignIn() {
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
       <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
         CookBookie
       </h2>
       <div className="flex h-max w-96 flex-col items-center rounded-md  bg-white px-4 py-4 md:px-8 md:py-8">
-        <LoginForm />
+        <SignInForm />
         <div className="mt-8 text-xs font-light">
           <p>
             Don&apos;t have an account?{" "}
