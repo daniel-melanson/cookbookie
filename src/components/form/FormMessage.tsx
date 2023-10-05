@@ -8,7 +8,7 @@ export interface MessageProps {
   msg: string;
 }
 
-export function FormInputError({ match, msg }: MessageProps) {
+export function FormErrorMessage({ match, msg }: MessageProps) {
   return (
     <Form.Message
       className="flex items-center text-sm font-light text-red-600"
