@@ -6,6 +6,7 @@ import { AiOutlineWarning } from "react-icons/ai";
 import { ContinueWithGoogle } from "~/components/form/ContinueWith";
 import FormInput from "~/components/form/FormInput";
 import { FormErrorMessage } from "~/components/form/FormMessage";
+import SubmitButton from "~/components/form/SubmitButton";
 // import SignUp from "./signup";
 
 enum FormType {
@@ -47,14 +48,7 @@ function SignInForm({ handleFormSwitch }: FormProp) {
           </div>
           <FormInput type="password" />
         </Form.Field>
-        <Form.Submit className="mt-3 w-full" asChild>
-          <button
-            className="h-[35px] w-full items-center justify-center rounded bg-neutral-950 text-white hover:shadow-sm hover:shadow-neutral-400"
-            type="submit"
-          >
-            Sign In
-          </button>
-        </Form.Submit>
+        <SubmitButton text={"Sign In"}/>
         <span className="py-4">Forgot Password?</span>
         <ContinueWithGoogle />
       </Form.Root>
@@ -112,14 +106,7 @@ function SignUpForm({ handleFormSwitch }: FormProp) {
           </div>
           <FormInput type="password" />
         </Form.Field>
-        <Form.Submit className="mt-3 w-full" asChild>
-          <button
-            className="h-[35px] w-full items-center justify-center rounded bg-neutral-950 text-white hover:shadow-sm hover:shadow-neutral-400"
-            type="submit"
-          >
-            Sign Up
-          </button>
-        </Form.Submit>
+        <SubmitButton text={"Continue"}/>
       </Form.Root>
       <div className="mt-8 text-xs font-light">
         <p>
