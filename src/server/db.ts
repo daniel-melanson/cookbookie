@@ -54,6 +54,6 @@ export const prisma = (
     tagKind: validate(TagKindCreateInput),
     tag: validate(TagCreateInput),
   },
-});
+}) as PrismaClient;
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
