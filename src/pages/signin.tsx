@@ -1,82 +1,150 @@
-import React from "react";
-import { FcGoogle } from "react-icons/fc";
-import { /* useSession, */ signIn /*, signOut */ } from "next-auth/react";
-import * as Form from "@radix-ui/react-form";
+import React, { useState } from "react";
 import Link from "next/link";
+import ContinueWithGoogle from "~/components/form/ContinueWithGoogle";
+import AuthForm from "~/components/form/AuthForm";
+import Head from "next/head";
+import FormTextField from "~/components/form/FormTextField";
+import FormSubmit from "~/components/form/FormSubmit";
+import FormErrorMessage from "~/components/form/FormErrorMessage";
+import { match } from "ts-pattern";
 
-function FormInput({ type }: { type: string }) {
-  return (
-    <Form.Control asChild>
-      <input
-        type={type}
-        className="h-[35px] w-full rounded border-2 border-neutral-200 bg-neutral-100 px-2 text-sm leading-none hover:border-neutral-300"
-        required
-      />
-    </Form.Control>
-  );
+enum FormKind {
+  SignIn = "Sign In",
+  SignUp = "Sign Up",
+  ResetPassword = "Reset Password",
 }
 
-function LoginForm() {
+interface FormProps {
+  setForm: (from: FormKind) => void;
+}
+
+function FormSwitch({
+  onClick,
+  prompt,
+  action,
+}: {
+  prompt: string;
+  action: string;
+  onClick: () => void;
+}) {
   return (
-    <Form.Root className="w-full">
-      <Form.Field className="mb-3 w-full" name="email">
-        <div className="flex items-baseline justify-between">
-          <Form.Label className="leading-9">Email</Form.Label>
-          <Form.Message className="text-sm font-light" match="valueMissing">
-            Please enter your email
-          </Form.Message>
-          <Form.Message className="text-sm font-light" match="typeMismatch">
-            Please enter a valid email
-          </Form.Message>
-        </div>
-        <FormInput type="email" />
-      </Form.Field>
-      <Form.Field className="mb-3 w-full" name="password">
-        <div className="flex items-baseline justify-between">
-          <Form.Label className="leading-9">Password</Form.Label>
-          <Form.Message className="text-sm font-light" match="valueMissing">
-            Please enter your password
-          </Form.Message>
-        </div>
-        <FormInput type="password" />
-      </Form.Field>
-      <Form.Submit className="mt-3 w-full" asChild>
-        <button
-          className="h-[35px] w-full items-center justify-center rounded bg-neutral-950 text-white hover:shadow-sm hover:shadow-neutral-400"
-          type="submit"
+    <div className="mt-2 text-xs font-light">
+      <p>
+        {prompt + " "}
+        <span
+          className="font-bold hover:cursor-pointer hover:underline"
+          onClick={() => onClick()}
         >
-          Sign In
-        </button>
-      </Form.Submit>
-      <button
-        className="mt-2 flex h-[35px] w-full items-center rounded border-2 border-neutral-100 px-1 hover:bg-neutral-100"
-        type="button"
-      >
-        <FcGoogle className="me-2 h-[18px] w-[18px]" />
-        Sign in with Google
-      </button>
-    </Form.Root>
+          {action}
+        </span>
+        .
+      </p>
+    </div>
   );
 }
 
-export default function Login() {
+function EmailField() {
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
-      <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
-        CookBookie
-      </h2>
-      <div className="flex h-max w-96 flex-col items-center rounded-md  bg-white px-4 py-4 md:px-8 md:py-8">
-        <LoginForm />
-        <div className="mt-8 text-xs font-light">
-          <p>
-            Don&apos;t have an account?{" "}
-            <Link className=" underline" href="/signup">
-              Sign up here
-            </Link>
-            .
+    <FormTextField name="email" type={"email"}>
+      <FormErrorMessage
+        match="typeMismatch"
+        message="Please enter a valid email"
+      />
+    </FormTextField>
+  );
+}
+
+function SignInForm({ setForm }: FormProps) {
+  return (
+    <>
+      <AuthForm name={"Sign In"}>
+        <EmailField />
+        <FormTextField name="password" type={"password"} />
+        <FormSubmit text={"Sign In"} />
+        <div className="w-fill flex h-[24px] justify-center">
+          <p
+            className="text-sm font-bold hover:cursor-pointer hover:underline"
+            onClick={() => setForm(FormKind.ResetPassword)}
+          >
+            Forgot Password?
           </p>
         </div>
+        <ContinueWithGoogle text={"Sign in with Google"} />
+      </AuthForm>
+      <FormSwitch
+        prompt={"Don't have an account?"}
+        action={"Sign up here"}
+        onClick={() => setForm(FormKind.SignUp)}
+      />
+    </>
+  );
+}
+
+const Line = () => <div className="h-[1px] flex-grow bg-black" />;
+
+function SignUpForm({ setForm }: FormProps) {
+  return (
+    <>
+      <AuthForm name={"Sign Up"}>
+        <EmailField />
+        <FormTextField name="password" type={"password"} />
+        <FormSubmit text="Continue" />
+        <div className="w-fill flex h-[24px] justify-center">
+          <div className="flex w-3/4 items-center justify-center space-x-2 font-bold">
+            <Line />
+            <p>or</p>
+            <Line />
+          </div>
+        </div>
+        <ContinueWithGoogle text={"Continue with Google"} />
+      </AuthForm>
+      <FormSwitch
+        prompt={"Already have an account?"}
+        action={"Sign in here"}
+        onClick={() => setForm(FormKind.SignIn)}
+      />
+    </>
+  );
+}
+
+function ResetPasswordForm({ setForm }: FormProps) {
+  return (
+    <>
+      <AuthForm name={"Reset Password"}>
+        <EmailField />
+        <FormSubmit text="Continue" />
+      </AuthForm>
+      <FormSwitch
+        prompt={"Remembered your password?"}
+        action={"Sign in here"}
+        onClick={() => setForm(FormKind.SignIn)}
+      />
+    </>
+  );
+}
+
+export default function SignIn() {
+  const [currentForm, setForm] = useState(FormKind.SignIn);
+
+  return (
+    <>
+      <Head>
+        <title>{currentForm}</title>
+      </Head>
+      <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
+        <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
+          <Link href="/">CookBookie</Link>
+        </h2>
+        <div className="flex h-max w-96 flex-col items-center rounded-md bg-white px-4 py-4 md:px-8 md:py-8">
+          {match(currentForm)
+            .with(FormKind.SignIn, () => <SignInForm setForm={setForm} />)
+            .with(FormKind.SignUp, () => <SignUpForm setForm={setForm} />)
+            .with(FormKind.ResetPassword, () => (
+              <ResetPasswordForm setForm={setForm} />
+            ))
+            .exhaustive()}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

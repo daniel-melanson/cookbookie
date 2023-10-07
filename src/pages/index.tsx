@@ -12,7 +12,7 @@ export default function Home() {
         <title>CookBookie</title>
       </Head>
       <Script src="https://accounts.google.com/gsi/client" async defer></Script>
-      <NavigationBar user={true} includeSearch={true} />
+      <NavigationBar user={false} includeSearch={true} />
       <HomeMain />
       <Footer />
     </>
