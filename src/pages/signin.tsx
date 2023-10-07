@@ -1,157 +1,150 @@
 import React, { useState } from "react";
-import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
-import { ContinueWithGoogle } from "~/components/form/ContinueWith";
-import FormInput from "~/components/form/FormInput";
-import { FormErrorMessage } from "~/components/form/FormMessage";
-import SubmitButton from "~/components/form/SubmitButton";
+import ContinueWithGoogle from "~/components/form/ContinueWithGoogle";
+import AuthForm from "~/components/form/AuthForm";
+import Head from "next/head";
+import FormTextField from "~/components/form/FormTextField";
+import FormSubmit from "~/components/form/FormSubmit";
+import FormErrorMessage from "~/components/form/FormErrorMessage";
+import { match } from "ts-pattern";
 
-enum FormType {
-  SignIn,
-  SignUp,
-  ResetPassword,
+enum FormKind {
+  SignIn = "Sign In",
+  SignUp = "Sign Up",
+  ResetPassword = "Reset Password",
 }
 
-interface FormProp {
-  handleFormSwitch: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
+interface FormProps {
+  setForm: (from: FormKind) => void;
 }
 
-function SignInForm({ handleFormSwitch }: FormProp) {
+function FormSwitch({
+  onClick,
+  prompt,
+  action,
+}: {
+  prompt: string;
+  action: string;
+  onClick: () => void;
+}) {
+  return (
+    <div className="mt-2 text-xs font-light">
+      <p>
+        {prompt + " "}
+        <span
+          className="font-bold hover:cursor-pointer hover:underline"
+          onClick={() => onClick()}
+        >
+          {action}
+        </span>
+        .
+      </p>
+    </div>
+  );
+}
+
+function EmailField() {
+  return (
+    <FormTextField name="email" type={"email"}>
+      <FormErrorMessage
+        match="typeMismatch"
+        message="Please enter a valid email"
+      />
+    </FormTextField>
+  );
+}
+
+function SignInForm({ setForm }: FormProps) {
   return (
     <>
-      <h2 className="text-xl font-semibold">Sign In</h2>
-      <Form.Root className="flex w-full flex-col items-center">
-        <Form.Field className="mb-3 w-full" name="email">
-          <div className="flex items-baseline justify-between">
-            <Form.Label className="leading-9">Email</Form.Label>
-            <FormErrorMessage
-              match="valueMissing"
-              msg="Please enter your email"
-            />
-            <FormErrorMessage
-              match="typeMismatch"
-              msg="Please enter a valid email"
-            />
-          </div>
-          <FormInput type="email" />
-        </Form.Field>
-        <Form.Field className="mb-3 w-full" name="password">
-          <div className="flex items-baseline justify-between">
-            <Form.Label className="leading-9">Password</Form.Label>
-            <FormErrorMessage
-              match="valueMissing"
-              msg="Please enter your password"
-            />
-          </div>
-          <FormInput type="password" />
-        </Form.Field>
-        <SubmitButton text={"Sign In"} />
-        <span className="py-4">Forgot Password?</span>
-        <ContinueWithGoogle />
-      </Form.Root>
-      <div className="mt-8 text-xs font-light">
-        <p>
-          Don&apos;t have an account?{" "}
-          <span
-            className="font-bold hover:cursor-pointer hover:underline"
-            onClick={handleFormSwitch}
+      <AuthForm name={"Sign In"}>
+        <EmailField />
+        <FormTextField name="password" type={"password"} />
+        <FormSubmit text={"Sign In"} />
+        <div className="w-fill flex h-[24px] justify-center">
+          <p
+            className="text-sm font-bold hover:cursor-pointer hover:underline"
+            onClick={() => setForm(FormKind.ResetPassword)}
           >
-            Sign up here
-          </span>
-          .
-        </p>
-      </div>
+            Forgot Password?
+          </p>
+        </div>
+        <ContinueWithGoogle text={"Sign in with Google"} />
+      </AuthForm>
+      <FormSwitch
+        prompt={"Don't have an account?"}
+        action={"Sign up here"}
+        onClick={() => setForm(FormKind.SignUp)}
+      />
     </>
   );
 }
 
-function SignUpForm({ handleFormSwitch }: FormProp) {
+const Line = () => <div className="h-[1px] flex-grow bg-black" />;
+
+function SignUpForm({ setForm }: FormProps) {
   return (
     <>
-      <h2 className="text-xl font-semibold">Sign Up</h2>
-      <Form.Root className="flex w-full flex-col items-center">
-        <Form.Field className="mb-3 w-full" name="email">
-          <div className="flex items-baseline justify-between">
-            <Form.Label className="leading-9">Email</Form.Label>
-            <FormErrorMessage
-              match="valueMissing"
-              msg="Please enter an email"
-            />
-            <FormErrorMessage
-              match="typeMismatch"
-              msg="Please enter a valid email"
-            />
+      <AuthForm name={"Sign Up"}>
+        <EmailField />
+        <FormTextField name="password" type={"password"} />
+        <FormSubmit text="Continue" />
+        <div className="w-fill flex h-[24px] justify-center">
+          <div className="flex w-3/4 items-center justify-center space-x-2 font-bold">
+            <Line />
+            <p>or</p>
+            <Line />
           </div>
-          <FormInput type="email" />
-        </Form.Field>
-        <Form.Field className="mb-3 w-full" name="password">
-          <div className="flex items-baseline justify-between">
-            <Form.Label className="leading-9">Password</Form.Label>
-            <Form.Message className="text-sm font-light" match="valueMissing">
-              Please enter a password
-            </Form.Message>
-          </div>
-          <FormInput type="password" />
-        </Form.Field>
-        <Form.Field className="mb-3 w-full" name="password">
-          <div className="flex items-baseline justify-between">
-            <Form.Label className="leading-9">Re-type Password</Form.Label>
-            <FormErrorMessage
-              match="valueMissing"
-              msg="Please re-enter your password"
-            />
-          </div>
-          <FormInput type="password" />
-        </Form.Field>
-        <SubmitButton text={"Continue"} />
-      </Form.Root>
-      <div className="mt-8 text-xs font-light">
-        <p>
-          Already have an account?{" "}
-          <span
-            className="font-bold hover:cursor-pointer hover:underline"
-            onClick={handleFormSwitch}
-          >
-            Sign in here
-          </span>
-          .
-        </p>
-      </div>
+        </div>
+        <ContinueWithGoogle text={"Continue with Google"} />
+      </AuthForm>
+      <FormSwitch
+        prompt={"Already have an account?"}
+        action={"Sign in here"}
+        onClick={() => setForm(FormKind.SignIn)}
+      />
+    </>
+  );
+}
+
+function ResetPasswordForm({ setForm }: FormProps) {
+  return (
+    <>
+      <AuthForm name={"Reset Password"}>
+        <EmailField />
+        <FormSubmit text="Continue" />
+      </AuthForm>
+      <FormSwitch
+        prompt={"Remembered your password?"}
+        action={"Sign in here"}
+        onClick={() => setForm(FormKind.SignIn)}
+      />
     </>
   );
 }
 
 export default function SignIn() {
-  const [currentForm, setForm] = useState(FormType.SignIn);
-
-  function handleFormSwitch(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
-    if (!e.currentTarget.textContent) {
-      console.error("Form link text is null");
-      return;
-    }
-    switch (e.currentTarget.textContent) {
-      case "Sign in here":
-        setForm(FormType.SignIn);
-        break;
-      case "Sign up here":
-        setForm(FormType.SignUp);
-        break;
-    }
-  }
+  const [currentForm, setForm] = useState(FormKind.SignIn);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
-      <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
-        <Link href="/">CookBookie</Link>
-      </h2>
-      <div className="flex h-max w-96 flex-col items-center rounded-md  bg-white px-4 py-4 md:px-8 md:py-8">
-        {(currentForm === FormType.SignIn && (
-          <SignInForm handleFormSwitch={handleFormSwitch} />
-        )) ||
-          (currentForm === FormType.SignUp && (
-            <SignUpForm handleFormSwitch={handleFormSwitch} />
-          ))}
+    <>
+      <Head>
+        <title>{currentForm}</title>
+      </Head>
+      <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
+        <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
+          <Link href="/">CookBookie</Link>
+        </h2>
+        <div className="flex h-max w-96 flex-col items-center rounded-md bg-white px-4 py-4 md:px-8 md:py-8">
+          {match(currentForm)
+            .with(FormKind.SignIn, () => <SignInForm setForm={setForm} />)
+            .with(FormKind.SignUp, () => <SignUpForm setForm={setForm} />)
+            .with(FormKind.ResetPassword, () => (
+              <ResetPasswordForm setForm={setForm} />
+            ))
+            .exhaustive()}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
