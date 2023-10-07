@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-// import { /* useSession, */ signIn /*, signOut */ } from "next-auth/react";
 import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
-import { AiOutlineWarning } from "react-icons/ai";
 import { ContinueWithGoogle } from "~/components/form/ContinueWith";
 import FormInput from "~/components/form/FormInput";
 import { FormErrorMessage } from "~/components/form/FormMessage";
 import SubmitButton from "~/components/form/SubmitButton";
-// import SignUp from "./signup";
 
 enum FormType {
   SignIn,
@@ -48,7 +45,7 @@ function SignInForm({ handleFormSwitch }: FormProp) {
           </div>
           <FormInput type="password" />
         </Form.Field>
-        <SubmitButton text={"Sign In"}/>
+        <SubmitButton text={"Sign In"} />
         <span className="py-4">Forgot Password?</span>
         <ContinueWithGoogle />
       </Form.Root>
@@ -106,7 +103,7 @@ function SignUpForm({ handleFormSwitch }: FormProp) {
           </div>
           <FormInput type="password" />
         </Form.Field>
-        <SubmitButton text={"Continue"}/>
+        <SubmitButton text={"Continue"} />
       </Form.Root>
       <div className="mt-8 text-xs font-light">
         <p>
@@ -126,6 +123,7 @@ function SignUpForm({ handleFormSwitch }: FormProp) {
 
 export default function SignIn() {
   const [currentForm, setForm] = useState(FormType.SignIn);
+
   function handleFormSwitch(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
     if (!e.currentTarget.textContent) {
       console.error("Form link text is null");
@@ -140,6 +138,7 @@ export default function SignIn() {
         break;
     }
   }
+
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-amber-400 to-red-600">
       <h2 className="mb-10 text-center font-cursive text-5xl font-black text-white">
