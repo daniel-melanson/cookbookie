@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import * as nodemailer from "nodemailer";
 import ContinueWithGoogle from "~/components/form/ContinueWithGoogle";
 import AuthForm from "~/components/form/AuthForm";
 import Head from "next/head";
@@ -16,6 +17,22 @@ enum FormKind {
 
 interface FormProps {
   setForm: (from: FormKind) => void;
+}
+
+async function sendVerificationRequest({
+  identifier: email,
+  url,
+  provider: { server, from },
+}) {
+  const { host } = new URL(url);
+  const transport = nodemailer.createTransport(server);
+  await transport.sendMail({
+    to: email,
+    from,
+    subject: `Sign in to ${host}`,
+    text: text({ url, host }),
+    html: html({ url, host, email }),
+  });
 }
 
 function FormSwitch({
