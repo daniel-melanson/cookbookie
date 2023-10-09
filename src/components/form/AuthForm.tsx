@@ -3,7 +3,7 @@ import * as Form from "@radix-ui/react-form";
 
 interface Props {
   name: string;
-  action?: ((data: FormData) => void) | undefined;
+  action?: ((data: FormData) => Promise<void>) | undefined;
 }
 
 export default function AuthForm({

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import * as nodemailer from "nodemailer";
+import { hash } from "bcrypt";
+import { prisma } from "~/server/db";
 import ContinueWithGoogle from "~/components/form/ContinueWithGoogle";
 import AuthForm from "~/components/form/AuthForm";
 import Head from "next/head";
@@ -17,22 +18,6 @@ enum FormKind {
 
 interface FormProps {
   setForm: (from: FormKind) => void;
-}
-
-async function sendVerificationRequest({
-  identifier: email,
-  url,
-  provider: { server, from },
-}) {
-  const { host } = new URL(url);
-  const transport = nodemailer.createTransport(server);
-  await transport.sendMail({
-    to: email,
-    from,
-    subject: `Sign in to ${host}`,
-    text: text({ url, host }),
-    html: html({ url, host, email }),
-  });
 }
 
 function FormSwitch({
@@ -100,9 +85,19 @@ function SignInForm({ setForm }: FormProps) {
 const Line = () => <div className="h-[1px] flex-grow bg-black" />;
 
 function SignUpForm({ setForm }: FormProps) {
+  async function signUpUser(data: FormData) {
+    // "use server";
+    // const password = await hash(data.get("password") as string, 16);
+    // const user = await prisma.user.create({
+    //   data: {
+    //     email: data.get("email") as string,
+    //   },
+    // });
+    console.log(data);
+  }
   return (
     <>
-      <AuthForm name={"Sign Up"}>
+      <AuthForm name={"Sign Up"} action={signUpUser}>
         <EmailField />
         <FormTextField name="password" type={"password"} />
         <FormSubmit text="Continue" />
