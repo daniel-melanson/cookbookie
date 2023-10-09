@@ -63,6 +63,7 @@ model User {
   firstName          String               @db.VarChar(64)
   lastName           String               @db.VarChar(64)
   email              String               @unique @db.VarChar(512)
+  password           String?
   dateOfBirth        DateTime
   avatar             String?              @db.VarChar(1024)
   role               UserRole             @default(USER)
