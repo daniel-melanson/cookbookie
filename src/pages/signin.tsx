@@ -9,6 +9,8 @@ import FormTextField from "~/components/form/FormTextField";
 import FormSubmit from "~/components/form/FormSubmit";
 import FormErrorMessage from "~/components/form/FormErrorMessage";
 import { match } from "ts-pattern";
+import { type InputProps } from "~/components/form/FormTextInput";
+import { signIn } from "next-auth/react";
 
 enum FormKind {
   SignIn = "Sign In",
@@ -45,9 +47,20 @@ function FormSwitch({
   );
 }
 
-function EmailField() {
+function EmailField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
   return (
-    <FormTextField name="email" type={"email"}>
+    <FormTextField
+      name="email"
+      type={"email"}
+      value={value}
+      onChange={onChange}
+    >
       <FormErrorMessage
         match="typeMismatch"
         message="Please enter a valid email"
@@ -57,11 +70,29 @@ function EmailField() {
 }
 
 function SignInForm({ setForm }: FormProps) {
+  const [signInCredentials, setSignInCredentials] = useState({
+    email: "",
+    password: "",
+  });
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSignInCredentials((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  }
+
+  function handleSubmit() {
+    console.log(signInCredentials);
+  }
   return (
     <>
-      <AuthForm name={"Sign In"}>
-        <EmailField />
-        <FormTextField name="password" type={"password"} />
+      <AuthForm name={"Sign In"} onSubmit={handleSubmit}>
+        <EmailField value={signInCredentials.email} onChange={handleChange} />
+        <FormTextField
+          name="password"
+          type={"password"}
+          value={signInCredentials.password}
+          onChange={handleChange}
+        />
         <FormSubmit text={"Sign In"} />
         <div className="w-fill flex h-[24px] justify-center">
           <p
@@ -85,21 +116,31 @@ function SignInForm({ setForm }: FormProps) {
 const Line = () => <div className="h-[1px] flex-grow bg-black" />;
 
 function SignUpForm({ setForm }: FormProps) {
-  async function signUpUser(data: FormData) {
-    // "use server";
-    // const password = await hash(data.get("password") as string, 16);
-    // const user = await prisma.user.create({
-    //   data: {
-    //     email: data.get("email") as string,
-    //   },
-    // });
-    console.log(data);
+  const [signUpCredentials, setSignUpCredentials] = useState({
+    email: "",
+    password: "",
+  });
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSignUpCredentials((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
   }
+
+  function handleSubmit() {
+    console.log(signUpCredentials);
+  }
+
   return (
     <>
-      <AuthForm name={"Sign Up"} action={signUpUser}>
-        <EmailField />
-        <FormTextField name="password" type={"password"} />
+      <AuthForm name={"Sign Up"} onSubmit={handleSubmit}>
+        <EmailField value={signUpCredentials.email} onChange={handleChange} />
+        <FormTextField
+          name="password"
+          type={"password"}
+          value={signUpCredentials.password}
+          onChange={handleChange}
+        />
         <FormSubmit text="Continue" />
         <div className="w-fill flex h-[24px] justify-center">
           <div className="flex w-3/4 items-center justify-center space-x-2 font-bold">
@@ -120,10 +161,19 @@ function SignUpForm({ setForm }: FormProps) {
 }
 
 function ResetPasswordForm({ setForm }: FormProps) {
+  const [recoverEmail, setRecoverEmail] = useState("");
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setRecoverEmail(e.target.value);
+  }
+
+  function handleSubmit() {
+    console.log(recoverEmail);
+  }
   return (
     <>
-      <AuthForm name={"Reset Password"}>
-        <EmailField />
+      <AuthForm name={"Reset Password"} onSubmit={handleSubmit}>
+        <EmailField value={recoverEmail} onChange={handleChange} />
         <FormSubmit text="Continue" />
       </AuthForm>
       <FormSwitch

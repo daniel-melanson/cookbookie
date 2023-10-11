@@ -1,25 +1,25 @@
-import React from "react";
 import * as Form from "@radix-ui/react-form";
-import FormTextInput from "./FormTextInput";
-import type { FormTextInputType } from "./FormTextInput";
+import FormTextInput, { type InputProps } from "./FormTextInput";
 import FormErrorMessage from "./FormErrorMessage";
-
-interface Props {
-  name: string;
-  type: FormTextInputType;
-}
 
 export default function FormTextField({
   name,
   type,
+  value,
+  onChange,
   children,
-}: Props & React.PropsWithChildren) {
+}: InputProps & React.PropsWithChildren) {
   name = name.toLowerCase();
   const label = name.charAt(0).toUpperCase() + name.slice(1);
 
   return (
     <Form.Field className="relative w-full" name={name}>
-      <FormTextInput name={name} type={type} />
+      <FormTextInput
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+      />
       <Form.Label asChild>
         <label
           htmlFor={name}
