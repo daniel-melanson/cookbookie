@@ -5,14 +5,14 @@ import NavigationBar from "~/components/NavigationBar";
 import Footer from "~/components/Footer";
 import HomeMain from "~/components/HomeMain";
 
-export default function Home() {
+export default function Page() {
   return (
     <>
       <Head>
         <title>CookBookie</title>
       </Head>
       <Script src="https://accounts.google.com/gsi/client" async defer></Script>
-      <NavigationBar user={false} includeSearch={true} />
+      <NavigationBar user={false} includeSearch={false} />
       <HomeMain />
       <Footer />
     </>
