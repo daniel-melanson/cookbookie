@@ -1,20 +1,18 @@
-import Head from "next/head";
-import Script from "next/script";
-
+import React from "react";
 import NavigationBar from "~/components/NavigationBar";
-import Footer from "~/components/Footer";
-import HomeMain from "~/components/HomeMain";
+
+import PageBase from "~/components/PageBase";
+import SearchBar, { SearchBarStyle } from "~/components/SearchBar";
 
 export default function Page() {
   return (
-    <>
-      <Head>
-        <title>CookBookie</title>
-      </Head>
-      <Script src="https://accounts.google.com/gsi/client" async defer></Script>
-      <NavigationBar user={false} includeSearch={false} />
-      <HomeMain />
-      <Footer />
-    </>
+    <PageBase title="Home">
+      <NavigationBar />
+      <main className="lg:mx-10">
+        <div className="home-image-banner flex h-[400px] flex-col items-center justify-center rounded-bl-lg rounded-br-lg">
+          <SearchBar style={SearchBarStyle.Home} />
+        </div>
+      </main>
+    </PageBase>
   );
 }
