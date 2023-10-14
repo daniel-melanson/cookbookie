@@ -27,7 +27,7 @@ function SearchInput() {
 function SelectItem(props: Select.SelectItemProps) {
   return (
     <Select.Item
-      className="flex items-center rounded px-5 data-[highlighted]:bg-orange data-[highlighted]:text-white data-[highlighted]:outline-none"
+      className="data-[highlighted]:bg-orange-500 flex items-center rounded px-5 data-[highlighted]:text-white data-[highlighted]:outline-none"
       value={props.value}
     >
       <Select.ItemIndicator className="absolute left-0">
@@ -49,7 +49,7 @@ function SearchSelect({ onChange }: { onChange: (value: string) => void }) {
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
-          className="rounded-lg border-[1px] border-neutral-200 bg-white p-2 shadow"
+          className="select-none rounded-lg border-[1px] border-neutral-200 bg-white p-2 shadow cursor-pointer"
           position="popper"
           sideOffset={10}
         >
@@ -91,7 +91,7 @@ function Search({
       <SearchSelect onChange={(value) => setAction(`/${value}/search`)} />
       {includeButton && (
         <button
-          className="hover:bg-orange-dark flex h-[48px] w-[48px] items-center justify-center rounded-lg bg-orange transition-colors "
+          className="hover:bg-orange-600 bg-orange-500 flex h-[48px] w-[48px] items-center justify-center rounded-lg transition-colors "
           type="submit"
         >
           <RiSearchLine className="align-self-middle text-3xl text-white" />

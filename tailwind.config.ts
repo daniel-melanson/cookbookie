@@ -5,18 +5,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        blue: "#1878b9",
-        "light-green": "#6eb87c",
-        gold: "#ecab32",
-        orange: "#eb4a36",
-        white: "#ffffff",
-        black: "#0c0808",
-        gray: "#b2a9a9",
-        "light-gray": "#e7dada",
+        nobel: {
+          "50": "#f8f8f8",
+          "100": "#f1efef",
+          "200": "#e6e2e2",
+          "300": "#d3cece",
+          "400": "#b2a9a9",
+          "500": "#9f9494",
+          "600": "#877b7b",
+          "700": "#6f6666",
+          "800": "#5e5656",
+          "900": "#514b4b",
+          "950": "#292626",
+        },
+        orange: {
+          "50": "#fef3f2",
+          "100": "#fee5e2",
+          "200": "#fdd1cb",
+          "300": "#fbafa6",
+          "400": "#f68173",
+          "500": "#eb4a36",
+          "600": "#d93c29",
+          "700": "#b72f1e",
+          "800": "#972a1d",
+          "900": "#7e291e",
+          "950": "#44110b",
+        },
       },
-      fontFamily: {
-        cursive: ['Lucida Handwriting', 'cursive'],
-      }
+    },
+    fontFamily: {
+      cursive: ["Lucida Handwriting", "cursive"],
     },
   },
   plugins: [],

@@ -185,7 +185,7 @@ function ResetPasswordForm({ setForm }: FormProps) {
   );
 }
 
-export default function SignIn() {
+export default function Page() {
   const [currentForm, setForm] = useState(FormKind.SignIn);
 
   return (
