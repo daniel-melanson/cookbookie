@@ -5,12 +5,11 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import CredentialsProvider  from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcrypt";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import { useCallback } from "react";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -64,10 +63,10 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      name: "Sign in",
+      name: "credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "" },
-        password: {  label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
@@ -79,11 +78,15 @@ export const authOptions: NextAuthOptions = {
         if (!user?.emailVerified) return null;
 
         // must use compare due to salting of hash function
-        const isPasswordValid = await compare(credentials.password, user.password!);
+        const isPasswordValid = await compare(
+          credentials.password,
+          user.password!,
+        );
         if (!isPasswordValid) return null;
-      }
-    }),
 
+        return user;
+      },
+    }),
   ],
 };
 
