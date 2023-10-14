@@ -5,6 +5,7 @@ import BaseAuthPage from "~/components/auth/BaseAuthPage";
 import SignInForm from "~/components/auth/SignInForm";
 import ResetPasswordForm from "~/components/auth/ResetPasswordForm";
 import { AuthFormKind } from "~/components/auth";
+import SignUpForm from "~/components/auth/SignUpForm";
 
 export default function Page() {
   const [form, setForm] = useState(AuthFormKind.SignIn);
@@ -17,7 +18,7 @@ export default function Page() {
       <BaseAuthPage>
         {match(form)
           .with(AuthFormKind.SignIn, () => <SignInForm setForm={setForm} />)
-          .with(AuthFormKind.SignUp, () => <SignInForm setForm={setForm} />)
+          .with(AuthFormKind.SignUp, () => <SignUpForm setForm={setForm} />)
           .with(AuthFormKind.ResetPassword, () => (
             <ResetPasswordForm setForm={setForm} />
           ))
