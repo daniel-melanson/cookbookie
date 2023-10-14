@@ -33,9 +33,9 @@ export default function Page() {
     <PageBase title="Search">
       <NavigationBar />
       <main className="flex lg:m-5 lg:mb-0">
-        <Form.Root className="bg-nobel-200 flex h-64 w-64 rounded-lg p-4">
+        <Form.Root className="flex h-64 w-64 rounded-lg bg-nobel-200 p-4">
           <div className="flex w-full flex-col">
-            <label className="text-nobel-700 mb-1 text-lg">Meal</label>
+            <label className="mb-1 text-lg text-nobel-700">Meal</label>
             <CheckBox label="Breakfast" />
             <CheckBox label="Lunch" />
             <CheckBox label="Dinner" />

@@ -19,7 +19,7 @@ export default function NavigationBar(props: NavigationBarProps) {
   const session = { user: undefined }; // TODO useSession();
 
   return (
-    <header className="align-center flex h-16 items-center justify-between border-b border-light-gray px-4 py-2">
+    <header className="align-center border-light-gray flex h-16 items-center justify-between border-b px-4 py-2">
       <h1 className="text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
@@ -44,12 +44,12 @@ export default function NavigationBar(props: NavigationBarProps) {
               line={<RiFridgeLine />}
               fill={<RiFridgeFill />}
             />
-            <div className="h-8 w-8 rounded-full bg-blue" />
+            <div className="bg-blue h-8 w-8 rounded-full" />
           </>
         ) : (
           <Link
             className="rounded p-2 text-lg hover:bg-neutral-200"
-            href="/signin"
+            href="/login"
           >
             Sign In
           </Link>
