@@ -6,10 +6,11 @@ import {
 } from "@prisma/client";
 import { z } from "zod";
 
-const name = (max = 64) => z.string().min(2).max(max);
-const url = () => z.string().url().min(5).max(1024);
-const unitAbbr = () => z.string().min(1).max(5);
-const quantity = () => z.number().min(0).max(10000);
+export const cuid = () => z.string().cuid();
+export const name = (max = 64) => z.string().min(2).max(max);
+export const url = () => z.string().url().min(5).max(1024);
+export const unitAbbr = () => z.string().min(1).max(5);
+export const quantity = () => z.number().min(0).max(10000);
 
 export const UserRole = z.nativeEnum(PrismaUserRole);
 
