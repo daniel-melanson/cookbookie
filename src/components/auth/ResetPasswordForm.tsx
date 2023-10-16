@@ -6,20 +6,10 @@ import FormEmailField from "~/components/form/FormEmailField";
 import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
 
 export default function ResetPasswordForm({ setForm }: AuthFormProps) {
-  const [recoverEmail, setRecoverEmail] = React.useState("");
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setRecoverEmail(e.target.value);
-  }
-
-  function handleSubmit() {
-    console.log(recoverEmail);
-  }
-
   return (
     <>
-      <AuthForm name={"Reset Password"} onSubmit={handleSubmit}>
-        <FormEmailField value={recoverEmail} onChange={handleChange} />
+      <AuthForm name={"Reset Password"}>
+        <FormEmailField />
         <FormSubmit text="Continue" />
       </AuthForm>
       <AuthFormSwitch

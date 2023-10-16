@@ -38,3 +38,10 @@ h1 {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.disable-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
