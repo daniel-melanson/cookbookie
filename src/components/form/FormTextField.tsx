@@ -5,8 +5,6 @@ import FormErrorMessage from "./FormErrorMessage";
 export default function FormTextField({
   name,
   type,
-  value,
-  onChange,
   children,
 }: InputProps & React.PropsWithChildren) {
   name = name.toLowerCase();
@@ -14,12 +12,7 @@ export default function FormTextField({
 
   return (
     <Form.Field className="relative w-full" name={name}>
-      <FormTextInput
-        name={name}
-        type={type}
-        value={value}
-        onChange={onChange}
-      />
+      <FormTextInput name={name} type={type} />
       <Form.Label asChild>
         <label
           htmlFor={name}
