@@ -3,7 +3,7 @@ import * as Form from "@radix-ui/react-form";
 
 interface Props {
   name: string;
-  onSubmit?: (() => void) | undefined;
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
 }
 
 export default function AuthForm({
