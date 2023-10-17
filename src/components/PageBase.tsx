@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function PageBase(props: Props & React.PropsWithChildren) {
-  const pageTitle = `${props.title} &ndash; CookBookie`;
+  const pageTitle = `${props.title} – CookBookie`;
 
   return (
     <>
