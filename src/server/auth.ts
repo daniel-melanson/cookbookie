@@ -75,7 +75,7 @@ export const authOptions: NextAuthOptions = {
             email: credentials.email,
           },
         });
-        if (!user?.emailVerified) return null;
+        if (!user) return null;
 
         // must use compare due to salting of hash function
         const isPasswordValid = await compare(
