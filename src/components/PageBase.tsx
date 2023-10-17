@@ -9,12 +9,10 @@ interface Props {
 }
 
 export default function PageBase(props: Props & React.PropsWithChildren) {
-  const pageTitle = `${props.title} – CookBookie`;
-
   return (
     <>
       <Head>
-        <title>{pageTitle}</title>
+        <title>{`${props.title} – CookBookie`}</title>
       </Head>
       <Script src="https://accounts.google.com/gsi/client" async defer></Script>
       {props.children}
