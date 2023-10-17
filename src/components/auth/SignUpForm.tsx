@@ -1,43 +1,21 @@
 import React from "react";
 import AuthForm from "~/components/auth/AuthForm";
 import FormSubmit from "~/components/form/FormSubmit";
-import FormTextField from "~/components/form/FormTextField";
 import { AuthFormKind, type AuthFormProps } from "~/components/auth";
 import FormEmailField from "~/components/form/FormEmailField";
 import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
 import ContinueWithGoogle from "~/components/auth/ContinueWithGoogle";
+import SignUpPasswordField from "./SignUpPasswordField";
+import { FormDataProvider } from "~/contexts/FormContext";
 
 const Line = () => <div className="h-[1px] flex-grow bg-black" />;
 
 export default function SignUpForm({ setForm }: AuthFormProps) {
-  const [signUpCredentials, setSignUpCredentials] = React.useState({
-    email: "",
-    password: "",
-  });
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSignUpCredentials((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  }
-
-  function handleSubmit() {
-    console.log(signUpCredentials);
-  }
-
   return (
-    <>
-      <AuthForm name={"Sign Up"} onSubmit={handleSubmit}>
-        <FormEmailField
-          value={signUpCredentials.email}
-          onChange={handleChange}
-        />
-        <FormTextField
-          name="password"
-          type={"password"}
-          value={signUpCredentials.password}
-          onChange={handleChange}
-        />
+    <FormDataProvider>
+      <AuthForm name={"Sign Up"} onSubmit={(d) => console.log(d)}>
+        <FormEmailField />
+        <SignUpPasswordField />
         <FormSubmit text="Continue" />
         <div className="w-fill flex h-[24px] justify-center">
           <div className="flex w-3/4 items-center justify-center space-x-2 font-bold">
@@ -53,6 +31,6 @@ export default function SignUpForm({ setForm }: AuthFormProps) {
         action={"Sign in here"}
         onClick={() => setForm(AuthFormKind.SignIn)}
       />
-    </>
+    </FormDataProvider>
   );
 }
