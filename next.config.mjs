@@ -17,6 +17,9 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "loremflickr.com" }],
+  },
 };
 
 export default config;
