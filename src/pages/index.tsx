@@ -15,7 +15,7 @@ function EmojiLink({ emoji, text, href }: Props) {
   return (
     <Link
       href={href}
-      className="px-auto w-full rounded-lg bg-orange-500 py-2 text-center text-lg font-bold text-white shadow-lg transition-colors hover:bg-orange-600 "
+      className="px-auto w-full rounded-lg border-b-4 border-orange-600 bg-orange-500 py-2 text-center text-lg font-bold text-white shadow-lg transition-colors hover:bg-orange-600 "
     >
       <span className="mr-2">{emoji}</span>
       {text}

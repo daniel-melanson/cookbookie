@@ -16,7 +16,7 @@ function SearchInput() {
 function SearchButton() {
   return (
     <button
-      className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-lg bg-orange-500 transition-colors hover:bg-orange-600 "
+      className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-lg border-b-4 border-orange-600 bg-orange-500 transition-colors hover:bg-orange-600 "
       type="submit"
     >
       <RiSearchLine className="align-self-middle text-3xl text-white" />
