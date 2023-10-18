@@ -7,7 +7,7 @@ import {
   RiBookmarkLine,
   RiBookmarkFill,
 } from "react-icons/ri";
-import IconLink from "./IconLink";
+import IconLink from "~/components/IconLink";
 import Link from "next/link";
 import NavBarSearch from "~/components/NavBarSearch";
 
@@ -16,7 +16,7 @@ interface NavigationBarProps {
 }
 
 export default function NavigationBar(props: NavigationBarProps) {
-  const session = { user: undefined }; // TODO useSession();
+  const session = { user: true }; // TODO useSession();
 
   return (
     <header className="align-center border-light-gray flex h-16 items-center justify-between border-b px-4 py-2">
