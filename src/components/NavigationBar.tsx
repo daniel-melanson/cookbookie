@@ -46,7 +46,7 @@ export default function NavigationBar(props: NavigationBarProps) {
           </>
         ) : (
           <Link
-            className="rounded p-2 text-lg hover:bg-neutral-200"
+            className="rounded p-2 text-lg transition-colors hover:bg-neutral-200"
             href="/login"
           >
             Sign In
