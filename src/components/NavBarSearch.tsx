@@ -1,12 +1,16 @@
 import { RiSearchLine } from "react-icons/ri";
+import { useRouter } from "next/router";
 
 function SearchInput() {
+  const { query } = useRouter();
+
   return (
     <input
       className="my-2 flex-grow bg-transparent placeholder-neutral-400 focus:outline-none"
       required
       type="search"
       name="q"
+      defaultValue={query.q ?? ""}
       placeholder="Search..."
     />
   );
@@ -24,10 +28,12 @@ function SearchButton() {
 }
 
 export default function SearchBar() {
+  const { pathname } = useRouter();
+
   return (
     <form
       className="align-center flex h-10 w-1/3 items-center space-x-2 rounded-lg border-2 border-neutral-200 bg-white pl-3 pr-2 transition-colors focus-within:border-neutral-300"
-      action={"/recipes"}
+      action={pathname}
       method="GET"
     >
       <SearchInput />
