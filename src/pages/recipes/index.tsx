@@ -2,7 +2,7 @@ import React from "react";
 import NavigationBar from "~/components/NavigationBar";
 
 import PageBase from "~/components/PageBase";
-import RecipeCard from "~/components/recipes/RecipeCard";
+import RecipeGrid from "~/components/recipes/RecipeGrid";
 
 import { api } from "~/utils/api";
 
@@ -17,11 +17,7 @@ export default function Page() {
         {/* <div className="flex  w-64 rounded-lg bg-nobel-200 p-4"> */}
         {/*   <SearchForm /> */}
         {/* </div> */}
-        <div className="container flex flex-wrap justify-center">
-          {query.data?.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))}
-        </div>
+        <RecipeGrid recipes={query.data!} />
       </main>
     </PageBase>
   );
