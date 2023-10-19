@@ -6,35 +6,18 @@ import { AuthFormKind, type AuthFormProps } from "~/components/auth";
 import FormEmailField from "~/components/form/FormEmailField";
 import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
 import ContinueWithGoogle from "~/components/auth/ContinueWithGoogle";
+import { FormDataProvider, useFormData } from "~/contexts/FormContext";
+import { api } from "~/utils/api";
 
 export default function SignInForm({ setForm }: AuthFormProps) {
-  const [signInCredentials, setSignInCredentials] = React.useState({
-    email: "",
-    password: "",
-  });
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSignInCredentials((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  }
-
   function handleSubmit() {
-    console.log(signInCredentials);
+    console.log();
   }
   return (
-    <>
+    <FormDataProvider>
       <AuthForm name={"Sign In"} onSubmit={handleSubmit}>
-        <FormEmailField
-          value={signInCredentials.email}
-          onChange={handleChange}
-        />
-        <FormTextField
-          name="password"
-          type={"password"}
-          value={signInCredentials.password}
-          onChange={handleChange}
-        />
+        <FormEmailField />
+        <FormTextField name="password" type={"password"} />
         <FormSubmit text={"Sign In"} />
         <div className="w-fill flex h-[24px] justify-center">
           <p
@@ -51,6 +34,6 @@ export default function SignInForm({ setForm }: AuthFormProps) {
         action={"Sign up here"}
         onClick={() => setForm(AuthFormKind.SignUp)}
       />
-    </>
+    </FormDataProvider>
   );
 }
