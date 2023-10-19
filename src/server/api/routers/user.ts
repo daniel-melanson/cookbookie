@@ -12,7 +12,7 @@ export const userRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
     return await ctx.prisma.user.findUnique({where: {
       email: input.email,
-      password: input.password
+      password: input.password,
     }});
   }),
 
@@ -26,7 +26,7 @@ export const userRouter = createTRPCRouter({
       firstName: "",
       lastName: "",
       dateOfBirth: Date(),
-      unitSystem: "US"
+      unitSystem: "US",
     }});
   }),
 
