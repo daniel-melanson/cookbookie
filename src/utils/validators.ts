@@ -19,6 +19,7 @@ export const UserCreateInput = z.object({
   firstName: name(),
   lastName: name(),
   email: z.string().email().min(3).max(512),
+  password: z.string().optional(),
   image: url(),
   dateOfBirth: z.date(),
   avatar: url().optional(),
