@@ -1,4 +1,7 @@
+import { TRPCError } from "@trpc/server";
+import { hash } from "bcrypt";
 import { z } from "zod";
+import { password } from "~/utils/validators";
 
 import {
   createTRPCRouter,
@@ -7,36 +10,40 @@ import {
 } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
-  getUserCredentials: publicProcedure
-    .input(z.object({email: z.string(), password: z.string()}))
-    .query(({ ctx, input }) => {
-    return ctx.prisma.user.findUnique({where: {
-      email: input.email,
-      password: input.password,
-    }});
-  }),
-
-  getEmail: publicProcedure
-    .input(z.string())
-    .query(({ ctx, input }) => {
-    return ctx.prisma.user.findUnique({where: {
-      email: input,
-    }});
-  }),
-
   registerUser: publicProcedure
-    .input(z.object({email: z.string(), password: z.string()}))
-    .mutation(({ ctx, input }) => {
-    return ctx.prisma.user.create({data: {
-      email: input.email,
-      password: input.password,
-      // TODO: Take input for the following fields
-      firstName: "test",
-      lastName: "test",
-      dateOfBirth: Date(),
-      unitSystem: "US",
-    }});
-  }),
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: password(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userCount = await ctx.prisma.user.count({
+        where: { email: input.email },
+      });
+
+      if (userCount !== 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User with email already exists",
+        });
+      }
+
+      await ctx.prisma.user.create({
+        data: {
+          email: input.email,
+          password: await hash(input.password, 12),
+          // TODO: Take input for the following fields
+          firstName: "First name",
+          lastName: "Last name",
+          dateOfBirth: new Date(),
+          unitSystem: "US",
+          role: "USER",
+        },
+      });
+
+      return { email: input.email, password: input.password };
+    }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";

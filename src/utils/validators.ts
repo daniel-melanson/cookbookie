@@ -1,8 +1,8 @@
 import {
-  type Prisma,
   UnitSystem as PrismaUnitSystem,
   UserRole as PrismaUserRole,
   RecipeDifficulty,
+  type Prisma,
 } from "@prisma/client";
 import { z } from "zod";
 
@@ -10,6 +10,23 @@ const name = (max = 64) => z.string().min(2).max(max);
 const url = () => z.string().url().min(5).max(1024);
 const unitAbbr = () => z.string().min(1).max(5);
 const quantity = () => z.number().min(0).max(10000);
+
+export const password = () =>
+  z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .max(128, "Password must be at most 128 characters.")
+    .regex(/\d/, "Password must contain a number.")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+    .regex(
+      /[!"#$%&'()*+,-./:;<=>?@\\\[\]^_`{|}~]/,
+      "Password must contain at least one special character.",
+    )
+    .regex(
+      /^[A-Za-z\d!"#$%&'()*+,-./:;<=>?@\\\[\]^_`{|}~]+$/,
+      "Password must only contain English characters.",
+    );
 
 export const UserRole = z.nativeEnum(PrismaUserRole);
 
@@ -20,7 +37,6 @@ export const UserCreateInput = z.object({
   lastName: name(),
   email: z.string().email().min(3).max(512),
   password: z.string().optional(),
-  image: url(),
   dateOfBirth: z.date(),
   avatar: url().optional(),
   role: UserRole,

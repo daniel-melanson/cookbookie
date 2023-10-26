@@ -1,13 +1,11 @@
-import React from "react";
-import AuthForm from "~/components/auth/AuthForm";
-import FormSubmit from "~/components/form/FormSubmit";
-import FormTextField from "~/components/form/FormTextField";
 import { AuthFormKind, type AuthFormProps } from "~/components/auth";
-import FormEmailField from "~/components/form/FormEmailField";
+import AuthForm from "~/components/auth/AuthForm";
 import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
 import ContinueWithGoogle from "~/components/auth/ContinueWithGoogle";
-import { FormDataProvider, useFormData } from "~/contexts/FormContext";
-import { api } from "~/utils/api";
+import FormEmailField from "~/components/form/FormEmailField";
+import FormSubmit from "~/components/form/FormSubmit";
+import FormTextField from "~/components/form/FormTextField";
+import { FormDataProvider } from "~/contexts/FormContext";
 
 export default function SignInForm({ setForm }: AuthFormProps) {
   function handleSubmit() {
