@@ -45,6 +45,9 @@ export default function NavigationBar(props: NavigationBarProps) {
               fill={<RiFridgeFill />}
             />
             <div className="bg-blue h-8 w-8 rounded-full" />
+            <Link className="rounded p-2 text-lg hover:bg-neutral-200" href="/">
+              Sign Out
+            </Link>
           </>
         ) : (
           <Link

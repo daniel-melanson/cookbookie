@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import { AuthFormKind, type AuthFormProps } from "~/components/auth";
 import AuthForm from "~/components/auth/AuthForm";
 import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
@@ -8,8 +9,13 @@ import FormTextField from "~/components/form/FormTextField";
 import { FormDataProvider } from "~/contexts/FormContext";
 
 export default function SignInForm({ setForm }: AuthFormProps) {
-  function handleSubmit() {
-    console.log();
+  function handleSubmit(data: Record<string, unknown>) {
+    void signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      callbackUrl: "/",
+      // redirect: false,
+    });
   }
   return (
     <FormDataProvider>
