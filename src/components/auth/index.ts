@@ -1,5 +1,5 @@
 export interface AuthFormProps {
-  setForm: (from: FormKind) => void;
+  setForm: (from: AuthFormKind) => void;
 }
 
 export enum AuthFormKind {

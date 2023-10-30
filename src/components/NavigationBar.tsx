@@ -11,14 +11,13 @@ import IconLink from "./IconLink";
 import Link from "next/link";
 import SearchBar, { SearchBarStyle } from "./SearchBar";
 import { useSession, signOut } from "next-auth/react";
-import { sign } from "crypto";
 
 interface NavigationBarProps {
   includeSearch?: boolean;
 }
 
 export default function NavigationBar(props: NavigationBarProps) {
-  const { data: session, status } = useSession();
+  const { /*data: session ,*/ status } = useSession();
 
   return (
     <header className="align-center border-light-gray flex h-16 items-center justify-between border-b px-4 py-2">

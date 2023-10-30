@@ -1,7 +1,13 @@
 import React from "react";
 import * as Form from "@radix-ui/react-form";
 
-export default function FormSubmit({ text, isLoading }: { text: string, isLoading?: boolean }) {
+export default function FormSubmit({
+  text,
+  isLoading,
+}: {
+  text: string;
+  isLoading?: boolean;
+}) {
   return (
     <Form.Submit className="w-full" asChild disabled={isLoading}>
       <button
