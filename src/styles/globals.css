@@ -32,9 +32,16 @@ h1 {
   opacity: 1;
 }
 
-.homeImageBanner {
+.home-image-banner {
   background: url("../../public/home-background-1.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.disable-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }

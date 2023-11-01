@@ -10,16 +10,17 @@ import {
 import IconLink from "./IconLink";
 import Link from "next/link";
 import SearchBar, { SearchBarStyle } from "./SearchBar";
+import { useSession, signOut } from "next-auth/react";
 
 interface NavigationBarProps {
   includeSearch?: boolean;
-  // TODO change to a user or session object or something
-  user?: boolean;
 }
 
 export default function NavigationBar(props: NavigationBarProps) {
+  const { /*data: session ,*/ status } = useSession();
+
   return (
-    <header className="align-center flex h-16 items-center justify-between border-b border-light-gray px-4 py-2">
+    <header className="align-center border-light-gray flex h-16 items-center justify-between border-b px-4 py-2">
       <h1 className="text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
@@ -27,7 +28,7 @@ export default function NavigationBar(props: NavigationBarProps) {
         <SearchBar style={SearchBarStyle.NavigationBar} />
       )}
       <div className="flex items-center justify-end space-x-4 text-3xl">
-        {props.user ? (
+        {status === "authenticated" ? (
           <>
             <IconLink
               href="/user/bookmarks"
@@ -44,12 +45,19 @@ export default function NavigationBar(props: NavigationBarProps) {
               line={<RiFridgeLine />}
               fill={<RiFridgeFill />}
             />
-            <div className="h-8 w-8 rounded-full bg-blue" />
+            {/* <div className="bg-blue h-8 w-8 rounded-full" /> */}
+            <Link
+              className="rounded p-2 text-lg hover:bg-neutral-200"
+              href="/"
+              onClick={() => void signOut()}
+            >
+              Sign Out
+            </Link>
           </>
         ) : (
           <Link
             className="rounded p-2 text-lg hover:bg-neutral-200"
-            href="/signin"
+            href="/login"
           >
             Sign In
           </Link>
