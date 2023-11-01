@@ -1,10 +1,10 @@
-import React from "react";
 import * as Form from "@radix-ui/react-form";
-import { useFormData } from "~/contexts/FormContext";
+import React from "react";
+import { useFormData, type FormData } from "~/contexts/FormContext";
 
 interface Props {
   name: string;
-  onSubmit?: (data: Record<string, unknown>) => void;
+  onSubmit?: (data: FormData) => void;
 }
 
 export default function AuthForm({

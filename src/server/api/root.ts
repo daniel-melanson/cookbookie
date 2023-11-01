@@ -11,7 +11,7 @@ import { recipeRouter } from "~/server/api/routers/recipes";
 export const appRouter = createTRPCRouter({
   recipes: recipeRouter,
   example: exampleRouter,
-  posts: userRouter,
+  users: userRouter,
 });
 
 // export type definition of API
