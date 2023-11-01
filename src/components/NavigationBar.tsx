@@ -9,8 +9,8 @@ import {
 } from "react-icons/ri";
 import IconLink from "~/components/IconLink";
 import Link from "next/link";
-import SearchBar, { SearchBarStyle } from "./SearchBar";
 import { useSession, signOut } from "next-auth/react";
+import NavBarSearch from "./NavBarSearch";
 
 interface NavigationBarProps {
   includeSearch?: boolean;
