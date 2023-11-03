@@ -3,21 +3,47 @@ import NavigationBar from "~/components/NavigationBar";
 
 import PageBase from "~/components/PageBase";
 import RecipeGrid from "~/components/recipes/RecipeGrid";
+import PageSelect from "~/components/search/PageSelect";
+
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { api } from "~/utils/api";
+import { z } from "zod";
 
 export default function Page() {
-  const query = api.recipes.getAll.useQuery();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { page } = z
+    .object({
+      page: z
+        .string()
+        .min(1)
+        .regex(/^\d+$/)
+        .default("1")
+        .transform((v) => Number(v)),
+    })
+    .parse(Object.fromEntries(searchParams.entries()));
+
+  const updateSearchPram = (name: string, value: unknown) => {
+    const params = new URLSearchParams(searchParams);
+    params.set(name, String(value));
+
+    return params.toString();
+  };
+
+  const query = api.recipes.search.useQuery({ page });
   if (query.isLoading) return;
 
   return (
     <PageBase title="Search">
       <NavigationBar includeSearch />
-      <main className="flex justify-center lg:m-5 lg:mb-0">
-        {/* <div className="flex  w-64 rounded-lg bg-nobel-200 p-4"> */}
-        {/*   <SearchForm /> */}
-        {/* </div> */}
-        <RecipeGrid recipes={query.data!} />
+      <main className="flex min-h-screen flex-col content-center space-y-6 lg:m-5 lg:mb-0">
+        <RecipeGrid recipes={query.data!.recipes} />
+        <PageSelect
+          page={page}
+          totalPages={query.data!.pageCount}
+          createLink={(p) => `${pathname}?${updateSearchPram("page", p)}`}
+        />
       </main>
     </PageBase>
   );

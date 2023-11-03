@@ -4,7 +4,7 @@ import Image from "next/image";
 import IconToggle from "~/components/IconToggle";
 import { RiBookmarkFill, RiBookmarkLine } from "react-icons/ri";
 
-type Recipe = OneOf<RouterOutputs["recipes"]["getAll"]>;
+type Recipe = OneOf<RouterOutputs["recipes"]["search"]["recipes"]>;
 
 interface Props {
   recipe: Recipe;
