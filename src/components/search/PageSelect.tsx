@@ -5,7 +5,7 @@ import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import { match } from "ts-pattern";
 
 interface EdgeButtonProps {
-  direction: "up" | "down";
+  direction: "next" | "prev";
   href?: string;
 }
 
@@ -14,12 +14,13 @@ function PageNavLink({
   href,
   children,
 }: EdgeButtonProps & React.PropsWithChildren) {
+  const isPrev = direction === "prev";
   const className = classNames(
     "flex items-center border-y-2 border-neutral-300 text-lg",
-    direction === "down"
+    isPrev
       ? "rounded-bl-lg rounded-tl-lg border-l-2"
       : "rounded-br-lg rounded-tr-lg border-r-2",
-    direction == "down" ? "pl-1 pr-3" : "pl-3 pr-1",
+    isPrev ? "pl-1 pr-3" : "pl-3 pr-1",
     href
       ? "text-neutral-800 hover:bg-neutral-200"
       : "disable-select text-neutral-400",
@@ -52,35 +53,25 @@ interface Props {
 
 export default function PageSelect({ page, totalPages, createLink }: Props) {
   function PageOption({ value }: { value: number }) {
+    const isLastPage = value === totalPages;
+    const isCurrentPage = value === page;
+    const isNextToCurrent = value - 1 === page;
+
     const baseClassNames = classNames(
       "border-y-2 px-3 py-1 text-lg",
-      value === totalPages ? "border-r-2" : "",
-      value - 1 === page ? "border-l-0" : "border-l-2",
+      isLastPage ? "border-r-2" : "",
+      isNextToCurrent ? "border-l-0" : "border-l-2",
+      isCurrentPage
+        ? "disable-select border-x-2 border-neutral-800 font-bold"
+        : "border-l-2 border-neutral-300 hover:bg-neutral-200",
     );
 
-    if (value === page) {
-      return (
-        <div
-          key={value}
-          className={classNames(
-            baseClassNames,
-            "disable-select border-x-2 border-neutral-800 font-bold",
-          )}
-        >
-          {value}
-        </div>
-      );
-    }
-
-    return (
-      <Link
-        key={value}
-        className={classNames(
-          baseClassNames,
-          "border-l-2 border-neutral-300 hover:bg-neutral-200",
-        )}
-        href={createLink(value)}
-      >
+    return isCurrentPage ? (
+      <div key={value} className={baseClassNames}>
+        {value}
+      </div>
+    ) : (
+      <Link key={value} className={baseClassNames} href={createLink(value)}>
         {value}
       </Link>
     );
@@ -114,7 +105,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
     <div className="flex justify-center">
       <div className="flex rounded-xl shadow">
         <PageNavLink
-          direction="down"
+          direction="prev"
           href={page > 1 ? createLink(page - 1) : undefined}
         >
           <RiArrowLeftSLine /> Previous
@@ -128,7 +119,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
           );
         })}
         <PageNavLink
-          direction="up"
+          direction="next"
           href={page < totalPages ? createLink(page + 1) : undefined}
         >
           Next <RiArrowRightSLine />
