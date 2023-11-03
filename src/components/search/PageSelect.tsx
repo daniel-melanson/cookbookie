@@ -20,7 +20,9 @@ function PageNavLink({
       ? "rounded-bl-lg rounded-tl-lg border-l-2"
       : "rounded-br-lg rounded-tr-lg border-r-2",
     direction == "down" ? "pl-1 pr-3" : "pl-3 pr-1",
-    href ? "text-neutral-800" : "disable-select text-neutral-400",
+    href
+      ? "text-neutral-800 hover:bg-neutral-200"
+      : "disable-select text-neutral-400",
   );
 
   if (!href) {
@@ -50,16 +52,32 @@ interface Props {
 
 export default function PageSelect({ page, totalPages, createLink }: Props) {
   function PageOption({ value }: { value: number }) {
+    const baseClassNames = classNames(
+      "border-y-2 px-3 py-1 text-lg",
+      value === totalPages ? "border-r-2" : "",
+      value - 1 === page ? "border-l-0" : "border-l-2",
+    );
+
+    if (value === page) {
+      return (
+        <div
+          key={value}
+          className={classNames(
+            baseClassNames,
+            "disable-select border-x-2 border-neutral-800 font-bold",
+          )}
+        >
+          {value}
+        </div>
+      );
+    }
+
     return (
       <Link
         key={value}
         className={classNames(
-          "border-y-2 px-3 py-1 text-lg",
-          value === page
-            ? "border-x-2 border-neutral-800 font-bold"
-            : "border-l-2 border-neutral-300",
-          value === totalPages ? "border-r-2" : "",
-          value - 1 === page ? "border-l-0" : "border-l-2",
+          baseClassNames,
+          "border-l-2 border-neutral-300 hover:bg-neutral-200",
         )}
         href={createLink(value)}
       >
