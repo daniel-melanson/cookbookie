@@ -8,7 +8,7 @@ interface Props {
 
 export default function RecipeGrid({ recipes }: Props) {
   return (
-    <div className="container flex flex-wrap justify-center self-center">
+    <div className="col-span-5 grid grid-cols-3 gap-5 lg:grid-cols-4">
       {recipes.map((recipe) => (
         <RecipeCard key={recipe.id} recipe={recipe} />
       ))}

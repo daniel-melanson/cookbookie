@@ -70,7 +70,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
 
   const pageOptions =
     totalPages <= 5
-      ? new Array<number>(totalPages).map((_, i) => i + 1)
+      ? new Array<number>(totalPages).fill(0).map((_, i) => i + 1)
       : match(page)
           .with(1, () => [1, 2, 3])
           .with(totalPages, () => [totalPages - 2, totalPages - 1, totalPages])

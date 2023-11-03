@@ -15,7 +15,7 @@ export const recipeRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const PAGE_SIZE = 40;
+      const PAGE_SIZE = 45;
 
       const recipes = await ctx.prisma.recipe.findMany({
         skip: (input.page - 1) * PAGE_SIZE,

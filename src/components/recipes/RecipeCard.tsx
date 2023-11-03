@@ -12,7 +12,7 @@ interface Props {
 
 export default function RecipeCard({ recipe }: Props) {
   return (
-    <div className="xm:w-1/2 relative flex w-full flex-col rounded-lg shadow-lg shadow-neutral-300 transition-shadow md:m-3 md:w-1/5">
+    <div className="relative flex flex-col rounded-lg shadow-lg shadow-neutral-300">
       <Image
         className="rounded-lg rounded-bl-none rounded-br-none"
         width={512}

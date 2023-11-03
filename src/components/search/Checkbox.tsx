@@ -1,0 +1,30 @@
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { HiCheck } from "react-icons/hi";
+
+interface Props {
+  label: string;
+}
+
+export default function CheckBox({ label }: Props) {
+  const id = `checkbox-${label.toLowerCase()}`;
+
+  return (
+    <div className="flex items-center ">
+      <Checkbox.Root
+        value={"true"}
+        id={id}
+        className=" hover:bg-violet3 flex h-[16px] w-[16px] appearance-none items-center justify-center rounded border-[1px] border-nobel-500 bg-white outline-none "
+      >
+        <Checkbox.Indicator>
+          <HiCheck className="font-bold text-nobel-500" />
+        </Checkbox.Indicator>
+      </Checkbox.Root>
+      <label
+        className="disable-select ms-0.5 text-sm text-neutral-700 hover:cursor-pointer"
+        htmlFor={id}
+      >
+        {label}
+      </label>
+    </div>
+  );
+}
