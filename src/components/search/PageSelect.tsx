@@ -20,7 +20,7 @@ function PageNavLink({
       ? "rounded-bl-lg rounded-tl-lg border-l-2"
       : "rounded-br-lg rounded-tr-lg border-r-2",
     direction == "down" ? "pl-1 pr-3" : "pl-3 pr-1",
-    href ? "text-neutral-800" : "text-neutral-400",
+    href ? "text-neutral-800" : "disable-select text-neutral-400",
   );
 
   if (!href) {
