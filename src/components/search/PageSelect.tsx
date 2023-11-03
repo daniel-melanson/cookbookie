@@ -54,12 +54,12 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
       <Link
         key={value}
         className={classNames(
-          "border-y-2 border-l-2 px-3 py-1 text-lg",
+          "border-y-2 px-3 py-1 text-lg",
           value === page
-            ? "border-neutral-800 font-bold"
-            : "border-neutral-300",
+            ? "border-x-2 border-neutral-800 font-bold"
+            : "border-l-2 border-neutral-300",
           value === totalPages ? "border-r-2" : "",
-          value - 1 === page ? "border-l-neutral-800" : "",
+          value - 1 === page ? "border-l-0" : "border-l-2",
         )}
         href={createLink(value)}
       >
