@@ -20,7 +20,7 @@ export default function CheckBox({ label }: Props) {
         </Checkbox.Indicator>
       </Checkbox.Root>
       <label
-        className="disable-select ms-0.5 text-sm text-neutral-700 hover:cursor-pointer"
+        className="disable-select ms-1 text-sm text-neutral-700 hover:cursor-pointer"
         htmlFor={id}
       >
         {label}
