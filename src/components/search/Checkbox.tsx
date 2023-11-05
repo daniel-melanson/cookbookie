@@ -13,10 +13,10 @@ export default function CheckBox({ label }: Props) {
       <Checkbox.Root
         value={"true"}
         id={id}
-        className=" hover:bg-violet3 flex h-[16px] w-[16px] appearance-none items-center justify-center rounded border-[1px] border-nobel-500 bg-white outline-none "
+        className=" flex h-[16px] w-[16px] appearance-none items-center justify-center rounded border-[1px] border-nobel-500 bg-nobel-100 outline-none hover:bg-nobel-200 data-[state=checked]:bg-nobel-500"
       >
         <Checkbox.Indicator>
-          <HiCheck className="font-bold text-nobel-500" />
+          <HiCheck className="font-bold text-white" />
         </Checkbox.Indicator>
       </Checkbox.Root>
       <label
