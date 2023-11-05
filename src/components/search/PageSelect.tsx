@@ -63,7 +63,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
       isNextToCurrent ? "border-l-0" : "border-l-2",
       isCurrentPage
         ? "disable-select border-x-2 border-neutral-800 font-bold"
-        : "border-l-2 border-neutral-300 hover:bg-neutral-200",
+        : "border-neutral-300 hover:bg-neutral-200",
     );
 
     return isCurrentPage ? (
