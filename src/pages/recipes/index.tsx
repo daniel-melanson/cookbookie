@@ -39,7 +39,7 @@ export default function Page() {
     <PageBase title="Search">
       <NavigationBar includeSearch />
       <main className="flex min-h-screen flex-col content-center space-y-6 lg:m-5 lg:mb-0">
-        <div className="container mx-auto grid grid-cols-4 gap-5">
+        <div className="container mx-auto flex space-x-4">
           <RecipeFilters />
           <RecipeGrid recipes={query.data!.recipes} />
         </div>
