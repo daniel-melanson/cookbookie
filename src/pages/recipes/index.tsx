@@ -33,7 +33,6 @@ export default function Page() {
   };
 
   const query = api.recipes.search.useQuery({ page });
-  if (query.isLoading) return;
 
   return (
     <PageBase title="Search">
@@ -41,13 +40,15 @@ export default function Page() {
       <main className="flex min-h-screen flex-col content-center space-y-6 lg:m-5 lg:mb-0">
         <div className="container mx-auto flex space-x-4">
           <RecipeFilters />
-          <RecipeGrid recipes={query.data!.recipes} />
+          {query.isSuccess && <RecipeGrid recipes={query.data.recipes} />}
         </div>
-        <PageSelect
-          page={page}
-          totalPages={query.data!.pageCount}
-          createLink={(p) => `${pathname}?${updateSearchPram("page", p)}`}
-        />
+        {query.isSuccess && (
+          <PageSelect
+            page={page}
+            totalPages={query.data.pageCount}
+            createLink={(p) => `${pathname}?${updateSearchPram("page", p)}`}
+          />
+        )}
       </main>
     </PageBase>
   );
