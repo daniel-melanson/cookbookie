@@ -1,6 +1,15 @@
 import React from "react";
 import Slider from "~/components/search/Slider";
 import CheckboxGroup from "~/components/search/CheckboxGroup";
+import ToggleGroup, { ToggleItem } from "./ToggleGroup";
+import {
+  MdOutlineBreakfastDining,
+  MdOutlineBrunchDining,
+  MdOutlineCookie,
+  MdOutlineDinnerDining,
+  MdOutlineLunchDining,
+} from "react-icons/md";
+import { BiDrink } from "react-icons/bi";
 
 export default function RecipeFilters() {
   const [servings, setServings] = React.useState(2);
@@ -9,25 +18,6 @@ export default function RecipeFilters() {
 
   return (
     <form className="flex flex-col space-y-1 px-3 py-2">
-      <CheckboxGroup
-        label="Meal"
-        options={["Breakfast", "Lunch", "Dinner", "Snack", "Drink"]}
-      />
-      <CheckboxGroup
-        label="Restrictions"
-        options={["Keto", "Kosher", "Halal", "Vegetarian", "Vegan"]}
-      />
-      <CheckboxGroup
-        label="Allergens"
-        options={[
-          "Gluten Free",
-          "Dairy Free",
-          "Nut Free",
-          "Soy Free",
-          "Egg Free",
-          "Fish Free",
-        ]}
-      />
       <Slider
         label="Servings"
         value={servings}
@@ -36,6 +26,40 @@ export default function RecipeFilters() {
         step={1}
         onChange={setServings}
       />
+      <ToggleGroup label="Allergens">
+        <ToggleItem value="gluten-free">Gluten Free</ToggleItem>
+        <ToggleItem value="dairy-free">Dairy Free</ToggleItem>
+        <ToggleItem value="nut-free">Nut Free</ToggleItem>
+        <ToggleItem value="egg-free">Egg Free</ToggleItem>
+        <ToggleItem value="fish-free">Fish Free</ToggleItem>
+      </ToggleGroup>
+      <ToggleGroup label="Dietary Restrictions">
+        <ToggleItem value="keto">Keto</ToggleItem>
+        <ToggleItem value="kosher">Kosher</ToggleItem>
+        <ToggleItem value="halal">Halal</ToggleItem>
+        <ToggleItem value="vegetarian">Vegetarian</ToggleItem>
+        <ToggleItem value="vegan">Vegan</ToggleItem>
+      </ToggleGroup>
+      <ToggleGroup label="Meal">
+        <ToggleItem value="breakfast">
+          <MdOutlineBreakfastDining /> Breakfast
+        </ToggleItem>
+        <ToggleItem value="brunch">
+          <MdOutlineBrunchDining /> Brunch
+        </ToggleItem>
+        <ToggleItem value="lunch">
+          <MdOutlineLunchDining /> Lunch
+        </ToggleItem>
+        <ToggleItem value="dinner">
+          <MdOutlineDinnerDining /> Dinner
+        </ToggleItem>
+        <ToggleItem value="snack">
+          <MdOutlineCookie /> Snack
+        </ToggleItem>
+        <ToggleItem value="drink">
+          <BiDrink /> Drink
+        </ToggleItem>
+      </ToggleGroup>
       <Slider
         label="Time"
         hint="Maximum preparation time"

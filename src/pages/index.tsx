@@ -5,11 +5,11 @@ import NavigationBar from "~/components/NavigationBar";
 import PageBase from "~/components/PageBase";
 import SearchBar from "~/components/SearchBar";
 
-type Props = {
+type Props = React.PropsWithChildren<{
   href: string;
   emoji: string;
   text: string;
-} & React.PropsWithChildren;
+}>;
 
 function EmojiLink({ emoji, text, href }: Props) {
   return (

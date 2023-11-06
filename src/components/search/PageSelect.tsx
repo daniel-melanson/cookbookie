@@ -13,7 +13,7 @@ function PageNavLink({
   direction,
   href,
   children,
-}: EdgeButtonProps & React.PropsWithChildren) {
+}: React.PropsWithChildren<EdgeButtonProps>) {
   const isPrev = direction === "prev";
   const className = classNames(
     "flex items-center border-y-2 border-neutral-300 text-lg",

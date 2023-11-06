@@ -8,7 +8,7 @@ interface Props {
   title: string;
 }
 
-export default function PageBase(props: Props & React.PropsWithChildren) {
+export default function PageBase(props: React.PropsWithChildren<Props>) {
   return (
     <>
       <Head>

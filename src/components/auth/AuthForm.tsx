@@ -11,7 +11,7 @@ export default function AuthForm({
   children,
   name,
   onSubmit,
-}: Props & React.PropsWithChildren) {
+}: React.PropsWithChildren<Props>) {
   const data = useFormData();
 
   return (
