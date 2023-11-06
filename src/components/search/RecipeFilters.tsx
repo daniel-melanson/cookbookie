@@ -7,6 +7,7 @@ import {
   MdOutlineBrunchDining,
   MdOutlineCookie,
   MdOutlineDinnerDining,
+  MdOutlineIcecream,
   MdOutlineLunchDining,
 } from "react-icons/md";
 import { BiDrink } from "react-icons/bi";
@@ -52,6 +53,9 @@ export default function RecipeFilters() {
         </ToggleItem>
         <ToggleItem value="dinner">
           <MdOutlineDinnerDining /> Dinner
+        </ToggleItem>
+        <ToggleItem value="dessert">
+          <MdOutlineIcecream /> Dessert
         </ToggleItem>
         <ToggleItem value="snack">
           <MdOutlineCookie /> Snack
