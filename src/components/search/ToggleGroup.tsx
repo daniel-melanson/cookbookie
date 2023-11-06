@@ -4,6 +4,7 @@ import FilterLabel from "~/components/search/FilterLabel";
 
 interface Props {
   label: string;
+  type?: "single" | "multiple";
   hint?: string;
 }
 
@@ -23,12 +24,13 @@ export function ToggleItem({ children, ...props }: T.ToggleGroupItemProps) {
 export default function ToggleGroup({
   label,
   hint,
+  type,
   children,
 }: React.PropsWithChildren<Props>) {
   return (
     <div>
       <FilterLabel label={label} hint={hint} />
-      <T.Root type="multiple" className="flex flex-wrap">
+      <T.Root type={type ?? "multiple"} className="flex flex-wrap">
         {children}
       </T.Root>
     </div>

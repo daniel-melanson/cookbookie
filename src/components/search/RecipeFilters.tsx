@@ -33,7 +33,7 @@ export default function RecipeFilters() {
         <ToggleItem value="egg-free">Egg Free</ToggleItem>
         <ToggleItem value="fish-free">Fish Free</ToggleItem>
       </ToggleGroup>
-      <ToggleGroup label="Dietary Restrictions">
+      <ToggleGroup label="Dietary Restrictions" type="single">
         <ToggleItem value="keto">Keto</ToggleItem>
         <ToggleItem value="kosher">Kosher</ToggleItem>
         <ToggleItem value="halal">Halal</ToggleItem>
