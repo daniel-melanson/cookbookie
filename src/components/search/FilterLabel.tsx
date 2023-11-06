@@ -31,7 +31,9 @@ function Hint({ text }: { text: string }) {
 export default function FilterLabel({ label, hint }: Props) {
   return (
     <div className="flex items-center">
-      <h3 className="mb-1 mr-2 text-xl font-bold text-nobel-600">{label}</h3>
+      <h3 className="mb-1 mr-2 whitespace-nowrap text-xl font-bold text-nobel-600">
+        {label}
+      </h3>
       {hint && <Hint text={hint} />}
     </div>
   );
