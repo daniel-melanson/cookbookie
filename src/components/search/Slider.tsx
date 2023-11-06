@@ -19,8 +19,6 @@ export default function Slider({
   transform,
   onChange,
 }: Props) {
-  const [showValue, setShowValue] = React.useState(false);
-
   return (
     <div className="flex space-x-3">
       <L.Root className="whitespace-nowrap text-sm text-nobel-600">
@@ -32,26 +30,12 @@ export default function Slider({
         max={max}
         step={step}
         value={[value]}
-        onValueChange={(e) => {
-          setShowValue(true);
-          onChange(e[0]!);
-        }}
-        onValueCommit={() => setShowValue(false)}
-        onBlur={() => setShowValue(false)}
+        onValueChange={([v]) => onChange(v!)}
       >
         <S.Track className="relative h-[4px] w-full rounded-full border-[1px] border-nobel-500 bg-white">
           <S.Range className="absolute h-full rounded-full bg-white" />
         </S.Track>
-        <S.Thumb
-          className="relative block h-4 w-4 rounded-[10px] bg-white shadow-[0_2px_4px] focus:shadow-[0_0_0_2px] focus:outline-none"
-          aria-label="Volume"
-        >
-          {showValue && (
-            <p className="absolute left-1/2 -translate-x-1/2 -translate-y-8 whitespace-nowrap rounded bg-white px-1 text-center font-bold text-nobel-500 shadow-[0_2px_4px]">
-              {transform ? transform(value) : value}
-            </p>
-          )}
-        </S.Thumb>
+        <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none" />
       </S.Root>
       <L.Root className="whitespace-nowrap text-sm text-nobel-600">
         {transform ? transform(max) : max}

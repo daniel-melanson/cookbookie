@@ -1,6 +1,7 @@
 import React from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { RiAddLine, RiQuestionLine, RiSubtractLine } from "react-icons/ri";
+import * as Accordion from "@radix-ui/react-accordion";
+import { RiQuestionLine } from "react-icons/ri";
 
 function Hint({ text }: { text: string }) {
   return (
@@ -23,54 +24,22 @@ function Hint({ text }: { text: string }) {
   );
 }
 
-function Label({
-  label,
-  hint,
-  open,
-  setOpen,
-}: {
-  label: string;
-  hint?: string;
-  open: boolean;
-  setOpen: (b: boolean) => void;
-}) {
-  const [shown, setShown] = React.useState(false);
-
-  return (
-    <div
-      className="flex items-center hover:cursor-pointer"
-      onMouseEnter={() => setShown(true)}
-      onMouseLeave={() => open || setShown(false)}
-      onClick={() => setOpen(!open)}
-    >
-      <h3 className="disable-select mb-1 whitespace-nowrap text-xl font-bold text-nobel-600">
-        {label}
-      </h3>
-      {hint && <Hint text={hint} />}
-      {shown && (
-        <button
-          type="button"
-          className="ml-auto text-nobel-600"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <RiSubtractLine /> : <RiAddLine />}
-        </button>
-      )}
-    </div>
-  );
-}
-
 export default function FilterItem({
   label,
   hint,
   children,
 }: React.PropsWithChildren<{ label: string; hint?: string }>) {
-  const [open, setOpen] = React.useState(false);
-
   return (
-    <div>
-      <Label label={label} hint={hint} open={open} setOpen={setOpen} />
-      {open && children}
-    </div>
+    <Accordion.Item value={`accordion-item-${label.toLowerCase()}`}>
+      <Accordion.Header>
+        <Accordion.Trigger className="mb-1 flex items-center text-lg font-bold text-nobel-600 hover:cursor-pointer">
+          {label}
+          {/* {hint && <Hint text={hint} />} */}
+        </Accordion.Trigger>
+      </Accordion.Header>
+      <Accordion.Content className="overflow-hidden data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown">
+        {children}
+      </Accordion.Content>
+    </Accordion.Item>
   );
 }

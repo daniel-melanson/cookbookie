@@ -32,6 +32,20 @@ export default {
           "950": "#44110b",
         },
       },
+      keyframes: {
+        slideDown: {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        slideUp: {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        slideDown: "slideDown 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        slideUp: "slideUp 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+      },
     },
     fontFamily: {
       cursive: ["Lucida Handwriting", "cursive"],
