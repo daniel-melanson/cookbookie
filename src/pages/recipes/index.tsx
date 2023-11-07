@@ -10,6 +10,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import { z } from "zod";
 import RecipeFilters from "~/components/search/RecipeFilters";
+import SearchResults from "~/components/search/SearchResults";
 
 export default function Page() {
   const pathname = usePathname();
@@ -37,10 +38,12 @@ export default function Page() {
   return (
     <PageBase title="Search">
       <NavigationBar includeSearch />
-      <main className="flex min-h-screen flex-col content-center space-y-6 lg:m-5 lg:mb-0">
+      <main className="mx-5 mt-5 flex min-h-screen flex-col content-center space-y-6">
         <div className="container mx-auto flex space-x-4">
           <RecipeFilters />
-          {query.isSuccess && <RecipeGrid recipes={query.data.recipes} />}
+          <SearchResults>
+            {query.isSuccess && <RecipeGrid recipes={query.data.recipes} />}
+          </SearchResults>
         </div>
         {query.isSuccess && (
           <PageSelect
