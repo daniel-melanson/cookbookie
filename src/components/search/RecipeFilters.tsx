@@ -74,7 +74,7 @@ export default function RecipeFilters() {
           </ToggleItem>
         </ToggleGroup>
       </FilterItem>
-      <FilterItem label="Preparation Time" hint="Maximum preparation time">
+      <FilterItem label="Preparation Time">
         <Slider
           value={time}
           min={15}
@@ -92,7 +92,7 @@ export default function RecipeFilters() {
       </FilterItem>
       <FilterItem
         label="Missing Ingredients"
-        hint={`Maximum number of ingredients missing from "My Pantry"`}
+        hint={`Maximum number of ingredients missing from "My Pantry".`}
       >
         <Slider
           value={missingIngredients}
@@ -104,7 +104,7 @@ export default function RecipeFilters() {
       </FilterItem>
       <FilterItem
         label="Ingredients"
-        hint="Recipes must use the specified ingredients."
+        hint="Using a specific set of ingredients."
       >
         <IngredientSearch />
       </FilterItem>
