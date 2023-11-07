@@ -1,7 +1,4 @@
 import React from "react";
-import * as Accordion from "@radix-ui/react-accordion";
-import { RiArrowDownSLine } from "react-icons/ri";
-import classNames from "classnames";
 
 export default function FilterItem({
   label,
