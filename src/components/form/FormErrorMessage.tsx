@@ -11,7 +11,7 @@ export interface MessageProps {
 export default function FormErrorMessage({ match, message }: MessageProps) {
   return (
     <Form.Message
-      className="mt-1 flex items-center text-sm text-red-500"
+      className="mt-1 flex items-center text-xs text-red-600"
       match={match}
     >
       <RiErrorWarningLine />
