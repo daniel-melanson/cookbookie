@@ -21,7 +21,7 @@ export default function NavigationBar(props: NavigationBarProps) {
 
   return (
     <header className="align-center border-light-gray flex h-16 items-center justify-between border-b px-4 py-2">
-      <h1 className="text-3xl">
+      <h1 className="font-cursive text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
       {props.includeSearch && <NavBarSearch />}

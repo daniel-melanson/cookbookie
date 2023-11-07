@@ -48,7 +48,7 @@ export default {
       },
     },
     fontFamily: {
-      cursive: ["Lucida Handwriting", "cursive"],
+      cursive: ["Vujahday Script", "cursive"],
     },
   },
   plugins: [],
