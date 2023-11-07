@@ -1,6 +1,6 @@
 import React from "react";
 import * as Accordion from "@radix-ui/react-accordion";
-import { RiAddLine, RiSubtractLine } from "react-icons/ri";
+import { RiArrowDownSLine } from "react-icons/ri";
 import classNames from "classnames";
 
 export default function FilterItem({
@@ -17,15 +17,10 @@ export default function FilterItem({
         <Accordion.Trigger className="group flex w-full items-center text-lg font-bold text-nobel-600 hover:cursor-pointer">
           {label}
           <div className="relative ml-auto h-4 w-4">
-            <RiAddLine
+            <RiArrowDownSLine
               className={classNames(
                 baseClasses,
-                "invisible group-hover:visible group-data-[state=open]:invisible",
-              )}
-            />
-            <RiSubtractLine
-              className={classNames(
-                "invisible group-data-[state=open]:visible",
+                "invisible transition-all ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-hover:visible group-data-[state=open]:visible group-data-[state=open]:rotate-180",
               )}
             />
           </div>
