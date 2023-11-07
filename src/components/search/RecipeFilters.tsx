@@ -12,8 +12,7 @@ import {
   MdOutlineLunchDining,
 } from "react-icons/md";
 import { BiDrink } from "react-icons/bi";
-import FilterGroup from "./filter/FilterGroup";
-import FilterItem from "./filter/FilterItem";
+import FilterItem from "~/components/search/filter/FilterItem";
 
 export default function RecipeFilters() {
   const [servings, setServings] = React.useState(2);
@@ -21,7 +20,7 @@ export default function RecipeFilters() {
   const [missingIngredients, setMissingIngredients] = React.useState(0);
 
   return (
-    <FilterGroup>
+    <form className="flex min-w-[256px] flex-col space-y-1">
       <FilterItem label="Servings">
         <Slider
           value={servings}
@@ -108,6 +107,6 @@ export default function RecipeFilters() {
       >
         <IngredientSearch />
       </FilterItem>
-    </FilterGroup>
+    </form>
   );
 }
