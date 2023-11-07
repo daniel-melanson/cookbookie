@@ -1,6 +1,6 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import { RiArrowDownSLine, RiCheckFill, RiSortDesc } from "react-icons/ri";
+import { RiArrowDownSLine, RiCheckFill } from "react-icons/ri";
 
 function SortOption({ value, label }: { value: string; label: string }) {
   return (

@@ -104,7 +104,7 @@ export default function RecipeFilters() {
       </FilterItem>
       <FilterItem
         label="Ingredients"
-        hint="Using a specific set of ingredients."
+        hint="Includes a specific set of ingredients."
       >
         <IngredientSearch />
       </FilterItem>
