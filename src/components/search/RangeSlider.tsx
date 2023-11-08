@@ -3,11 +3,11 @@ import * as S from "@radix-ui/react-slider";
 import * as L from "@radix-ui/react-label";
 
 interface Props {
-  value: number;
+  value?: [number, number];
   min: number;
   max: number;
   step: number;
-  onChange: (e: number) => void;
+  onChange: (e: [number, number]) => void;
   transform?: (e: number) => string;
 }
 
@@ -19,6 +19,11 @@ export default function Slider({
   transform,
   onChange,
 }: Props) {
+  const [lower, upper] = value ?? [min, max];
+
+  const lowerPercent = Math.round(((lower - min) / (max - min)) * 100);
+  const rangePercent = Math.round(((upper - lower) / (max - min)) * 100);
+
   return (
     <div className="flex space-x-3">
       <L.Root className="whitespace-nowrap text-sm text-nobel-600">
@@ -29,16 +34,23 @@ export default function Slider({
         min={min}
         max={max}
         step={step}
-        value={[value]}
-        onValueChange={([v]) => onChange(v!)}
+        value={[lower, upper]}
+        onValueChange={([l, u]) =>
+          onChange([Math.min(l!, u!), Math.max(l!, u!)])
+        }
       >
         <S.Track className="relative h-[4px] w-full rounded-full border-[1px] border-nobel-500 bg-white">
           <S.Range className="absolute h-full rounded-full bg-white" />
+          <div
+            className="absolute h-full bg-nobel-500"
+            style={{ left: `${lowerPercent}%`, width: `${rangePercent}%` }}
+          />
         </S.Track>
+        <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none" />
         <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none" />
       </S.Root>
       <L.Root className="whitespace-nowrap text-sm text-nobel-600">
-        {transform ? transform(max) : max}
+        +{transform ? transform(max) : max}
       </L.Root>
     </div>
   );

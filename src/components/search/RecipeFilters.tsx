@@ -1,5 +1,5 @@
 import React from "react";
-import Slider from "~/components/search/Slider";
+import RangeSlider from "~/components/search/RangeSlider";
 import IngredientSearch from "~/components/search/IngredientSearch";
 import ToggleGroup from "./toggle/ToggleGroup";
 import ToggleItem from "./toggle/ToggleItem";
@@ -15,17 +15,18 @@ import { BiDrink } from "react-icons/bi";
 import FilterItem from "~/components/search/filter/FilterItem";
 
 export default function RecipeFilters() {
-  const [servings, setServings] = React.useState(2);
-  const [time, setTime] = React.useState(15);
-  const [missingIngredients, setMissingIngredients] = React.useState(0);
+  type Range = [number, number] | undefined;
+  const [servings, setServings] = React.useState<Range>();
+  const [time, setTime] = React.useState<Range>();
+  const [missingIngredients, setMissingIngredients] = React.useState<Range>();
 
   return (
     <form className="flex min-w-[256px] flex-col space-y-1">
       <FilterItem label="Servings">
-        <Slider
+        <RangeSlider
           value={servings}
           min={1}
-          max={6}
+          max={12}
           step={1}
           onChange={setServings}
         />
@@ -74,10 +75,10 @@ export default function RecipeFilters() {
         </ToggleGroup>
       </FilterItem>
       <FilterItem label="Preparation Time">
-        <Slider
+        <RangeSlider
           value={time}
           min={15}
-          max={120}
+          max={180}
           transform={(v) => {
             if (v < 60) return `${v}m`;
 
@@ -93,7 +94,7 @@ export default function RecipeFilters() {
         label="Missing Ingredients"
         hint={`Maximum number of ingredients missing from "My Pantry".`}
       >
-        <Slider
+        <RangeSlider
           value={missingIngredients}
           min={0}
           max={5}
