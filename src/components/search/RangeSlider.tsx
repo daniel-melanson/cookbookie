@@ -11,6 +11,10 @@ interface Props {
   transform?: (e: number) => string;
 }
 
+const SliderThumb = () => (
+  <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none" />
+);
+
 export default function Slider({
   value,
   min,
@@ -46,8 +50,8 @@ export default function Slider({
             style={{ left: `${lowerPercent}%`, width: `${rangePercent}%` }}
           />
         </S.Track>
-        <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none" />
-        <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none" />
+        <SliderThumb />
+        <SliderThumb />
       </S.Root>
       <L.Root className="whitespace-nowrap text-sm text-nobel-600">
         +{transform ? transform(max) : max}
