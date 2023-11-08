@@ -4,7 +4,9 @@ import { useDebounce } from "@uidotdev/usehooks";
 import * as S from "@radix-ui/react-scroll-area";
 import { RiAddFill, RiSubtractLine } from "react-icons/ri";
 
-type IngredientEmbed = OneOf<RouterOutputs["ingredients"]["embedSearch"]>;
+export type IngredientEmbed = OneOf<
+  RouterOutputs["ingredients"]["embedSearch"]
+>;
 
 function IngredientResults({
   ingredients,
@@ -61,8 +63,13 @@ function IngredientPill({
   );
 }
 
-export default function IngredientSearch() {
-  const [ingredients, setIngredients] = React.useState<IngredientEmbed[]>([]);
+export default function IngredientSearch({
+  ingredients,
+  onChange,
+}: {
+  ingredients: IngredientEmbed[];
+  onChange: (ingredients: IngredientEmbed[]) => void;
+}) {
   const ingredientIds = new Set(ingredients.map((ingredient) => ingredient.id));
 
   const [filter, setFilter] = React.useState("");
@@ -84,9 +91,7 @@ export default function IngredientSearch() {
             key={ingredient.id}
             ingredient={ingredient}
             onRemove={() =>
-              setIngredients(
-                ingredients.filter(({ id }) => id !== ingredient.id),
-              )
+              onChange(ingredients.filter(({ id }) => id !== ingredient.id))
             }
           />
         ))}
@@ -96,7 +101,7 @@ export default function IngredientSearch() {
           ingredients={query.data.filter(({ id }) => !ingredientIds.has(id))}
           onSelect={(ingredient) => {
             setFilter("");
-            setIngredients([...ingredients, ingredient]);
+            onChange([...ingredients, ingredient]);
           }}
         />
       )}

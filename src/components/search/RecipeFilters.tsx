@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import RangeSlider from "~/components/search/RangeSlider";
-import IngredientSearch from "~/components/search/IngredientSearch";
+import IngredientSearch, {
+  type IngredientEmbed,
+} from "~/components/search/IngredientSearch";
 import ToggleGroup from "./toggle/ToggleGroup";
 import ToggleItem from "./toggle/ToggleItem";
 import {
@@ -14,11 +16,31 @@ import {
 import { BiDrink } from "react-icons/bi";
 import FilterItem from "~/components/search/filter/FilterItem";
 
+interface FilterData {
+  servings?: [number, number];
+  time?: [number, number];
+  missingIngredients?: [number, number];
+  allergens?: string[];
+  meal?: string[];
+  dietaryRestrictions?: string;
+  ingredients?: IngredientEmbed[];
+}
+
 export default function RecipeFilters() {
-  type Range = [number, number] | undefined;
-  const [servings, setServings] = React.useState<Range>();
-  const [time, setTime] = React.useState<Range>();
-  const [missingIngredients, setMissingIngredients] = React.useState<Range>();
+  const [data, setData] = useState<FilterData>({});
+  const {
+    servings,
+    time,
+    missingIngredients,
+    allergens,
+    meal,
+    dietaryRestrictions,
+    ingredients,
+  } = data;
+
+  function handlerFactory<K extends keyof FilterData>(key: K) {
+    return (value: FilterData[K]) => setData({ ...data, [key]: value });
+  }
 
   return (
     <form className="flex min-w-[256px] flex-col space-y-1">
@@ -28,11 +50,15 @@ export default function RecipeFilters() {
           min={1}
           max={12}
           step={1}
-          onChange={setServings}
+          onChange={handlerFactory("servings")}
         />
       </FilterItem>
       <FilterItem label="Allergens">
-        <ToggleGroup>
+        <ToggleGroup
+          type="multiple"
+          value={allergens}
+          onValueChange={handlerFactory("allergens")}
+        >
           <ToggleItem value="gluten-free">Gluten Free</ToggleItem>
           <ToggleItem value="dairy-free">Dairy Free</ToggleItem>
           <ToggleItem value="nut-free">Nut Free</ToggleItem>
@@ -41,7 +67,11 @@ export default function RecipeFilters() {
         </ToggleGroup>
       </FilterItem>
       <FilterItem label="Dietary Restrictions">
-        <ToggleGroup type="single">
+        <ToggleGroup
+          type="single"
+          value={dietaryRestrictions}
+          onValueChange={handlerFactory("dietaryRestrictions")}
+        >
           <ToggleItem value="keto">Keto</ToggleItem>
           <ToggleItem value="kosher">Kosher</ToggleItem>
           <ToggleItem value="halal">Halal</ToggleItem>
@@ -50,7 +80,11 @@ export default function RecipeFilters() {
         </ToggleGroup>
       </FilterItem>
       <FilterItem label="Meal">
-        <ToggleGroup>
+        <ToggleGroup
+          type="multiple"
+          value={meal}
+          onValueChange={handlerFactory("meal")}
+        >
           <ToggleItem value="breakfast">
             <MdOutlineBreakfastDining /> Breakfast
           </ToggleItem>
@@ -87,7 +121,7 @@ export default function RecipeFilters() {
             return minutes > 0 ? `${hours}hr ${minutes}min` : `${hours}hr`;
           }}
           step={15}
-          onChange={setTime}
+          onChange={handlerFactory("time")}
         />
       </FilterItem>
       <FilterItem
@@ -99,14 +133,17 @@ export default function RecipeFilters() {
           min={0}
           max={5}
           step={1}
-          onChange={setMissingIngredients}
+          onChange={handlerFactory("missingIngredients")}
         />
       </FilterItem>
       <FilterItem
         label="Ingredients"
         hint="Includes a specific set of ingredients."
       >
-        <IngredientSearch />
+        <IngredientSearch
+          ingredients={ingredients ?? []}
+          onChange={handlerFactory("ingredients")}
+        />
       </FilterItem>
     </form>
   );

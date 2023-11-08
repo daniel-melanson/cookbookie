@@ -1,10 +1,15 @@
 import React from "react";
 
+interface Props {
+  label: string;
+  hint?: string;
+}
+
 export default function FilterItem({
   label,
   hint,
   children,
-}: React.PropsWithChildren<{ label: string; hint?: string }>) {
+}: React.PropsWithChildren<Props>) {
   return (
     <>
       <h2 className="flex w-full items-center text-lg font-bold text-nobel-600">
