@@ -10,13 +10,8 @@ import {
 import IconLink from "~/components/IconLink";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import NavBarSearch from "./NavBarSearch";
 
-interface NavigationBarProps {
-  includeSearch?: boolean;
-}
-
-export default function NavigationBar(props: NavigationBarProps) {
+export default function NavigationBar({ children }: React.PropsWithChildren) {
   const { /*data: session ,*/ status } = useSession();
 
   return (
@@ -24,7 +19,7 @@ export default function NavigationBar(props: NavigationBarProps) {
       <h1 className="font-cursive text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
-      {props.includeSearch && <NavBarSearch />}
+      {children}
       <div className="flex items-center justify-end space-x-4 text-3xl">
         {status === "authenticated" ? (
           <>

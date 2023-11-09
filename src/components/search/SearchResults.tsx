@@ -16,11 +16,17 @@ function SortOption({ value, label }: { value: string; label: string }) {
   );
 }
 
-function SortSelection() {
+function SortSelection({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
   return (
     <div className="flex items-center space-x-2 justify-self-end">
       <span className="font-bold text-nobel-600">SORT BY</span>
-      <Select.Root defaultValue="relevance">
+      <Select.Root value={value} onValueChange={onChange}>
         <Select.Trigger className="inline-flex items-center space-x-1 outline-none">
           <Select.Value />
           <Select.Icon>
@@ -31,8 +37,8 @@ function SortSelection() {
           <Select.Content className="overflow-hidden rounded border-[1px] border-nobel-500 bg-white">
             <Select.Viewport className="p-1.5">
               <SortOption value="relevance" label="Relevance" />
-              <SortOption value="preparation-time" label="Preparation Time" />
-              <SortOption value="servings" label="Servings" />
+              <SortOption value="popularity" label="Popularity" />
+              <SortOption value="created-at" label="Created At" />
             </Select.Viewport>
           </Select.Content>
         </Select.Portal>
@@ -43,11 +49,17 @@ function SortSelection() {
 
 export default function SearchResults({
   children,
-}: React.PropsWithChildren<{ count?: number }>) {
+  sort,
+  onSortChange,
+}: React.PropsWithChildren<{
+  count?: number;
+  sort: string;
+  onSortChange: (v: string) => void;
+}>) {
   return (
     <div className="grid grid-cols-2 gap-2">
       <h2 className="text-2xl font-bold">Results</h2>
-      <SortSelection />
+      <SortSelection value={sort} onChange={onSortChange} />
       <div className="col-span-2">{children}</div>
     </div>
   );

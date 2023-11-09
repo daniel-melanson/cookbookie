@@ -1,5 +1,6 @@
 import React from "react";
 import NavigationBar from "~/components/NavigationBar";
+import NavBarSearch from "~/components/NavBarSearch";
 
 import PageBase from "~/components/PageBase";
 import RecipeGrid from "~/components/recipes/RecipeGrid";
@@ -42,44 +43,67 @@ export default function Page() {
     }
   };
 
-  const { page, f } = z
+  const { p, f, s, q } = z
     .object({
-      page: z
+      p: z
         .string()
         .regex(/^\d+$/)
         .transform((v) => Number(v))
         .optional(),
+      q: z.string().optional(),
       f: z.string().optional(),
+      s: z.enum(["relevance", "popularity", "created-at"]).optional(),
     })
     .parse(Object.fromEntries(searchParams.entries()));
 
   const filters = (f ? JSON.parse(atob(f)) : {}) as RecipeFilters;
 
-  const updatePageSearchParam = (page: number) => {
+  const createUpdatedSearchParam = (key: string, value: number | string) => {
     const params = new URLSearchParams(searchParams);
-    params.set("page", String(page));
+    params.set(key, String(value));
 
     return params.toString();
   };
 
-  console.log(filters);
-  const query = api.recipes.search.useQuery({ page, ...filters });
+  const query = api.recipes.search.useQuery({
+    page: p,
+    query: q,
+    filters: { ...filters },
+    orderBy: s,
+  });
 
   return (
     <PageBase title="Search">
-      <NavigationBar includeSearch />
+      <NavigationBar>
+        <NavBarSearch
+          target="recipes"
+          query={q}
+          createSubmitLink={(q) =>
+            `${pathname}?${createUpdatedSearchParam("q", q)}`
+          }
+        />
+      </NavigationBar>
       <main className="mx-5 mt-5 flex min-h-screen flex-col content-center space-y-6">
         <div className="container mx-auto flex space-x-4">
           <RecipeFilterForm filters={filters} onChange={updateFilters} />
-          <SearchResults>
+          <SearchResults
+            sort={s ?? q ? "relevance" : "popularity"}
+            onSortChange={(v) =>
+              void router.push(
+                `${pathname}?${createUpdatedSearchParam("s", v)}`,
+              )
+            }
+          >
             {<RecipeGrid recipes={query.isSuccess ? query.data.recipes : []} />}
           </SearchResults>
         </div>
         {query.isSuccess && (
           <PageSelect
-            page={page ?? 1}
+            page={p ?? 1}
             totalPages={query.data.pageCount}
-            createLink={(p) => `${pathname}?${updatePageSearchParam(p)}`}
+            createLink={(p) =>
+              `${pathname}?${createUpdatedSearchParam("p", p)}`
+            }
           />
         )}
       </main>
