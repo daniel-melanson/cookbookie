@@ -9,47 +9,77 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 import { api } from "~/utils/api";
 import { z } from "zod";
-import RecipeFilters from "~/components/search/RecipeFilters";
+import RecipeFilterForm, {
+  type RecipeFilters,
+} from "~/components/search/RecipeFilterForm";
 import SearchResults from "~/components/search/SearchResults";
+import { useRouter } from "next/router";
 
 export default function Page() {
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { page } = z
+  const updateFilters = (filters: RecipeFilters) => {
+    for (const [key, value] of Object.entries(filters)) {
+      if (
+        value === undefined ||
+        ((Array.isArray(value) || typeof value === "string") &&
+          value.length === 0)
+      ) {
+        // @ts-expect-error key is a valid key of filters
+        delete filters[key];
+      }
+    }
+
+    const hasFilters = Object.keys(filters).length > 0;
+    if (hasFilters) {
+      const params = new URLSearchParams(searchParams);
+      params.set("f", btoa(JSON.stringify(filters)));
+
+      void router.push(`${pathname}?${params.toString()}`);
+    } else {
+      void router.push(pathname);
+    }
+  };
+
+  const { page, f } = z
     .object({
       page: z
         .string()
-        .min(1)
         .regex(/^\d+$/)
-        .default("1")
-        .transform((v) => Number(v)),
+        .transform((v) => Number(v))
+        .optional(),
+      f: z.string().optional(),
     })
     .parse(Object.fromEntries(searchParams.entries()));
 
-  const updateSearchPram = (name: string, value: unknown) => {
+  const filters = (f ? JSON.parse(atob(f)) : {}) as RecipeFilters;
+
+  const updatePageSearchParam = (page: number) => {
     const params = new URLSearchParams(searchParams);
-    params.set(name, String(value));
+    params.set("page", String(page));
 
     return params.toString();
   };
 
-  const query = api.recipes.search.useQuery({ page });
+  console.log(filters);
+  const query = api.recipes.search.useQuery({ page, ...filters });
 
   return (
     <PageBase title="Search">
       <NavigationBar includeSearch />
       <main className="mx-5 mt-5 flex min-h-screen flex-col content-center space-y-6">
         <div className="container mx-auto flex space-x-4">
-          <RecipeFilters />
+          <RecipeFilterForm filters={filters} onChange={updateFilters} />
           <SearchResults>
-            {query.isSuccess && <RecipeGrid recipes={query.data.recipes} />}
+            {<RecipeGrid recipes={query.isSuccess ? query.data.recipes : []} />}
           </SearchResults>
         </div>
         {query.isSuccess && (
           <PageSelect
-            page={page}
+            page={page ?? 1}
             totalPages={query.data.pageCount}
-            createLink={(p) => `${pathname}?${updateSearchPram("page", p)}`}
+            createLink={(p) => `${pathname}?${updatePageSearchParam(p)}`}
           />
         )}
       </main>

@@ -7,7 +7,7 @@ interface Props {
   min: number;
   max: number;
   step: number;
-  onChange: (e: [number, number]) => void;
+  onValueChange: (e: [number, number]) => void;
   transform?: (e: number) => string;
 }
 
@@ -21,12 +21,22 @@ export default function Slider({
   max,
   step,
   transform,
-  onChange,
+  onValueChange,
 }: Props) {
-  const [lower, upper] = value ?? [min, max];
+  const [[lower, upper], setValue] = React.useState(value ?? [min, max]);
 
   const lowerPercent = Math.round(((lower - min) / (max - min)) * 100);
   const rangePercent = Math.round(((upper - lower) / (max - min)) * 100);
+
+  function handlerFactory(f: (_: [number, number]) => void) {
+    return ([lower, upper]: number[]) =>
+      f([
+        // @ts-expect-error value change is [number, number]
+        Math.min(lower, upper),
+        // @ts-expect-error value change is [number, number]
+        Math.max(lower, upper),
+      ]);
+  }
 
   return (
     <div className="flex space-x-3">
@@ -39,9 +49,8 @@ export default function Slider({
         max={max}
         step={step}
         value={[lower, upper]}
-        onValueChange={([l, u]) =>
-          onChange([Math.min(l!, u!), Math.max(l!, u!)])
-        }
+        onValueChange={handlerFactory(setValue)}
+        onValueCommit={handlerFactory(onValueChange)}
       >
         <S.Track className="relative h-[4px] w-full rounded-full border-[1px] border-nobel-500 bg-white">
           <S.Range className="absolute h-full rounded-full bg-white" />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import RangeSlider from "~/components/search/RangeSlider";
 import IngredientSearch, {
   type IngredientEmbed,
@@ -16,18 +16,24 @@ import {
 import { BiDrink } from "react-icons/bi";
 import FilterItem from "~/components/search/filter/FilterItem";
 
-interface FilterData {
-  servings?: [number, number];
-  time?: [number, number];
-  missingIngredients?: [number, number];
+export type Range = [number, number];
+
+export interface RecipeFilters {
+  dietaryRestrictions?: string;
+  servings?: Range;
+  time?: Range;
+  missingIngredients?: Range;
   allergens?: string[];
   meal?: string[];
-  dietaryRestrictions?: string;
   ingredients?: IngredientEmbed[];
 }
 
-export default function RecipeFilters() {
-  const [data, setData] = useState<FilterData>({});
+interface Props {
+  filters: RecipeFilters;
+  onChange: (filters: RecipeFilters) => void;
+}
+
+export default function RecipeFilterForm({ filters, onChange }: Props) {
   const {
     servings,
     time,
@@ -36,10 +42,13 @@ export default function RecipeFilters() {
     meal,
     dietaryRestrictions,
     ingredients,
-  } = data;
+  } = filters;
 
-  function handlerFactory<K extends keyof FilterData>(key: K) {
-    return (value: FilterData[K]) => setData({ ...data, [key]: value });
+  function handlerFactory<K extends keyof RecipeFilters>(key: K) {
+    return (value: RecipeFilters[K]) => {
+      value = Array.isArray(value) && value.length === 0 ? undefined : value;
+      onChange({ ...filters, [key]: value });
+    };
   }
 
   return (
@@ -50,13 +59,13 @@ export default function RecipeFilters() {
           min={1}
           max={12}
           step={1}
-          onChange={handlerFactory("servings")}
+          onValueChange={handlerFactory("servings")}
         />
       </FilterItem>
       <FilterItem label="Allergens">
         <ToggleGroup
           type="multiple"
-          value={allergens}
+          value={allergens ?? []}
           onValueChange={handlerFactory("allergens")}
         >
           <ToggleItem value="gluten-free">Gluten Free</ToggleItem>
@@ -82,7 +91,7 @@ export default function RecipeFilters() {
       <FilterItem label="Meal">
         <ToggleGroup
           type="multiple"
-          value={meal}
+          value={meal ?? []}
           onValueChange={handlerFactory("meal")}
         >
           <ToggleItem value="breakfast">
@@ -121,7 +130,7 @@ export default function RecipeFilters() {
             return minutes > 0 ? `${hours}hr ${minutes}min` : `${hours}hr`;
           }}
           step={15}
-          onChange={handlerFactory("time")}
+          onValueChange={handlerFactory("time")}
         />
       </FilterItem>
       <FilterItem
@@ -133,7 +142,7 @@ export default function RecipeFilters() {
           min={0}
           max={5}
           step={1}
-          onChange={handlerFactory("missingIngredients")}
+          onValueChange={handlerFactory("missingIngredients")}
         />
       </FilterItem>
       <FilterItem
