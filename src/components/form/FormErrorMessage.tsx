@@ -4,14 +4,14 @@ import { RiErrorWarningLine } from "react-icons/ri";
 
 export interface MessageProps {
   // Types found in source code
-  match: Form.ValidityMatcher | Form.CustomMatcher;
+  match?: Form.ValidityMatcher | Form.CustomMatcher;
   message: string;
 }
 
 export default function FormErrorMessage({ match, message }: MessageProps) {
   return (
     <Form.Message
-      className="mt-1 flex items-center text-xs text-red-600"
+      className="mt-1 flex items-center text-xs text-red-500"
       match={match}
     >
       <RiErrorWarningLine />

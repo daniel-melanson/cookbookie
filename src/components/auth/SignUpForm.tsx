@@ -5,9 +5,10 @@ import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
 import ContinueWithGoogle from "~/components/auth/ContinueWithGoogle";
 import FormEmailField from "~/components/form/FormEmailField";
 import FormSubmit from "~/components/form/FormSubmit";
+import SignUpPasswordField from "./SignUpPasswordField";
 import { FormDataProvider } from "~/contexts/FormContext";
 import { api } from "~/utils/api";
-import SignUpPasswordField from "./SignUpPasswordField";
+import { useFormData } from "~/contexts/FormContext";
 
 const Line = () => <div className="h-[1px] flex-grow bg-black" />;
 
@@ -29,14 +30,14 @@ export default function SignUpForm({ setForm }: AuthFormProps) {
     });
   }
 
-  if (mutation.isError) {
-    console.log(mutation.error);
+  if (mutation.isError && mutation.error.message.includes("email")) {
+    console.log(mutation.error.message);
   }
 
   return (
     <FormDataProvider>
       <AuthForm name={"Sign Up"} onSubmit={handleSubmit}>
-        <FormEmailField />
+        <FormEmailField serverErrorMessage={mutation.error?.message} />
         <SignUpPasswordField />
         <FormSubmit text="Continue" isLoading={mutation.isLoading} />
         <div className="w-fill flex h-[24px] justify-center">
