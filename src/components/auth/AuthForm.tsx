@@ -23,7 +23,7 @@ export default function AuthForm({
 
           onSubmit && onSubmit(data);
         }}
-        className="flex w-full flex-col space-y-[18px]"
+        className="w-full space-y-[18px]"
       >
         {children}
       </Form.Root>
