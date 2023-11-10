@@ -67,11 +67,9 @@ export default function IngredientSearch({
   ingredients,
   onChange,
 }: {
-  ingredients?: IngredientEmbed[];
+  ingredients: IngredientEmbed[];
   onChange: (ingredients: IngredientEmbed[]) => void;
 }) {
-  ingredients ??= [];
-
   const ingredientIds = new Set(ingredients.map((ingredient) => ingredient.id));
 
   const [filter, setFilter] = React.useState("");

@@ -150,7 +150,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
         hint="Includes a specific set of ingredients."
       >
         <IngredientSearch
-          ingredients={ingredients}
+          ingredients={ingredients ?? []}
           onChange={handlerFactory("ingredients")}
         />
       </FilterItem>
