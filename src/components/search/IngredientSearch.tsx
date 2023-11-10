@@ -52,10 +52,10 @@ function IngredientPill({
 }) {
   return (
     <div
-      className="disable-select m-0.5 flex h-8 items-center space-x-2 rounded-full border-[1px] border-nobel-500 bg-white px-2 py-1 text-sm capitalize text-neutral-700 transition-colors hover:bg-nobel-200"
+      className="disable-select m-0.5 flex h-fit items-center space-x-2 rounded-full border-[1px] border-nobel-500 bg-white px-2 py-1 text-sm capitalize text-neutral-700 transition-colors hover:bg-nobel-200"
       key={ingredient.id}
     >
-      <span>{ingredient.name}</span>
+      <span className="whitespace-nowrap">{ingredient.name}</span>
       <button type="button" className="man-w-[16px]" onClick={() => onRemove()}>
         <RiSubtractLine />
       </button>
