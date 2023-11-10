@@ -16,7 +16,7 @@ export default function NavBarSearch({
 
   return (
     <form
-      className="align-center flex h-10 w-1/3 items-center space-x-2 rounded-lg border-2 border-neutral-200 bg-white pl-3 pr-2 transition-colors focus-within:border-neutral-300"
+      className="flex h-10 w-1/6 min-w-min items-center space-x-2 rounded-lg border-2 border-neutral-200 bg-white pl-3 pr-2 transition-colors focus-within:border-neutral-300"
       onSubmit={(e) => {
         e.preventDefault();
 
