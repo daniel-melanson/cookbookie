@@ -24,10 +24,10 @@ function SortSelection({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex items-center space-x-2 justify-self-end">
+    <div className="flex items-end space-x-2 justify-self-end">
       <span className="font-bold text-nobel-600">SORT BY</span>
       <Select.Root value={value} onValueChange={onChange}>
-        <Select.Trigger className="inline-flex items-center space-x-1 outline-none">
+        <Select.Trigger className="flex items-center space-x-1 outline-none">
           <Select.Value />
           <Select.Icon>
             <RiArrowDownSLine />
@@ -57,10 +57,12 @@ export default function SearchResults({
   onSortChange: (v: string) => void;
 }>) {
   return (
-    <div className="grid grid-cols-2 gap-2">
-      <h2 className="text-2xl font-bold">Results</h2>
-      <SortSelection value={sort} onChange={onSortChange} />
-      <div className="col-span-2">{children}</div>
+    <div className="w-full space-y-4">
+      <div className="flex place-content-between">
+        <h2 className="text-2xl font-bold">Results</h2>
+        <SortSelection value={sort} onChange={onSortChange} />
+      </div>
+      {children}
     </div>
   );
 }

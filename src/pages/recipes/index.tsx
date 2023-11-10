@@ -83,7 +83,7 @@ export default function Page() {
           }
         />
       </NavigationBar>
-      <main className="mx-5 mt-5 flex min-h-screen flex-col content-center space-y-6">
+      <main className="mx-5 mt-5 min-h-screen content-center space-y-6">
         <div className="container mx-auto flex space-x-4">
           <RecipeFilterForm filters={filters} onChange={updateFilters} />
           <SearchResults
@@ -94,7 +94,9 @@ export default function Page() {
               )
             }
           >
-            {<RecipeGrid recipes={query.isSuccess ? query.data.recipes : []} />}
+            <RecipeGrid
+              recipes={query.isSuccess ? query.data.recipes : undefined}
+            />
           </SearchResults>
         </div>
         {query.isSuccess && (
