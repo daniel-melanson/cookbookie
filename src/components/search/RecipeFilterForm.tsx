@@ -65,7 +65,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
       <FilterItem label="Allergens">
         <ToggleGroup
           type="multiple"
-          value={allergens ?? []}
+          value={allergens}
           onValueChange={handlerFactory("allergens")}
         >
           <ToggleItem value="gluten-free">Gluten Free</ToggleItem>
@@ -78,7 +78,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
       <FilterItem label="Dietary Restrictions">
         <ToggleGroup
           type="single"
-          value={dietaryRestriction ?? ""}
+          value={dietaryRestriction}
           onValueChange={handlerFactory("dietaryRestriction")}
         >
           <ToggleItem value="keto">Keto</ToggleItem>
@@ -91,7 +91,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
       <FilterItem label="Meal">
         <ToggleGroup
           type="multiple"
-          value={meal ?? []}
+          value={meal}
           onValueChange={handlerFactory("meal")}
         >
           <ToggleItem value="breakfast">
@@ -150,7 +150,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
         hint="Includes a specific set of ingredients."
       >
         <IngredientSearch
-          ingredients={ingredients ?? []}
+          ingredients={ingredients}
           onChange={handlerFactory("ingredients")}
         />
       </FilterItem>

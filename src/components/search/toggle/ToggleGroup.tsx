@@ -5,6 +5,7 @@ export default function ToggleGroup({
   children,
   ...props
 }: T.ToggleGroupMultipleProps | T.ToggleGroupSingleProps) {
+  props.value ??= props.type === "single" ? "" : [];
   return (
     <T.Root {...props} className="flex flex-wrap">
       {children}
