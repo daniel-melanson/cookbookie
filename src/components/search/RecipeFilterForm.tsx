@@ -19,7 +19,7 @@ import FilterItem from "~/components/search/filter/FilterItem";
 export type Range = [number, number];
 
 export interface RecipeFilters {
-  dietaryRestrictions?: string;
+  dietaryRestriction?: string;
   servings?: Range;
   time?: Range;
   missingIngredients?: Range;
@@ -40,7 +40,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
     missingIngredients,
     allergens,
     meal,
-    dietaryRestrictions,
+    dietaryRestriction,
     ingredients,
   } = filters;
 
@@ -78,8 +78,8 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
       <FilterItem label="Dietary Restrictions">
         <ToggleGroup
           type="single"
-          value={dietaryRestrictions}
-          onValueChange={handlerFactory("dietaryRestrictions")}
+          value={dietaryRestriction ?? ""}
+          onValueChange={handlerFactory("dietaryRestriction")}
         >
           <ToggleItem value="keto">Keto</ToggleItem>
           <ToggleItem value="kosher">Kosher</ToggleItem>
