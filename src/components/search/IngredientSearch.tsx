@@ -79,13 +79,13 @@ export default function IngredientSearch({
   });
 
   return (
-    <div className="relative space-y-2">
+    <div className="relative  space-y-2">
       <input
-        className="h-7 rounded border-[1px] border-nobel-500 px-1 py-1 text-sm outline-none"
+        className="h-7 w-full rounded border-[1px] border-nobel-500 px-1 py-1 text-sm outline-none"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       />
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap p-1">
         {ingredients.map((ingredient) => (
           <IngredientPill
             key={ingredient.id}

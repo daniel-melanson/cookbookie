@@ -52,7 +52,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
   }
 
   return (
-    <form className="w-64 space-y-1">
+    <form className="w-72 space-y-1">
       <FilterItem label="Servings">
         <RangeSlider
           value={servings}
