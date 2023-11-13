@@ -1,6 +1,8 @@
 import React from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { MdAdd, MdClear } from "react-icons/md";
+import { match } from "ts-pattern";
+import classNames from "classnames";
 
 interface Props {
   label: string;
@@ -11,15 +13,23 @@ interface Props {
 }
 
 interface ButtonProps {
+  kind: "add" | "clear";
+  hint: string;
   onClick: () => void;
 }
 
-function ClearAll({ onClick }: ButtonProps) {
+function FilterButton({ hint, kind, onClick }: ButtonProps) {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger
-          className="ml-auto mr-1 p-1 text-sm"
+          className={classNames(
+            "ml-auto mr-1 p-1 text-sm",
+            match(kind)
+              .with("add", () => "rotate-45 hover:text-green-500")
+              .with("clear", () => "rotate-0 text-red-500")
+              .exhaustive(),
+          )}
           type="button"
           onClick={onClick}
         >
@@ -30,24 +40,12 @@ function ClearAll({ onClick }: ButtonProps) {
             className="rounded bg-white p-1 text-nobel-500"
             sideOffset={5}
           >
-            Clear
+            {hint}
             <Tooltip.Arrow className="fill-white" />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
     </Tooltip.Provider>
-  );
-}
-
-function Add({ onClick }: ButtonProps) {
-  return (
-    <button
-      className="ml-auto mr-1 p-1 text-sm"
-      type="button"
-      onClick={onClick}
-    >
-      <MdAdd />
-    </button>
   );
 }
 
@@ -62,8 +60,10 @@ export default function FilterItem({
     <>
       <div className="flex w-full items-center text-lg font-bold text-nobel-600">
         <h2>{label}</h2>
-        {onClear && <ClearAll onClick={onClear} />}
-        {onAdd && <Add onClick={onAdd} />}
+        {onClear && (
+          <FilterButton kind="clear" hint="Clear" onClick={onClear} />
+        )}
+        {onAdd && <FilterButton kind="add" hint="Add filter" onClick={onAdd} />}
       </div>
       {!onAdd && (
         <div className="px-1">
