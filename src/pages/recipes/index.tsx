@@ -87,7 +87,7 @@ export default function Page() {
         <div className="container mx-auto flex space-x-4">
           <RecipeFilterForm filters={filters} onChange={updateFilters} />
           <SearchResults
-            sort={s ?? q ? "relevance" : "popularity"}
+            sort={s ?? (q ? "relevance" : "popularity")}
             onSortChange={(v) =>
               void router.push(
                 `${pathname}?${createUpdatedSearchParam("s", v)}`,
