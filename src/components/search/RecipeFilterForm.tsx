@@ -100,6 +100,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
         hint={servings && `Between ${servings[0]} and ${servings[1]} servings.`}
       >
         <Slider
+          kind="range"
           key={servings?.join(",")}
           value={servings ?? [1, 12]}
           min={1}
@@ -177,6 +178,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
         }
       >
         <Slider
+          kind="single"
           key={time}
           value={time ?? 180}
           min={15}
@@ -197,6 +199,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
         onClear={onClearFactory("missingIngredients")}
       >
         <Slider
+          kind="single"
           key={missingIngredients}
           value={missingIngredients ?? 0}
           min={0}
