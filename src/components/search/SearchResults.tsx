@@ -47,19 +47,25 @@ function SortSelection({
   );
 }
 
+interface Props {
+  count?: number;
+  sort: string;
+  query?: string;
+  onSortChange: (v: string) => void;
+}
+
 export default function SearchResults({
   children,
   sort,
+  query,
   onSortChange,
-}: React.PropsWithChildren<{
-  count?: number;
-  sort: string;
-  onSortChange: (v: string) => void;
-}>) {
+}: React.PropsWithChildren<Props>) {
   return (
     <div className="w-full space-y-4">
       <div className="flex place-content-between">
-        <h2 className="text-2xl font-bold">Results</h2>
+        <h2 className="text-2xl font-bold">
+          {query ? `Results for "${query}"` : "Results"}
+        </h2>
         <SortSelection value={sort} onChange={onSortChange} />
       </div>
       {children}

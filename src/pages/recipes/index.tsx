@@ -88,6 +88,7 @@ export default function Page() {
           <RecipeFilterForm filters={filters} onChange={updateFilters} />
           <SearchResults
             sort={s ?? (q ? "relevance" : "popularity")}
+            query={q}
             onSortChange={(v) =>
               void router.push(
                 `${pathname}?${createUpdatedSearchParam("s", v)}`,

@@ -1,6 +1,6 @@
 import React from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { MdAdd, MdClear } from "react-icons/md";
+import { MdClear } from "react-icons/md";
 import { match } from "ts-pattern";
 import classNames from "classnames";
 
