@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { AuthFormKind, type AuthFormProps } from "~/components/auth";
 import AuthForm from "~/components/auth/AuthForm";
@@ -32,7 +33,9 @@ export default function SignUpForm({ setForm }: AuthFormProps) {
   return (
     <FormDataProvider>
       <AuthForm name={"Sign Up"} onSubmit={handleSubmit}>
-        <FormEmailField errorMessage={mutation.error?.message} />
+        <FormEmailField
+          errorMessage={mutation.isError ? mutation.error.message : undefined}
+        />
         <SignUpPasswordField />
         <FormSubmit text="Continue" isLoading={mutation.isLoading} />
         <div className="w-fill flex h-[24px] justify-center">
