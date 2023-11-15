@@ -65,12 +65,15 @@ export default function Page() {
     return params.toString();
   };
 
-  const query = api.recipes.search.useQuery({
-    page: p,
-    query: q,
-    filters: { ...filters },
-    orderBy: s,
-  });
+  const query = api.recipes.search.useQuery(
+    {
+      page: p,
+      query: q,
+      filters: { ...filters },
+      orderBy: s,
+    },
+    { refetchOnWindowFocus: false },
+  );
 
   return (
     <PageBase title="Search">
