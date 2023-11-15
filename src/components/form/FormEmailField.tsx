@@ -1,20 +1,18 @@
 import FormErrorMessage from "./FormErrorMessage";
 import FormTextField from "./FormTextField";
 interface FormEmailFieldProps {
-  serverErrorMessage?: string;
+  errorMessage?: string;
 }
 export default function FormEmailField({
-  serverErrorMessage,
+  errorMessage: serverErrorMessage,
 }: FormEmailFieldProps) {
   return (
     <FormTextField name="email" type={"email"}>
       <FormErrorMessage
         match="typeMismatch"
-        message="Please enter a valid email"
+        message="Please enter a valid email."
       />
-      {serverErrorMessage?.includes("email") && (
-        <FormErrorMessage message={serverErrorMessage} />
-      )}
+      {serverErrorMessage && <FormErrorMessage message={serverErrorMessage} />}
     </FormTextField>
   );
 }

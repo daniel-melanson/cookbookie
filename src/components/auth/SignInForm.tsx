@@ -12,8 +12,11 @@ import { FormDataProvider } from "~/contexts/FormContext";
 
 export default function SignInForm({ setForm }: AuthFormProps) {
   const [error, setError] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
   async function handleSubmit(data: Record<string, unknown>) {
+    setIsLoading(true);
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -21,18 +24,24 @@ export default function SignInForm({ setForm }: AuthFormProps) {
       redirect: false,
     });
 
+    setIsLoading(false);
     if (res?.ok) {
       await router.push("/");
     } else {
       setError("Incorrect email or password.");
     }
   }
+
   return (
     <FormDataProvider>
-      <AuthForm name={"Sign In"} onSubmit={(e) => void handleSubmit(e)}>
-        <FormEmailField serverErrorMessage={error} />
+      <AuthForm
+        name={"Sign In"}
+        onSubmit={(e) => void handleSubmit(e)}
+        onClearServerErrors={() => setError(undefined)}
+      >
+        <FormEmailField errorMessage={error} />
         <FormTextField name="password" type={"password"} />
-        <FormSubmit text={"Sign In"} />
+        <FormSubmit isLoading={isLoading} text={"Sign In"} />
         <div className="w-fill flex h-[24px] justify-center">
           <p
             className="text-sm font-bold hover:cursor-pointer hover:underline"

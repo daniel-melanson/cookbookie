@@ -29,14 +29,10 @@ export default function SignUpForm({ setForm }: AuthFormProps) {
     });
   }
 
-  if (mutation.isError && mutation.error.message.includes("email")) {
-    console.log(mutation.error.message);
-  }
-
   return (
     <FormDataProvider>
       <AuthForm name={"Sign Up"} onSubmit={handleSubmit}>
-        <FormEmailField serverErrorMessage={mutation.error?.message} />
+        <FormEmailField errorMessage={mutation.error?.message} />
         <SignUpPasswordField />
         <FormSubmit text="Continue" isLoading={mutation.isLoading} />
         <div className="w-fill flex h-[24px] justify-center">
