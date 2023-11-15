@@ -13,10 +13,6 @@ export default function SignupPasswordField() {
         validatorResult.error.issues.map((e: ZodIssue) => {
           return <FormErrorMessage key={e.message} message={e.message} />;
         })}
-      {/* <FormErrorMessage */}
-      {/*   match={(v) => v !== v.toLowerCase() && v !== v.toUpperCase()} */}
-      {/*   message="Password must be a mix up upper and lower case letters" */}
-      {/* /> */}
     </FormTextField>
   );
 }

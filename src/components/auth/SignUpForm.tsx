@@ -8,7 +8,6 @@ import FormSubmit from "~/components/form/FormSubmit";
 import SignUpPasswordField from "./SignUpPasswordField";
 import { FormDataProvider } from "~/contexts/FormContext";
 import { api } from "~/utils/api";
-import { useFormData } from "~/contexts/FormContext";
 
 const Line = () => <div className="h-[1px] flex-grow bg-black" />;
 
