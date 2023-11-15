@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import NavigationBar from "~/components/NavigationBar";
 import NavBarSearch from "~/components/NavBarSearch";
@@ -81,8 +83,8 @@ export default function Page() {
         <NavBarSearch
           target="recipes"
           query={q}
-          createSubmitLink={(q) =>
-            `${pathname}?${createUpdatedSearchParam("q", q)}`
+          onSubmit={(q) =>
+            void router.push(`${pathname}?${createUpdatedSearchParam("q", q)}`)
           }
         />
       </NavigationBar>

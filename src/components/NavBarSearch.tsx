@@ -1,30 +1,27 @@
 import React from "react";
 import { RiSearchLine } from "react-icons/ri";
-import { useRouter } from "next/router";
 
 export default function NavBarSearch({
   query,
   target,
-  createSubmitLink,
+  onSubmit,
 }: {
   query?: string;
   target: "recipes" | "ingredients";
-  createSubmitLink?: (query: string) => string;
+  onSubmit?: (query: string) => void;
 }) {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = React.useState(query ?? "");
 
   return (
     <form
       className="flex h-10 w-1/6 min-w-min items-center space-x-2 rounded-lg border-2 border-neutral-200 bg-white pl-3 pr-2 transition-colors focus-within:border-neutral-300"
+      action={`/${target}`}
+      method="GET"
       onSubmit={(e) => {
-        e.preventDefault();
-
-        void router.push(
-          createSubmitLink
-            ? createSubmitLink(searchQuery)
-            : `/${target}?q=${encodeURIComponent(searchQuery)}`,
-        );
+        if (onSubmit) {
+          e.preventDefault();
+          onSubmit(searchQuery);
+        }
       }}
     >
       <input
