@@ -11,7 +11,7 @@ export default function AuthForm({
   children,
   name,
   onSubmit,
-}: Props & React.PropsWithChildren) {
+}: React.PropsWithChildren<Props>) {
   const data = useFormData();
 
   return (
@@ -23,7 +23,7 @@ export default function AuthForm({
 
           onSubmit && onSubmit(data);
         }}
-        className="flex w-full flex-col space-y-[18px]"
+        className="w-full space-y-[18px]"
       >
         {children}
       </Form.Root>

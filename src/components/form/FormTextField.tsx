@@ -6,7 +6,7 @@ export default function FormTextField({
   name,
   type,
   children,
-}: InputProps & React.PropsWithChildren) {
+}: React.PropsWithChildren<InputProps>) {
   name = name.toLowerCase();
   const label = name.charAt(0).toUpperCase() + name.slice(1);
 

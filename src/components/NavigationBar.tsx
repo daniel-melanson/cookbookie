@@ -7,26 +7,19 @@ import {
   RiBookmarkLine,
   RiBookmarkFill,
 } from "react-icons/ri";
-import IconLink from "./IconLink";
+import IconLink from "~/components/IconLink";
 import Link from "next/link";
-import SearchBar, { SearchBarStyle } from "./SearchBar";
 import { useSession, signOut } from "next-auth/react";
 
-interface NavigationBarProps {
-  includeSearch?: boolean;
-}
-
-export default function NavigationBar(props: NavigationBarProps) {
+export default function NavigationBar({ children }: React.PropsWithChildren) {
   const { /*data: session ,*/ status } = useSession();
 
   return (
     <header className="align-center border-light-gray flex h-16 items-center justify-between border-b px-4 py-2">
-      <h1 className="text-3xl">
+      <h1 className="font-cursive text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
-      {props.includeSearch && (
-        <SearchBar style={SearchBarStyle.NavigationBar} />
-      )}
+      {children}
       <div className="flex items-center justify-end space-x-4 text-3xl">
         {status === "authenticated" ? (
           <>
@@ -56,7 +49,7 @@ export default function NavigationBar(props: NavigationBarProps) {
           </>
         ) : (
           <Link
-            className="rounded p-2 text-lg hover:bg-neutral-200"
+            className="rounded p-2 text-lg transition-colors hover:bg-neutral-200"
             href="/login"
           >
             Sign In
