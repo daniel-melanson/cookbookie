@@ -15,6 +15,8 @@ import {
 } from "react-icons/md";
 import { BiDrink } from "react-icons/bi";
 import FilterItem from "~/components/search/FilterItem";
+import { RiFilterOffLine } from "react-icons/ri";
+import Tooltip from "./Tooltip";
 
 function formatTime(minutes: number, length: "short" | "long") {
   const [hourLabel, minuteLabel] =
@@ -93,6 +95,20 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
 
   return (
     <form className="w-72 space-y-1">
+      <div className="flex justify-between">
+        <label className="text-2xl font-semibold text-nobel-600">Filters</label>
+        {Object.keys(filters).length > 0 && (
+          <Tooltip hint="Clear all filters">
+            <button
+              className="text-2xl text-nobel-600 transition-colors hover:text-red-400"
+              type="button"
+              onClick={() => onChange({})}
+            >
+              <RiFilterOffLine />
+            </button>
+          </Tooltip>
+        )}
+      </div>
       <FilterItem
         label="Servings"
         onClear={onClearFactory("servings")}

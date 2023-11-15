@@ -1,7 +1,7 @@
 import React from "react";
-import * as Tooltip from "@radix-ui/react-tooltip";
-import { MdClear } from "react-icons/md";
+import T from "./Tooltip";
 import { match } from "ts-pattern";
+import { MdClear } from "react-icons/md";
 import classNames from "classnames";
 
 interface Props {
@@ -12,40 +12,28 @@ interface Props {
   onAdd?: () => void;
 }
 
-interface ButtonProps {
+interface FilterButtonProps {
   kind: "add" | "clear";
-  hint: string;
   onClick: () => void;
+  hint: string;
 }
-
-function FilterButton({ hint, kind, onClick }: ButtonProps) {
+function FilterButton({ hint, kind, onClick }: FilterButtonProps) {
   return (
-    <Tooltip.Provider>
-      <Tooltip.Root>
-        <Tooltip.Trigger
-          className={classNames(
-            "ml-auto mr-1 p-1 text-sm",
-            match(kind)
-              .with("add", () => "rotate-45 hover:text-green-500")
-              .with("clear", () => "rotate-0 text-red-500")
-              .exhaustive(),
-          )}
-          type="button"
-          onClick={onClick}
-        >
-          <MdClear />
-        </Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content
-            className="rounded bg-white p-1 text-nobel-500"
-            sideOffset={5}
-          >
-            {hint}
-            <Tooltip.Arrow className="fill-white" />
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
+    <T hint={hint}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={classNames(
+          "ml-auto w-5 text-sm",
+          match(kind)
+            .with("add", () => "rotate-45 hover:text-blue-500")
+            .with("clear", () => "text-md rotate-0 text-red-400")
+            .exhaustive(),
+        )}
+      >
+        <MdClear />
+      </button>
+    </T>
   );
 }
 
@@ -58,7 +46,7 @@ export default function FilterItem({
 }: React.PropsWithChildren<Props>) {
   return (
     <>
-      <div className="flex w-full items-center text-lg font-bold text-nobel-600">
+      <div className="flex w-full items-center text-lg font-medium text-nobel-600">
         <h2>{label}</h2>
         {onClear && (
           <FilterButton kind="clear" hint="Clear" onClick={onClear} />
