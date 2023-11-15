@@ -1,5 +1,6 @@
 import React from "react";
 import * as Form from "@radix-ui/react-form";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function FormSubmit({
   text,
@@ -11,10 +12,10 @@ export default function FormSubmit({
   return (
     <Form.Submit className="w-full" asChild disabled={isLoading}>
       <button
-        className="h-[48px] w-full items-center justify-center rounded bg-neutral-950 text-white transition-shadow hover:bg-neutral-800"
+        className="flex h-[48px] w-full items-center justify-center rounded bg-neutral-950 text-white transition-shadow hover:bg-neutral-800"
         type="submit"
       >
-        {text}
+        {isLoading ? <LoadingSpinner /> : text}
       </button>
     </Form.Submit>
   );
