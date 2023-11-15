@@ -7,11 +7,19 @@ const passwordSchema = password();
 
 export default function SignupPasswordField() {
   const data = useFormData();
-  const validatorResult = passwordSchema.safeParse(data.password);
+  const password = data.password;
+
+  const validatorResult =
+    password !== undefined &&
+    typeof password === "string" &&
+    password.length > 0
+      ? passwordSchema.safeParse(data.password)
+      : undefined;
 
   return (
     <FormTextField name="password" type={"password"}>
-      {!validatorResult.success &&
+      {validatorResult &&
+        !validatorResult.success &&
         validatorResult.error.issues.map((e) => (
           <FormErrorMessage key={e.message} message={e.message} />
         ))}

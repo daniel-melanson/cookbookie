@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { AuthFormKind, type AuthFormProps } from "~/components/auth";
 import AuthForm from "~/components/auth/AuthForm";
