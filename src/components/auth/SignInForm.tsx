@@ -1,4 +1,6 @@
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { AuthFormKind, type AuthFormProps } from "~/components/auth";
 import AuthForm from "~/components/auth/AuthForm";
 import AuthFormSwitch from "~/components/auth/AuthFormSwitch";
@@ -9,18 +11,26 @@ import FormTextField from "~/components/form/FormTextField";
 import { FormDataProvider } from "~/contexts/FormContext";
 
 export default function SignInForm({ setForm }: AuthFormProps) {
-  function handleSubmit(data: Record<string, unknown>) {
-    void signIn("credentials", {
+  const [error, setError] = useState<string | undefined>(undefined);
+  const router = useRouter();
+  async function handleSubmit(data: Record<string, unknown>) {
+    const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
       callbackUrl: "/",
-      // redirect: false,
+      redirect: false,
     });
+
+    if (res?.ok) {
+      await router.push("/");
+    } else {
+      setError("Incorrect email or password");
+    }
   }
   return (
     <FormDataProvider>
-      <AuthForm name={"Sign In"} onSubmit={handleSubmit}>
-        <FormEmailField />
+      <AuthForm name={"Sign In"} onSubmit={(e) => void handleSubmit(e)}>
+        <FormEmailField serverErrorMessage={error} />
         <FormTextField name="password" type={"password"} />
         <FormSubmit text={"Sign In"} />
         <div className="w-fill flex h-[24px] justify-center">
