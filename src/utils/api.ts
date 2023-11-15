@@ -66,3 +66,7 @@ export type RouterInputs = inferRouterInputs<AppRouter>;
  * @example type HelloOutput = RouterOutputs['example']['hello']
  */
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export type OneOf<T extends unknown[]> = T extends readonly (infer R)[]
+  ? R
+  : never;
