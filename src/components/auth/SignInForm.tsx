@@ -24,7 +24,7 @@ export default function SignInForm({ setForm }: AuthFormProps) {
     if (res?.ok) {
       await router.push("/");
     } else {
-      setError("Incorrect email or password");
+      setError("Incorrect email or password.");
     }
   }
   return (
