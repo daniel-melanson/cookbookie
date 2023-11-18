@@ -1,4 +1,5 @@
 name: Setup Node.js Project
+description: "Installs node, pnpm, and dependencies"
 
 runs:
   using: composite
@@ -30,3 +31,5 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install
+      env:
+        NODE_ENV: development

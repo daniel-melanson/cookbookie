@@ -1,21 +1,28 @@
 import FormErrorMessage from "../form/FormErrorMessage";
 import FormTextField from "../form/FormTextField";
+import { useFormData } from "~/contexts/FormContext";
+import { password } from "~/utils/validators";
+
+const passwordSchema = password();
 
 export default function SignupPasswordField() {
+  const data = useFormData();
+  const password = data.password;
+
+  const validatorResult =
+    password !== undefined &&
+    typeof password === "string" &&
+    password.length > 0
+      ? passwordSchema.safeParse(data.password)
+      : undefined;
+
   return (
     <FormTextField name="password" type={"password"}>
-      <FormErrorMessage
-        match={(v) => v.length < 8}
-        message="Password must be at least 8 characters"
-      />
-      {/* <FormErrorMessage
-        match={(v) => v.search(/\d/) !== -1}
-        message="Password must contain at least one number"
-      /> */}
-      {/* <FormErrorMessage */}
-      {/*   match={(v) => v !== v.toLowerCase() && v !== v.toUpperCase()} */}
-      {/*   message="Password must be a mix up upper and lower case letters" */}
-      {/* /> */}
+      {validatorResult &&
+        !validatorResult.success &&
+        validatorResult.error.issues.map((e) => (
+          <FormErrorMessage key={e.message} message={e.message} />
+        ))}
     </FormTextField>
   );
 }

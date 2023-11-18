@@ -5,13 +5,15 @@ import { useFormData, type FormData } from "~/contexts/FormContext";
 interface Props {
   name: string;
   onSubmit?: (data: FormData) => void;
+  onClearServerErrors?: () => void;
 }
 
 export default function AuthForm({
   children,
   name,
   onSubmit,
-}: Props & React.PropsWithChildren) {
+  onClearServerErrors,
+}: React.PropsWithChildren<Props>) {
   const data = useFormData();
 
   return (
@@ -23,7 +25,8 @@ export default function AuthForm({
 
           onSubmit && onSubmit(data);
         }}
-        className="flex w-full flex-col space-y-[18px]"
+        onClearServerErrors={onClearServerErrors}
+        className="w-full space-y-[18px]"
       >
         {children}
       </Form.Root>
