@@ -55,8 +55,12 @@ function IngredientPill({
       className="disable-select m-0.5 flex h-fit items-center space-x-2 rounded-full border-[1px] border-nobel-500 bg-white px-2 py-1 text-sm capitalize text-neutral-700 transition-colors hover:bg-nobel-200"
       key={ingredient.id}
     >
-      <span className="whitespace-nowrap">{ingredient.name}</span>
-      <button type="button" className="man-w-[16px]" onClick={() => onRemove()}>
+      <span>{ingredient.name}</span>
+      <button
+        type="button"
+        className="man-w-[16px] text-red-400"
+        onClick={() => onRemove()}
+      >
         <RiSubtractLine />
       </button>
     </div>
@@ -64,25 +68,52 @@ function IngredientPill({
 }
 
 export default function IngredientSearch({
-  ingredients,
+  ingredientIds,
   onChange,
 }: {
-  ingredients: IngredientEmbed[];
-  onChange: (ingredients: IngredientEmbed[]) => void;
+  ingredientIds: string[];
+  onChange: (ingredients: string[]) => void;
 }) {
-  const ingredientIds = new Set(ingredients.map((ingredient) => ingredient.id));
+  const cache = React.useRef(new Map<string, IngredientEmbed>());
+
+  const ingredientIdSet = new Set(ingredientIds);
+
+  const ingredients: IngredientEmbed[] = [];
+  const uncovered: string[] = [];
+  for (const id of ingredientIds) {
+    if (cache.current.has(id)) {
+      ingredients.push(cache.current.get(id)!);
+    } else {
+      uncovered.push(id);
+    }
+  }
+
+  const uncoveredQuery = api.ingredients.getEmbeds.useQuery(uncovered, {
+    enabled: uncovered.length > 0,
+  });
+
+  if (uncoveredQuery.isSuccess) {
+    for (const ingredient of uncoveredQuery.data) {
+      cache.current.set(ingredient.id, ingredient);
+      ingredients.push(ingredient);
+    }
+  }
+
+  ingredients.sort((a, b) => a.name.length - b.name.length);
 
   const [filter, setFilter] = React.useState("");
   const debouncedFilter = useDebounce(filter, 500);
-  const query = api.ingredients.embedSearch.useQuery(debouncedFilter, {
+  const searchQuery = api.ingredients.embedSearch.useQuery(debouncedFilter, {
     enabled: debouncedFilter.length > 0,
   });
 
   return (
-    <div className="relative  space-y-2">
+    <div className="relative space-y-2">
       <input
-        className="h-7 w-full rounded border-[1px] border-nobel-500 px-1 py-1 text-sm outline-none"
+        className="h-7 w-full rounded border-[1px] border-nobel-500 px-1 py-1 text-sm outline-none disabled:bg-neutral-200"
         value={filter}
+        disabled={ingredientIds.length >= 5}
+        placeholder="Add ingredients..."
         onChange={(e) => setFilter(e.target.value)}
       />
       <div className="flex flex-wrap p-1">
@@ -91,17 +122,22 @@ export default function IngredientSearch({
             key={ingredient.id}
             ingredient={ingredient}
             onRemove={() =>
-              onChange(ingredients.filter(({ id }) => id !== ingredient.id))
+              onChange(ingredientIds.filter((id) => id !== ingredient.id))
             }
           />
         ))}
       </div>
-      {query.isSuccess && filter !== "" && (
+      {searchQuery.isSuccess && filter !== "" && (
         <IngredientResults
-          ingredients={query.data.filter(({ id }) => !ingredientIds.has(id))}
+          ingredients={searchQuery.data.filter(
+            ({ id }) => !ingredientIdSet.has(id),
+          )}
           onSelect={(ingredient) => {
             setFilter("");
-            onChange([...ingredients, ingredient]);
+
+            cache.current.set(ingredient.id, ingredient);
+
+            onChange([...ingredientIds, ingredient.id]);
           }}
         />
       )}

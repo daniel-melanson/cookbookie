@@ -50,7 +50,7 @@ export interface RecipeFilters {
   missingIngredients?: number;
   allergens?: string[];
   meal?: string[];
-  ingredients?: IngredientEmbed[];
+  ingredients?: string[];
 }
 
 interface Props {
@@ -232,7 +232,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
         onClear={onClearFactory("ingredients")}
       >
         <IngredientSearch
-          ingredients={ingredients ?? []}
+          ingredientIds={ingredients ?? []}
           onChange={onChangeFactory("ingredients")}
         />
       </FilterItem>

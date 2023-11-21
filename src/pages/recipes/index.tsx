@@ -71,7 +71,9 @@ export default function Page() {
     {
       page: p,
       query: q,
-      filters: { ...filters },
+      filters: {
+        ...filters,
+      },
       orderBy: s,
     },
     { refetchOnWindowFocus: false },
