@@ -1,12 +1,13 @@
 import { type Ingredient } from "@prisma/client";
 import React from "react";
 import Image from "next/image";
+import { faker } from "@faker-js/faker";
 
 const STUB_ARRAY = Array.from({ length: 48 }, (_, i) => i);
 
 function IngredientPill({ ingredient }: { ingredient: Ingredient }) {
   return (
-    <div className="flex h-14 items-center space-x-2 rounded-full bg-white p-2">
+    <div className="m-1.5 flex h-14 items-center space-x-2 rounded-full bg-white p-2 pe-4 shadow">
       <Image
         width={48}
         height={48}
@@ -25,20 +26,22 @@ interface Props {
 
 export default function IngredientGrid({ ingredients }: Props) {
   return (
-    <div className="flex flex-wrap space-x-2 space-y-2">
+    <div className="flex flex-wrap">
       {ingredients
         ? ingredients.map((ingredient) => (
             <IngredientPill key={ingredient.id} ingredient={ingredient} />
           ))
-        : STUB_ARRAY.map((i) => (
-            <div
-              className="w-max-[100%] animate-pulse overflow-clip rounded bg-neutral-200"
-              key={i}
-            >
-              <div className="aspect-square w-full"></div>
-              <div className="h-16 w-full"></div>
-            </div>
-          ))}
+        : STUB_ARRAY.map((i) => {
+            const width = faker.number.int({ min: 100, max: 255 });
+
+            return (
+              <div
+                className="m-1.5 box-border animate-pulse rounded-full bg-neutral-200"
+                style={{ width, height: "3.5rem" }}
+                key={i}
+              />
+            );
+          })}
     </div>
   );
 }
