@@ -10,18 +10,13 @@ interface Props {
 
 export default function RecipeCard({ recipe }: Props) {
   return (
-    <div className="relative overflow-clip rounded-lg">
+    <div className="relative overflow-clip rounded-lg shadow">
       <IconToggle
         className="absolute right-2 top-2"
         line={<RiBookmarkLine />}
         fill={<RiBookmarkFill />}
       />
-      <Image
-        width={512}
-        height={512}
-        src={recipe.icon}
-        alt={recipe.name}
-      />
+      <Image width={512} height={512} src={recipe.icon} alt={recipe.name} />
       <div className="h-16 bg-white p-2">
         <span className="text-sm capitalize">{recipe.name}</span>
       </div>
