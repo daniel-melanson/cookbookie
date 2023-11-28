@@ -9,7 +9,7 @@ import {
 
 export default function IngredientFilterForm() {
   const args = useSearchArgs<IngredientFilters>();
-  const dispatch = useSearchArgsDispatch();
+  const dispatch = useSearchArgsDispatch<IngredientFilters>();
 
   const { onClearFactory, onChangeFactory, onAddFactory } =
     makeFormEventFactories(args, dispatch);
@@ -17,6 +17,7 @@ export default function IngredientFilterForm() {
   return (
     <form className="w-72 space-y-1">
       <FiltersLabel />
+      
     </form>
   );
 }

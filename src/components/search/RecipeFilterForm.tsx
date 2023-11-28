@@ -26,7 +26,7 @@ export type Range = [number, number];
 
 export default function RecipeFilterForm() {
   const args = useSearchArgs<RecipeFilters>();
-  const dispatch = useSearchArgsDispatch();
+  const dispatch = useSearchArgsDispatch<RecipeFilters>();
   const {
     servings,
     time,

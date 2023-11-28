@@ -64,7 +64,11 @@ export function useSearchArgs<T extends SearchFilters>(): SearchData<T> {
   return React.useContext(Context) as SearchData<T>;
 }
 
-export const useSearchArgsDispatch = () => React.useContext(DispatchContext);
+export function useSearchArgsDispatch<
+  T extends SearchFilters,
+>(): React.Dispatch<SearchAction<T>> {
+  return React.useContext(DispatchContext) as React.Dispatch<SearchAction<T>>;
+}
 
 export function makeFormEventFactories<T extends SearchFilters>(
   object: SearchData<T>,
