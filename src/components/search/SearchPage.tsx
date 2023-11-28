@@ -61,20 +61,22 @@ export default function Page<T extends ZodRawShape>({
   const reducer: SearchReducer<SearchFilters> = (state, action) => {
     const searchArgs = match(action)
       .with({ kind: "reset", key: "page" }, () => ({ ...state, page: 1 }))
-      .with({ kind: "reset", key: "sort" }, () => ({
-        ...state,
-        sort: undefined,
-      }))
-      .with({ kind: "reset", key: P.not(P.nullish) }, ({ key }) => ({
+      .with({ kind: "reset", key: P.string }, ({ key }) => ({
         ...state,
         [key]: undefined,
+        page: undefined,
+      }))
+      .with({ kind: "set", key: "page", value: P.any }, ({ value }) => ({
+        ...state,
+        page: value,
       }))
       .with({ kind: "set", key: P.string, value: P.any }, ({ key, value }) => ({
         ...state,
         [key]: value,
+        page: undefined,
       }))
       .with({ kind: "reset" }, () => ({
-        page: 1,
+        page: undefined,
         query: state.query,
         sort: state.sort,
       }))
@@ -100,7 +102,7 @@ export default function Page<T extends ZodRawShape>({
       void router.replace(pathname);
     }
 
-    return searchArgs;
+    return searchArgs as SearchData<SearchFilters>;
   };
 
   return (

@@ -1,7 +1,23 @@
 import { type Ingredient } from "@prisma/client";
 import React from "react";
+import Image from "next/image";
 
 const STUB_ARRAY = Array.from({ length: 48 }, (_, i) => i);
+
+function IngredientPill({ ingredient }: { ingredient: Ingredient }) {
+  return (
+    <div className="flex h-14 items-center space-x-2 rounded-full bg-white p-2">
+      <Image
+        width={48}
+        height={48}
+        className="h-12 w-12 rounded-full"
+        src={ingredient.icon}
+        alt={ingredient.name}
+      />
+      <span className="capitalize">{ingredient.name}</span>
+    </div>
+  );
+}
 
 interface Props {
   ingredients?: Ingredient[];
@@ -9,10 +25,10 @@ interface Props {
 
 export default function IngredientGrid({ ingredients }: Props) {
   return (
-    <div className="grid auto-rows-auto grid-cols-3 gap-5 lg:grid-cols-4">
+    <div className="flex flex-wrap space-x-2 space-y-2">
       {ingredients
         ? ingredients.map((ingredient) => (
-            <div key={ingredient.id}>{JSON.stringify(ingredient)}</div>
+            <IngredientPill key={ingredient.id} ingredient={ingredient} />
           ))
         : STUB_ARRAY.map((i) => (
             <div
