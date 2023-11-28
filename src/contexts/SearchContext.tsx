@@ -49,10 +49,7 @@ export function SearchArgsProvider<T extends SearchFilters>({
   initialValue,
   reducer,
 }: React.PropsWithChildren<Props<T>>) {
-  const [args, dispatch] = React.useReducer(
-    reducer,
-    initialValue ?? ({} as SearchData<T>),
-  );
+  const [args, dispatch] = React.useReducer(reducer, initialValue);
 
   return (
     <Context.Provider value={args}>

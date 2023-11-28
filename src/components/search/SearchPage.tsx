@@ -47,7 +47,6 @@ export default function Page<T extends ZodRawShape>({
         for (const key of searchParams.keys()) {
           params[key] = searchParams.getAll(key);
         }
-
         return params;
       })(),
     ) as SearchData<SearchFilters>;
@@ -106,7 +105,11 @@ export default function Page<T extends ZodRawShape>({
 
   return (
     <PageBase title="Search">
-      <SearchArgsProvider reducer={reducer} initialValue={searchArgs}>
+      <SearchArgsProvider
+        key={searchParams.toString()}
+        reducer={reducer}
+        initialValue={searchArgs}
+      >
         <NavigationBar />
         <main className="mx-5 mt-5 min-h-screen content-center space-y-6">
           <div className="container mx-auto flex space-x-4">
