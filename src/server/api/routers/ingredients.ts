@@ -1,6 +1,12 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  type SearchResults,
+  createTRPCRouter,
+  publicProcedure,
+  searchProcedure,
+} from "~/server/api/trpc";
 import { z } from "zod";
 import { cuid } from "~/utils/validators";
+import { type Ingredient } from "@prisma/client";
 
 const EMBED_SELECT = {
   name: true,
@@ -39,4 +45,25 @@ export const ingredientRouter = createTRPCRouter({
         select: EMBED_SELECT,
       });
     }),
+
+  search: searchProcedure({}).query(async ({ ctx, input }) => {
+    input.orderBy ??= input.query ? "relevance" : "popularity";
+
+    const PAGE_SIZE = 48;
+
+    // TODO implement where clause from input.filters
+    const ingredients = await ctx.prisma.ingredient.findMany({
+      skip: (input.page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    });
+
+    // TODO use where clause here too
+    const totalCount = await ctx.prisma.ingredient.count({});
+
+    return {
+      results: ingredients,
+      totalCount,
+      pageCount: Math.ceil(totalCount / PAGE_SIZE),
+    } as SearchResults<Ingredient>;
+  }),
 });

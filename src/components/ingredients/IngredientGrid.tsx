@@ -1,19 +1,18 @@
-import { type Recipe } from "@prisma/client";
+import { type Ingredient } from "@prisma/client";
 import React from "react";
-import RecipeCard from "~/components/recipes/RecipeCard";
 
 const STUB_ARRAY = Array.from({ length: 48 }, (_, i) => i);
 
 interface Props {
-  recipes?: Recipe[];
+  ingredients?: Ingredient[];
 }
 
-export default function RecipeGrid({ recipes }: Props) {
+export default function IngredientGrid({ ingredients }: Props) {
   return (
     <div className="grid auto-rows-auto grid-cols-3 gap-5 lg:grid-cols-4">
-      {recipes
-        ? recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+      {ingredients
+        ? ingredients.map((ingredient) => (
+            <div key={ingredient.id}>{JSON.stringify(ingredient)}</div>
           ))
         : STUB_ARRAY.map((i) => (
             <div

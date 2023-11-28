@@ -1,8 +1,6 @@
 import React from "react";
 import Slider from "~/components/search/Slider";
-import IngredientSearch, {
-  type IngredientEmbed,
-} from "~/components/search/IngredientSearch";
+import IngredientSearch from "~/components/search/IngredientSearch";
 import ToggleGroup from "./toggle/ToggleGroup";
 import ToggleItem from "./toggle/ToggleItem";
 import {
@@ -15,50 +13,20 @@ import {
 } from "react-icons/md";
 import { BiDrink } from "react-icons/bi";
 import FilterItem from "~/components/search/FilterItem";
-import { RiFilterOffLine } from "react-icons/ri";
-import Tooltip from "./Tooltip";
-
-function formatTime(minutes: number, length: "short" | "long") {
-  const [hourLabel, minuteLabel] =
-    length === "short" ? ["hr", "min"] : [" hour", " minute"];
-
-  function join(value: number, label: string) {
-    return value > 1 && length === "long"
-      ? `${value}${label}s`
-      : `${value}${label}`;
-  }
-
-  if (minutes < 60) return join(minutes, minuteLabel);
-
-  const hours = Math.floor(minutes / 60);
-  const hourMinutes = minutes % 60;
-
-  return hourMinutes > 0
-    ? `${join(hours, hourLabel)}${length === "long" ? " and " : " "}${join(
-        hourMinutes,
-        minuteLabel,
-      )}`
-    : join(hours, hourLabel);
-}
+import { formatTime } from "~/utils/formatters";
+import FiltersLabel from "./FiltersLabel";
+import {
+  type RecipeFilters,
+  makeFormEventFactories,
+  useSearchArgs,
+  useSearchArgsDispatch,
+} from "~/contexts/SearchContext";
 
 export type Range = [number, number];
 
-export interface RecipeFilters {
-  dietaryRestriction?: string;
-  servings?: Range;
-  time?: number;
-  missingIngredients?: number;
-  allergens?: string[];
-  meal?: string[];
-  ingredients?: string[];
-}
-
-interface Props {
-  filters: RecipeFilters;
-  onChange: (filters: RecipeFilters) => void;
-}
-
-export default function RecipeFilterForm({ filters, onChange }: Props) {
+export default function RecipeFilterForm() {
+  const args = useSearchArgs<RecipeFilters>();
+  const dispatch = useSearchArgsDispatch();
   const {
     servings,
     time,
@@ -67,53 +35,26 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
     meal,
     dietaryRestriction,
     ingredients,
-  } = filters;
+  } = args;
 
-  function onChangeFactory<K extends keyof RecipeFilters>(key: K) {
-    return (value: unknown) => {
-      value = Array.isArray(value) && value.length === 0 ? undefined : value;
-      onChange({ ...filters, [key]: value });
-    };
-  }
+  const { onClearFactory, onChangeFactory, onAddFactory } =
+    makeFormEventFactories<RecipeFilters>(args, dispatch);
 
-  function onAddFactory<K extends keyof RecipeFilters>(key: K, value: unknown) {
-    if (filters[key] !== undefined) return undefined;
-
-    return () => onChange({ ...filters, [key]: value });
-  }
-
-  function onClearFactory<K extends keyof RecipeFilters>(key: K) {
-    if (filters[key] === undefined) return undefined;
-
-    return () => {
-      const updated = { ...filters };
-      delete updated[key];
-
-      onChange(updated);
-    };
+  function hintFactory<T>(f: (_: NonNullable<T>) => string, value: T) {
+    return value !== undefined ? f(value!) : undefined;
   }
 
   return (
     <form className="w-72 space-y-1">
-      <div className="flex justify-between">
-        <label className="text-2xl font-semibold text-nobel-600">Filters</label>
-        {Object.keys(filters).length > 0 && (
-          <Tooltip hint="Clear all filters">
-            <button
-              className="text-2xl text-nobel-600 transition-colors hover:text-red-400"
-              type="button"
-              onClick={() => onChange({})}
-            >
-              <RiFilterOffLine />
-            </button>
-          </Tooltip>
-        )}
-      </div>
+      <FiltersLabel />
       <FilterItem
         label="Servings"
         onClear={onClearFactory("servings")}
         onAdd={onAddFactory("servings", [1, 12])}
-        hint={servings && `Between ${servings[0]} and ${servings[1]} servings.`}
+        hint={hintFactory(
+          (s) => `Between ${s[0]} and ${s[1]} servings.`,
+          servings,
+        )}
       >
         <Slider
           kind="range"
@@ -201,7 +142,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
           max={180}
           transform={(v) => formatTime(v, "short")}
           step={15}
-          onChange={(v: number) => onChange({ ...filters, time: v })}
+          onChange={onChangeFactory("time")}
         />
       </FilterItem>
       <FilterItem
@@ -221,9 +162,7 @@ export default function RecipeFilterForm({ filters, onChange }: Props) {
           min={0}
           max={5}
           step={1}
-          onChange={(v: number) =>
-            onChange({ ...filters, missingIngredients: v })
-          }
+          onChange={onChangeFactory("missingIngredients")}
         />
       </FilterItem>
       <FilterItem

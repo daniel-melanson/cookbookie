@@ -1,6 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import React from "react";
 import * as Select from "@radix-ui/react-select";
 import { RiArrowDownSLine, RiCheckFill } from "react-icons/ri";
+import {
+  type SearchData,
+  useSearchArgs,
+  useSearchArgsDispatch,
+  type SearchFilters,
+} from "~/contexts/SearchContext";
+import PageSelect from "./PageSelect";
 
 function SortOption({ value, label }: { value: string; label: string }) {
   return (
@@ -38,7 +50,7 @@ function SortSelection({
             <Select.Viewport className="p-1.5">
               <SortOption value="relevance" label="Relevance" />
               <SortOption value="popularity" label="Popularity" />
-              <SortOption value="created-at" label="Created At" />
+              <SortOption value="created-at" label="Newest" />
             </Select.Viewport>
           </Select.Content>
         </Select.Portal>
@@ -47,28 +59,41 @@ function SortSelection({
   );
 }
 
-interface Props {
-  count?: number;
-  sort: string;
-  query?: string;
-  onSortChange: (v: string) => void;
+export interface SearchResultsProps {
+  useQuery: (args: SearchData<SearchFilters>) => any;
+  makeGrid: (results?: any[]) => React.ReactNode;
+  createUpdatedSearchParams: (key: string, value: number | string) => string;
 }
 
 export default function SearchResults({
-  children,
-  sort,
-  query,
-  onSortChange,
-}: React.PropsWithChildren<Props>) {
+  makeGrid,
+  createUpdatedSearchParams,
+  useQuery,
+}: SearchResultsProps) {
+  const args = useSearchArgs();
+  const dispatch = useSearchArgsDispatch();
+
+  const query = useQuery(args);
+
   return (
     <div className="w-full space-y-4">
       <div className="flex place-content-between">
         <h2 className="text-2xl font-bold">
-          {query ? `Results for "${query}"` : "Results"}
+          {args.query ? `Results for "${args.query}"` : "Results"}
         </h2>
-        <SortSelection value={sort} onChange={onSortChange} />
+        <SortSelection
+          value={args.sort ?? (args.query ? "relevance" : "popularity")}
+          onChange={(v) => dispatch({ kind: "set", key: "sort", value: v })}
+        />
       </div>
-      {children}
+      {makeGrid(query.data?.results)}
+      {query.isSuccess && (
+        <PageSelect
+          page={args.page ?? 1}
+          totalPages={query.data.pageCount}
+          createLink={(p) => createUpdatedSearchParams("page", p)}
+        />
+      )}
     </div>
   );
 }

@@ -6,6 +6,20 @@ import {
 } from "@prisma/client";
 import { z } from "zod";
 
+export function param<I, O>(p: z.ZodType<I, z.ZodTypeDef, O>) {
+  return z.tuple([p]).transform((v) => v[0]);
+}
+
+const intString = z
+  .string()
+  .regex(/^\d+$/)
+  .transform((v) => Number(v));
+
+export const integerParam = () => param(intString);
+export const stringParam = () => param(z.string());
+export const rangeParam = () => z.tuple([intString, intString]);
+export const stringListParam = () => z.string().array();
+
 export const cuid = () => z.string().cuid();
 export const name = (max = 64) => z.string().min(2).max(max);
 export const url = () => z.string().url().min(5).max(1024);

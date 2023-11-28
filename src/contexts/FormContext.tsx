@@ -1,7 +1,7 @@
 import React from "react";
 
-export type FormValues = string | boolean | number;
-export type FormData = Record<string, FormValues>;
+export type FormValue = string | boolean | number;
+export type FormData = Record<string, FormValue | FormValue[]>;
 export type FormDataAction = FormData;
 
 const FormDataContext = React.createContext<FormData>({});
