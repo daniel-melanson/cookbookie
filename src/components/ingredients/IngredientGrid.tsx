@@ -7,15 +7,15 @@ const STUB_ARRAY = Array.from({ length: 48 }, (_, i) => i);
 
 function IngredientPill({ ingredient }: { ingredient: Ingredient }) {
   return (
-    <div className="m-1.5 flex h-14 items-center space-x-2 rounded-full bg-white p-2 pe-4 shadow">
+    <div className="m-1.5 flex h-10 items-center space-x-2 rounded-full bg-white p-2 pe-4 shadow">
       <Image
-        width={48}
-        height={48}
-        className="h-12 w-12 rounded-full"
+        width={32}
+        height={32}
+        className="h-8 w-8 rounded-full"
         src={ingredient.icon}
         alt={ingredient.name}
       />
-      <span className="capitalize">{ingredient.name}</span>
+      <span className="text-sm capitalize">{ingredient.name}</span>
     </div>
   );
 }
@@ -37,7 +37,7 @@ export default function IngredientGrid({ ingredients }: Props) {
             return (
               <div
                 className="m-1.5 box-border animate-pulse rounded-full bg-neutral-200"
-                style={{ width, height: "3.5rem" }}
+                style={{ width, height: "2.5rem" }}
                 key={i}
               />
             );
