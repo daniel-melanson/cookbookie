@@ -67,6 +67,8 @@ function IngredientPill({
   );
 }
 
+const cache = new Map<string, IngredientEmbed>();
+
 export default function IngredientSearch({
   ingredientIds,
   onChange,
@@ -74,15 +76,13 @@ export default function IngredientSearch({
   ingredientIds: string[];
   onChange: (ingredients: string[]) => void;
 }) {
-  const cache = React.useRef(new Map<string, IngredientEmbed>());
-
   const ingredientIdSet = new Set(ingredientIds);
 
   const ingredients: IngredientEmbed[] = [];
   const uncovered: string[] = [];
   for (const id of ingredientIds) {
-    if (cache.current.has(id)) {
-      ingredients.push(cache.current.get(id)!);
+    if (cache.has(id)) {
+      ingredients.push(cache.get(id)!);
     } else {
       uncovered.push(id);
     }
@@ -94,7 +94,7 @@ export default function IngredientSearch({
 
   if (uncoveredQuery.isSuccess) {
     for (const ingredient of uncoveredQuery.data) {
-      cache.current.set(ingredient.id, ingredient);
+      cache.set(ingredient.id, ingredient);
       ingredients.push(ingredient);
     }
   }
@@ -135,7 +135,7 @@ export default function IngredientSearch({
           onSelect={(ingredient) => {
             setFilter("");
 
-            cache.current.set(ingredient.id, ingredient);
+            cache.set(ingredient.id, ingredient);
 
             onChange([...ingredientIds, ingredient.id]);
           }}
