@@ -49,7 +49,7 @@ export const ingredientRouter = createTRPCRouter({
   search: searchProcedure({}).query(async ({ ctx, input }) => {
     input.orderBy ??= input.query ? "relevance" : "popularity";
 
-    const PAGE_SIZE = 48;
+    const PAGE_SIZE = 128;
 
     // TODO implement where clause from input.filters
     const ingredients = await ctx.prisma.ingredient.findMany({

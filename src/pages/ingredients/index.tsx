@@ -4,6 +4,7 @@ import SearchPage from "~/components/search/SearchPage";
 import IngredientFilterForm from "~/components/search/IngredientFilterForm";
 import IngredientGrid from "~/components/ingredients/IngredientGrid";
 import { api } from "~/utils/api";
+import { stringParam } from "~/utils/validators";
 
 export default function Page() {
   return (
@@ -11,7 +12,9 @@ export default function Page() {
       useQuery={api.ingredients.search.useQuery}
       makeGrid={(results) => <IngredientGrid ingredients={results} />}
       filterForm={<IngredientFilterForm />}
-      filterValidator={{}}
+      filterValidator={{
+        category: stringParam().optional(),
+      }}
     />
   );
 }

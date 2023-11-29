@@ -13,7 +13,7 @@ export interface RecipeFilters {
 }
 
 export interface IngredientFilters {
-  tags?: string[];
+  category?: string;
 }
 
 export type SearchFilters = RecipeFilters | IngredientFilters;
