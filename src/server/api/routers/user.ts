@@ -34,8 +34,8 @@ export const userRouter = createTRPCRouter({
           email: input.email,
           password: await hash(input.password, 12),
           // TODO: Take input for the following fields
-          firstName: "First name",
-          lastName: "Last name",
+          firstName: "First Name",
+          lastName: "Last Name",
           dateOfBirth: new Date(),
           unitSystem: "US",
           role: "USER",
@@ -44,7 +44,24 @@ export const userRouter = createTRPCRouter({
 
       return { email: input.email, password: input.password };
     }),
-
+  setUserInfo: protectedProcedure.input(
+    z.object({
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
+      dateOfBirth: z.date().optional(),
+      unitSystem: z.enum(["US", "METRIC"]),
+    }),
+  ).mutation(async ({ctx, input}) => {
+    await ctx.prisma.user.update({where: {
+      email: ctx.session.user.email ?? undefined,
+    },
+  data: {
+      firstName: input.firstName ?? undefined,
+      lastName: input.firstName ?? undefined,
+      dateOfBirth: input.firstName ?? undefined,
+      unitSystem: input.unitSystem,
+  } })
+  }),
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
