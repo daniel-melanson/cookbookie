@@ -4,22 +4,21 @@ import { useFormDataDispatch } from "~/contexts/FormContext";
 interface Props {
   name: string;
 }
-export default function FormRadioField({ name }: Props) {
-  const dispatch = useFormDataDispatch();
+export default function FormRadioField({
+  name,
+  children,
+}: React.PropsWithChildren<Props>) {
   return (
     <Form.Field className="relative w-full" name={name}>
-      <Form.Label>Unit System</Form.Label>
+      <Form.Label>{name}</Form.Label>
       <Form.Control
-        onChange={(event) => dispatch({ [name]: event.target.value })}
-        className="data-[invalid]:border-red-500"
+        onChange={(event) =>
+          // dispatch({ ["Unit System"]: event.target.value })
+          console.log(event.target)
+        }
         asChild
       >
-        <>
-          <input id="US" type="radio" name={name} value="US"></input>
-          <label htmlFor="US">{"US (Cups, ounces, etc.)"}</label>
-          <input id="METRIC" type="radio" name={name} value="METRIC"></input>
-          <label htmlFor="METRIC">{"Metric (Milliliters, grams, etc.)"}</label>
-        </>
+        {children}
       </Form.Control>
     </Form.Field>
   );
