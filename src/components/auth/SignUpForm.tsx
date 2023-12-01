@@ -25,7 +25,7 @@ export default function SignUpForm({ setForm }: AuthFormProps) {
     void signIn("credentials", {
       email: mutation.data.email,
       password: mutation.data.password,
-      callbackUrl: "/",
+      callbackUrl: "/onboarding",
     });
   }
 
