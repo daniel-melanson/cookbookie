@@ -49,7 +49,7 @@ export const userRouter = createTRPCRouter({
       firstName: z.string().optional(),
       lastName: z.string().optional(),
       dateOfBirth: z.date().optional(),
-      unitSystem: z.enum(["US", "METRIC"]),
+      unitSystem: z.enum(["US", "METRIC"]).optional(),
     }),
   ).mutation(async ({ctx, input}) => {
     await ctx.prisma.user.update({where: {
@@ -59,7 +59,7 @@ export const userRouter = createTRPCRouter({
       firstName: input.firstName ?? undefined,
       lastName: input.firstName ?? undefined,
       dateOfBirth: input.firstName ?? undefined,
-      unitSystem: input.unitSystem,
+      unitSystem: input.unitSystem ?? undefined,
   } })
   }),
   getSecretMessage: protectedProcedure.query(() => {
