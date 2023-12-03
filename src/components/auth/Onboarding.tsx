@@ -7,8 +7,10 @@ import FormTextField from "../form/FormTextField";
 import FormRadioField from "../form/FormRadioField";
 import FormDateField from "../form/FormDateField";
 import FormSubmit from "../form/FormSubmit";
+import * as Form from "@radix-ui/react-form";
+
 import { api } from "~/utils/api";
-import { router } from "@trpc/server";
+
 interface infoType {
   unitSystem: "US" | "METRIC";
   firstName?: string | undefined;
@@ -34,19 +36,16 @@ export default function Onboarding() {
         <FormTextField name="Last Name" type="text" />
         <FormDateField name="Birth Date" />
         <FormRadioField name="Unit System">
-          <>
-            <input id="US" type="radio" name={"Unit System"} value="US"></input>
-            <label htmlFor="US">{"US (Cups, ounces, etc.)"}</label>
-            <input
-              id="METRIC"
-              type="radio"
-              name={"Unit System"}
-              value="METRIC"
-            ></input>
-            <label htmlFor="METRIC">
-              {"Metric (Milliliters, grams, etc.)"}
-            </label>
-          </>
+          <input id="US" type="radio" name={"Unit System"} value="US" />
+          <label className="ml-2" htmlFor="US">
+            {"US (Cups, ounces, etc.)"}
+          </label>
+          <br />
+          <input id="METRIC" type="radio" name={"Unit System"} value="METRIC" />
+          <label className="ml-2" htmlFor="METRIC">
+            {"Metric (Milliliters, grams, etc.)"}
+          </label>
+          <br />
         </FormRadioField>
         <FormSubmit isLoading={mutation.isLoading} text={"Continue"} />
       </AuthForm>

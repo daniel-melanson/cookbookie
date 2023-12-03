@@ -18,7 +18,7 @@ export default function FormDateField({ name }: Props) {
         type="date"
         placeholder="mm/dd/yyyy"
         onChange={(event) => dispatch({ [name]: event.target.value })}
-        className="focus:border-blue peer h-[48px] rounded border-[1px] border-neutral-200 px-2 text-sm leading-none placeholder-transparent transition-colors hover:border-neutral-300 focus:border-neutral-500 focus:outline-none data-[invalid]:border-red-500"
+        className="focus:border-blue peer h-[48px] rounded border-[1px] border-neutral-200 px-2 text-sm leading-none placeholder-transparent transition-colors  focus:border-neutral-500 focus:outline-none data-[invalid]:border-red-500"
       />
     </Form.Field>
   );

@@ -8,17 +8,19 @@ export default function FormRadioField({
   name,
   children,
 }: React.PropsWithChildren<Props>) {
+  const dispatch = useFormDataDispatch();
   return (
     <Form.Field className="relative w-full" name={name}>
       <Form.Label>{name}</Form.Label>
       <Form.Control
-        onChange={(event) =>
-          // dispatch({ ["Unit System"]: event.target.value })
-          console.log(event.target)
+        onChange={
+          (event) => dispatch({ [name]: event.target.value })
+          // console.log(event.target.value)
         }
+        name={name}
         asChild
       >
-        {children}
+        <fieldset>{children}</fieldset>
       </Form.Control>
     </Form.Field>
   );
