@@ -117,6 +117,15 @@ export const searchProcedure = <T extends z.ZodRawShape>(filters: T) =>
     }),
   );
 
+export const getSearchSuggestionsProcedure = () =>
+  publicProcedure.input(
+    z
+      .string()
+      .min(3)
+      .max(64)
+      .transform((v) => v.toLowerCase().trim().replace(/\s+/g, " ")),
+  );
+
 export interface SearchResults<T> {
   results: T[];
   totalCount: number;

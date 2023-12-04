@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import React from "react";
+import { type SearchResults as TSearchResults } from "~/server/api/trpc";
 import * as Select from "@radix-ui/react-select";
 import { RiArrowDownSLine, RiCheckFill } from "react-icons/ri";
 import {
@@ -13,6 +9,7 @@ import {
   type SearchFilters,
 } from "~/contexts/SearchContext";
 import PageSelect from "./PageSelect";
+import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 
 function SortOption({ value, label }: { value: string; label: string }) {
   return (
@@ -59,17 +56,19 @@ function SortSelection({
   );
 }
 
-export interface SearchResultsProps {
-  useQuery: (args: SearchData<SearchFilters>) => any;
-  makeGrid: (results?: any[]) => React.ReactNode;
-  createUpdatedSearchParams: (key: string, value: number | string) => string;
+export interface SearchResultsProps<T> {
+  useSearch: (
+    args: SearchData<SearchFilters>,
+  ) => UseTRPCQueryResult<TSearchResults<T>, unknown>;
+  makeGrid: (results?: T[]) => React.ReactNode;
+  createUpdatedPageParamURL: (page: number) => string;
 }
 
-export default function SearchResults({
+export default function SearchResults<T>({
   makeGrid,
-  createUpdatedSearchParams,
-  useQuery,
-}: SearchResultsProps) {
+  createUpdatedPageParamURL,
+  useSearch: useQuery,
+}: SearchResultsProps<T>) {
   const args = useSearchArgs();
   const dispatch = useSearchArgsDispatch();
 
@@ -86,12 +85,12 @@ export default function SearchResults({
           onChange={(v) => dispatch({ kind: "set", key: "sort", value: v })}
         />
       </div>
-      {makeGrid(query.data?.results)}
+      {makeGrid(query.isSuccess ? query.data.results : undefined)}
       {query.isSuccess && (
         <PageSelect
           page={args.page ?? 1}
           totalPages={query.data.pageCount}
-          createLink={(p) => createUpdatedSearchParams("page", p)}
+          createUpdatedPageParamURL={createUpdatedPageParamURL}
         />
       )}
     </div>

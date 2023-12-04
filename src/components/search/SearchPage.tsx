@@ -17,18 +17,23 @@ import {
   type SearchReducer,
 } from "~/contexts/SearchContext";
 import { integerParam, param, stringParam } from "~/utils/validators";
+import NavigationBarSearch, {
+  type NavigationBarSearchProps,
+} from "~/components/search/NavigationBarSearch";
 
-type Props<T extends ZodRawShape> = {
+type Props<T extends ZodRawShape, U> = {
   filterForm: React.ReactNode;
   filterValidator: T;
-} & Omit<SearchResultsProps, "createUpdatedSearchParams">;
+} & Omit<SearchResultsProps<U>, "createUpdatedPageParamURL"> &
+  Omit<NavigationBarSearchProps, "createUpdatedQueryParamURL">;
 
-export default function Page<T extends ZodRawShape>({
+export default function Page<T extends ZodRawShape, U>({
   filterForm,
   filterValidator,
   makeGrid,
-  useQuery,
-}: Props<T>) {
+  useSearch,
+  useSuggestions,
+}: Props<T, U>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -112,14 +117,19 @@ export default function Page<T extends ZodRawShape>({
         reducer={reducer}
         initialValue={searchArgs}
       >
-        <NavigationBar />
+        <NavigationBar>
+          <NavigationBarSearch
+            useSuggestions={useSuggestions}
+            createUpdatedQueryParamURL={(q) => updateSearchParam("query", q)}
+          />
+        </NavigationBar>
         <main className="mx-5 mt-5 min-h-screen content-center space-y-6">
           <div className="container mx-auto flex space-x-4">
             {filterForm}
             <SearchResults
-              useQuery={useQuery}
+              useSearch={useSearch}
               makeGrid={makeGrid}
-              createUpdatedSearchParams={updateSearchParam}
+              createUpdatedPageParamURL={(p) => updateSearchParam("page", p)}
             />
           </div>
         </main>

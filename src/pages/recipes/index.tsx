@@ -10,12 +10,21 @@ import {
   stringParam,
 } from "~/utils/validators";
 import { api } from "~/utils/api";
+import { type Recipe } from "@prisma/client";
 
 export default function Page() {
   return (
     <SearchPage
-      useQuery={api.recipes.search.useQuery}
-      makeGrid={(results) => <RecipeGrid recipes={results} />}
+      useSearch={(params) =>
+        api.recipes.search.useQuery(params, { refetchOnWindowFocus: false })
+      }
+      makeGrid={(results?: Recipe[]) => <RecipeGrid recipes={results} />}
+      useSuggestions={(q, enabled) =>
+        api.recipes.getSearchSuggestions.useQuery(q, {
+          enabled,
+          refetchOnWindowFocus: false,
+        })
+      }
       filterForm={<RecipeFilterForm />}
       filterValidator={{
         dietaryRestriction: stringParam().optional(),

@@ -4,8 +4,15 @@ import {
   searchProcedure,
   publicProcedure,
   type SearchResults,
+  getSearchSuggestionsProcedure as getSearchSuggestionsProcedure,
 } from "~/server/api/trpc";
 import { cuid } from "~/utils/validators";
+
+const EMBED_SELECT = {
+  name: true,
+  icon: true,
+  id: true,
+};
 
 export const recipeRouter = createTRPCRouter({
   search: searchProcedure({}).query(async ({ ctx, input }) => {
@@ -28,6 +35,22 @@ export const recipeRouter = createTRPCRouter({
       pageCount: Math.ceil(totalCount / PAGE_SIZE),
     } as SearchResults<Recipe>;
   }),
+
+  getSearchSuggestions: getSearchSuggestionsProcedure().query(
+    async ({ ctx, input }) => {
+      return ctx.prisma.recipe.findMany({
+        take: 12,
+        orderBy: {
+          _relevance: {
+            fields: ["name"],
+            search: input.split(" ").join(" <-> "),
+            sort: "desc",
+          },
+        },
+        select: EMBED_SELECT,
+      });
+    },
+  ),
 
   get: publicProcedure.input(cuid()).query(({ ctx, input }) => {
     return ctx.prisma.recipe.findUnique({

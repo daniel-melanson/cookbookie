@@ -3,8 +3,8 @@ import {
   createTRPCRouter,
   publicProcedure,
   searchProcedure,
+  getSearchSuggestionsProcedure,
 } from "~/server/api/trpc";
-import { z } from "zod";
 import { cuid } from "~/utils/validators";
 import { type Ingredient } from "@prisma/client";
 
@@ -12,29 +12,26 @@ const EMBED_SELECT = {
   name: true,
   icon: true,
   id: true,
-};
+} as const;
 
 export const ingredientRouter = createTRPCRouter({
-  getEmbeds: publicProcedure
-    .input(cuid().array())
-    .query(async ({ ctx, input }) => {
-      return ctx.prisma.ingredient.findMany({
-        where: { id: { in: input } },
-        select: EMBED_SELECT,
-      });
+  getEmbeds: publicProcedure.input(cuid().array()).query(({ ctx, input }) =>
+    ctx.prisma.ingredient.findMany({
+      where: { id: { in: input } },
+      select: EMBED_SELECT,
     }),
+  ),
 
-  embedSearch: publicProcedure
-    .input(
-      z
-        .string()
-        .min(3)
-        .max(64)
-        .transform((v) => v.toLowerCase().trim().replace(/\s+/g, " ")),
-    )
-    .query(async ({ ctx, input }) => {
+  getEmbed: publicProcedure
+    .input(cuid())
+    .query(({ ctx, input }) =>
+      ctx.prisma.ingredient.findUnique({ where: { id: input } }),
+    ),
+
+  getSearchSuggestions: getSearchSuggestionsProcedure().query(
+    async ({ ctx, input }) => {
       return ctx.prisma.ingredient.findMany({
-        take: 24,
+        take: 12,
         orderBy: {
           _relevance: {
             fields: ["name"],
@@ -44,7 +41,8 @@ export const ingredientRouter = createTRPCRouter({
         },
         select: EMBED_SELECT,
       });
-    }),
+    },
+  ),
 
   search: searchProcedure({}).query(async ({ ctx, input }) => {
     input.orderBy ??= input.query ? "relevance" : "popularity";

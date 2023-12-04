@@ -48,10 +48,14 @@ function PageElipsis() {
 interface Props {
   page: number;
   totalPages: number;
-  createLink: (page: number) => string;
+  createUpdatedPageParamURL: (page: number) => string;
 }
 
-export default function PageSelect({ page, totalPages, createLink }: Props) {
+export default function PageSelect({
+  page,
+  totalPages,
+  createUpdatedPageParamURL: createURL,
+}: Props) {
   function PageOption({ value }: { value: number }) {
     const isLastPage = value === totalPages;
     const isCurrentPage = value === page;
@@ -71,7 +75,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
         {value}
       </div>
     ) : (
-      <Link key={value} className={baseClassNames} href={createLink(value)}>
+      <Link key={value} className={baseClassNames} href={createURL(value)}>
         {value}
       </Link>
     );
@@ -106,7 +110,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
       <div className="flex rounded-xl shadow">
         <PageNavLink
           direction="prev"
-          href={page > 1 ? createLink(page - 1) : undefined}
+          href={page > 1 ? createURL(page - 1) : undefined}
         >
           <RiArrowLeftSLine /> Previous
         </PageNavLink>
@@ -120,7 +124,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
         })}
         <PageNavLink
           direction="next"
-          href={page < totalPages ? createLink(page + 1) : undefined}
+          href={page < totalPages ? createURL(page + 1) : undefined}
         >
           Next <RiArrowRightSLine />
         </PageNavLink>

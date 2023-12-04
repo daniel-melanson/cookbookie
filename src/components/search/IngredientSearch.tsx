@@ -5,7 +5,7 @@ import * as S from "@radix-ui/react-scroll-area";
 import { RiAddFill, RiSubtractLine } from "react-icons/ri";
 
 export type IngredientEmbed = OneOf<
-  RouterOutputs["ingredients"]["embedSearch"]
+  RouterOutputs["ingredients"]["getSearchSuggestions"]
 >;
 
 function IngredientResults({
@@ -103,7 +103,7 @@ export default function IngredientSearch({
 
   const [filter, setFilter] = React.useState("");
   const debouncedFilter = useDebounce(filter, 500);
-  const searchQuery = api.ingredients.embedSearch.useQuery(debouncedFilter, {
+  const searchQuery = api.ingredients.getSearchSuggestions.useQuery(debouncedFilter, {
     enabled: debouncedFilter.length > 0,
   });
 
