@@ -10,7 +10,7 @@ interface Props {
 
 export default function RecipeCard({ recipe }: Props) {
   return (
-    <div className="relative overflow-clip rounded-lg shadow">
+    <div className="relative overflow-clip rounded-lg border border-nobel-500 shadow">
       <IconToggle
         className="absolute right-2 top-2"
         line={<RiBookmarkLine />}
