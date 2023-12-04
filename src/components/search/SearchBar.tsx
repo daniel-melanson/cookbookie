@@ -20,10 +20,15 @@ export default function SearchBar({
 }: React.PropsWithChildren<Props>) {
   React;
   const [hasFocus, setHasFocus] = React.useState(false);
-  const showSuggestions = hasFocus && value && value.length > 3;
+  const [hasHover, setHasHover] = React.useState(false);
+  const showSuggestions = (hasFocus || hasHover) && value && value.length > 3;
 
   return (
-    <div className={classNames("relative", className)}>
+    <div
+      className={classNames("relative", className)}
+      onPointerEnter={() => setHasHover(true)}
+      onPointerLeave={() => setHasHover(false)}
+    >
       <div className="absolute z-10 flex w-full flex-col rounded-lg border border-nobel-500 bg-white">
         <form
           className="flex h-full w-full items-center px-2"
