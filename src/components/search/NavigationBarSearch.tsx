@@ -35,22 +35,15 @@ export default function NavigationBarSearch({
   return (
     <SearchBar
       className="h-10 w-1/2 xl:w-1/4"
+      includeSubmitButton
       value={value}
       onChange={setValue}
       onSubmit={(value) => void router.push(createUpdatedQueryParamURL(value))}
-    >
-      {query.isSuccess &&
-        query.data.map(({ name, id }) => (
-          <Link
-            key={id}
-            prefetch={false}
-            href={createUpdatedQueryParamURL(name)}
-          >
-            <li className="overflow-clip whitespace-nowrap rounded p-1 capitalize hover:bg-nobel-500  hover:text-white">
-              {name}
-            </li>
-          </Link>
-        ))}
-    </SearchBar>
+      suggestions={
+        query.isSuccess
+          ? query.data.map(({ name, id }) => ({ key: id, value: name }))
+          : []
+      }
+    />
   );
 }
