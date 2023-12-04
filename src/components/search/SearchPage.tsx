@@ -119,6 +119,7 @@ export default function Page<T extends ZodRawShape, U>({
       >
         <NavigationBar>
           <NavigationBarSearch
+            initialQuery={searchArgs.query}
             useSuggestions={useSuggestions}
             createUpdatedQueryParamURL={(q) => updateSearchParam("query", q)}
           />

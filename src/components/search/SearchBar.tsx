@@ -21,7 +21,7 @@ export default function SearchBar({
   React;
   const [hasFocus, setHasFocus] = React.useState(false);
   const [hasHover, setHasHover] = React.useState(false);
-  const showSuggestions = (hasFocus || hasHover) && value && value.length > 3;
+  const showSuggestions = hasFocus && value && value.length > 3;
 
   return (
     <div
@@ -51,7 +51,7 @@ export default function SearchBar({
             minLength={3}
             onChange={(e) => onChange?.(e.target.value)}
             onFocus={() => setHasFocus(true)}
-            onBlur={() => setHasFocus(false)}
+            onBlur={() => setHasFocus(hasHover)}
           />
         </form>
         {showSuggestions && <ol className="z-10 w-full p-1">{children}</ol>}
