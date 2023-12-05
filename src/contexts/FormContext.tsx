@@ -1,6 +1,6 @@
 import React from "react";
 
-export type FormValues = string | boolean | number;
+export type FormValues = string | boolean | Date | number;
 export type FormData = Record<string, FormValues>;
 export type FormDataAction = FormData;
 
