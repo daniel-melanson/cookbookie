@@ -1,41 +1,45 @@
-import React, { useState } from "react";
-import { type AuthFormProps } from "~/components/auth";
 import { useRouter } from "next/router";
-import { FormDataProvider, useFormDataDispatch } from "~/contexts/FormContext";
+import { FormDataProvider } from "~/contexts/FormContext";
 import AuthForm from "./AuthForm";
 import FormTextField from "../form/FormTextField";
 import FormRadioField from "../form/FormRadioField";
 import FormDateField from "../form/FormDateField";
 import FormSubmit from "../form/FormSubmit";
-import * as Form from "@radix-ui/react-form";
-
+import FormSelectField from "../form/FormSelectField";
 import { api } from "~/utils/api";
+import { useState } from "react";
 
 interface infoType {
-  unitSystem: "US" | "METRIC";
-  firstName?: string | undefined;
+  firstName: string;
+  unitSystem?: "US" | "METRIC";
   lastName?: string | undefined;
   dateOfBirth?: Date | undefined;
 }
 export default function Onboarding() {
-  const dispatch = useFormDataDispatch();
+  const [isLoading, setLoading] = useState(false);
   const mutation = api.users.setUserInfo.useMutation();
   const router = useRouter();
-  function handleSubmit(data: Record<string, unknown>) {
+  async function handleSubmit(data: Record<string, unknown>) {
+    console.log(data);
     mutation.mutate(data as unknown as infoType);
 
     if (mutation.isSuccess) {
-      void router.push("/");
+      await router.push("/");
     }
   }
 
   return (
     <FormDataProvider>
-      <AuthForm name="About You" onSubmit={handleSubmit}>
-        <FormTextField name="First Name" type="text" />
-        <FormTextField name="Last Name" type="text" />
-        <FormDateField name="Birth Date" />
-        <FormRadioField name="Unit System">
+      <AuthForm name="About You" onSubmit={(e) => void handleSubmit(e)}>
+        <FormTextField
+          name="firstName"
+          type="text"
+          label="First Name"
+          required
+        />
+        <FormTextField name="lastName" type="text" label="Last Name" />
+        <FormDateField name="dateOfBirth" label="Birth Date" />
+        <FormRadioField name="unitSystem" label="Unit System">
           <input id="US" type="radio" name={"Unit System"} value="US" />
           <label className="ml-2" htmlFor="US">
             {"US (Cups, ounces, etc.)"}

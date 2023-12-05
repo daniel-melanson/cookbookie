@@ -6,9 +6,10 @@ export type FormTextInputType = "email" | "password" | "text";
 export interface InputProps {
   name: string;
   type: FormTextInputType;
+  required?: boolean;
 }
 
-export default function FormTextInput({ type, name }: InputProps) {
+export default function FormTextInput({ type, name, required }: InputProps) {
   const dispatch = useFormDataDispatch();
 
   return (
@@ -18,7 +19,7 @@ export default function FormTextInput({ type, name }: InputProps) {
       placeholder="" // keep placeholder empty to use label as placeholder
       onChange={(event) => dispatch({ [name]: event.target.value })}
       className="focus:border-blue peer h-[48px] w-full rounded border-[1px] border-neutral-200 px-2 text-sm leading-none placeholder-transparent transition-colors hover:border-neutral-300 focus:border-neutral-500 focus:outline-none data-[invalid]:border-red-500"
-      required
+      required={required}
     />
   );
 }
