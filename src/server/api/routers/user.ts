@@ -46,7 +46,7 @@ export const userRouter = createTRPCRouter({
     }),
   setUserInfo: protectedProcedure.input(
     z.object({
-      firstName: z.string().optional(),
+      firstName: z.string(),
       lastName: z.string().optional(),
       dateOfBirth: z.date().optional(),
       unitSystem: z.enum(["US", "METRIC"]).optional(),
@@ -56,9 +56,9 @@ export const userRouter = createTRPCRouter({
       email: ctx.session.user.email ?? undefined,
     },
   data: {
-      firstName: input.firstName ?? undefined,
-      lastName: input.firstName ?? undefined,
-      dateOfBirth: input.firstName ?? undefined,
+      firstName: input.firstName,
+      lastName: input.lastName ?? undefined,
+      dateOfBirth: input.dateOfBirth ?? undefined,
       unitSystem: input.unitSystem ?? undefined,
   } })
   }),
