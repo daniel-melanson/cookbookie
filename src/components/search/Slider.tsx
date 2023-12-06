@@ -23,8 +23,8 @@ interface SingleSlider extends Props {
 
 function SliderThumb({ value }: { value: string }) {
   return (
-    <S.Thumb className="relative block h-4 w-4 rounded-[10px] border-[1px] border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none">
-      <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded border-[1px] border-nobel-500 bg-white px-1 py-0.5 text-sm text-nobel-500">
+    <S.Thumb className="relative block h-4 w-4 rounded-[10px] border border-nobel-500 bg-white focus:border-none focus:shadow-[0_0_0_2px] focus:outline-none">
+      <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded border border-nobel-500 bg-white px-1 py-0.5 text-sm text-nobel-500">
         {value}
       </span>
     </S.Thumb>
@@ -85,7 +85,7 @@ export default function Slider({
         value={localValue}
         onValueChange={handlerFactory(setLocalValue)}
       >
-        <S.Track className="relative h-[4px] w-full rounded-full border-[1px] border-nobel-500 bg-white">
+        <S.Track className="relative h-[4px] w-full rounded-full border border-nobel-500 bg-white">
           <S.Range className="absolute h-full rounded-full bg-white" />
           <div
             className="absolute h-full bg-nobel-500"

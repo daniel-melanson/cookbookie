@@ -17,7 +17,7 @@ export default function FormTextInput({ type, name }: InputProps) {
       type={type}
       placeholder="" // keep placeholder empty to use label as placeholder
       onChange={(event) => dispatch({ [name]: event.target.value })}
-      className="focus:border-blue peer h-[48px] w-full rounded border-[1px] border-neutral-200 px-2 text-sm leading-none placeholder-transparent transition-colors hover:border-neutral-300 focus:border-neutral-500 focus:outline-none data-[invalid]:border-red-500"
+      className="focus:border-blue peer h-[48px] w-full rounded border border-neutral-200 px-2 text-sm leading-none placeholder-transparent transition-colors hover:border-neutral-300 focus:border-neutral-500 focus:outline-none data-[invalid]:border-red-500"
       required
     />
   );

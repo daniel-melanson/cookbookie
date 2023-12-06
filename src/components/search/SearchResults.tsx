@@ -43,7 +43,7 @@ function SortSelection({
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="overflow-hidden rounded border-[1px] border-nobel-500 bg-white">
+          <Select.Content className="overflow-hidden rounded border border-nobel-500 bg-white">
             <Select.Viewport className="p-1.5">
               <SortOption value="relevance" label="Relevance" />
               <SortOption value="popularity" label="Popularity" />
