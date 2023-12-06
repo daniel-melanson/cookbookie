@@ -44,7 +44,7 @@ export default function IngredientFilterForm() {
     makeFormEventFactories(args, dispatch);
 
   return (
-    <form className="w-72 space-y-1">
+    <form className="max-w-[16rem] space-y-1">
       <FiltersLabel />
       <FilterItem label="Category" onClear={onClearFactory("category")}>
         <ToggleGroup
