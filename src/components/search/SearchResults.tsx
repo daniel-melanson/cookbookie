@@ -77,8 +77,17 @@ export default function SearchResults<T>({
   return (
     <div className="w-full space-y-4">
       <div className="flex place-content-between">
-        <h2 className="text-2xl font-bold text-nobel-600">
-          {args.query ? `Results for "${args.query}"` : "Results"}
+        <h2 className="text-xl font-bold text-nobel-600">
+          {args.query ? (
+            <>
+              Results for{" "}
+              <span className="font-medium italic text-neutral-900">
+                {args.query}
+              </span>
+            </>
+          ) : (
+            "Results"
+          )}
         </h2>
         <SortSelection
           value={args.sort ?? (args.query ? "relevance" : "popularity")}
