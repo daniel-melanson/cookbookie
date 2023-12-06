@@ -3,6 +3,7 @@ import T from "./Tooltip";
 import { match } from "ts-pattern";
 import { MdClear } from "react-icons/md";
 import classNames from "classnames";
+import { RiAddLine, RiSubtractLine } from "react-icons/ri";
 
 interface Props {
   label: string;
@@ -24,14 +25,14 @@ function FilterButton({ hint, kind, onClick }: FilterButtonProps) {
         type="button"
         onClick={onClick}
         className={classNames(
-          "ml-auto w-5 text-sm",
-          match(kind)
-            .with("add", () => "rotate-45 hover:text-blue-500")
-            .with("clear", () => "text-md rotate-0 text-red-400")
-            .exhaustive(),
+          "ml-auto w-5",
+          kind === "clear" && "text-md text-red-400",
         )}
       >
-        <MdClear />
+        {match(kind)
+          .with("add", () => <RiAddLine />)
+          .with("clear", () => <RiSubtractLine />)
+          .exhaustive()}
       </button>
     </T>
   );
