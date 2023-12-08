@@ -8,25 +8,21 @@ interface Suggestion {
 }
 
 interface Props {
-  className?: string;
-  includeSubmitButton?: boolean;
   value: string;
+  className?: string;
   onChange: (value: string) => void;
   onSubmit: (value: string) => void;
   placeholder?: string;
   suggestions?: Suggestion[];
-  renderSuggestion?: (suggestion: Suggestion) => React.ReactNode;
 }
 
 export default function SearchBar({
-  className,
   value,
   onChange,
-  includeSubmitButton = false,
+  className,
   placeholder,
   onSubmit,
   suggestions = [],
-  renderSuggestion,
 }: Props) {
   React;
   const [hasFocus, setHasFocus] = React.useState(false);
@@ -36,61 +32,46 @@ export default function SearchBar({
   const selectedValue =
     selectedIndex >= 0 ? suggestions[selectedIndex]!.value : value;
 
-  function handleKeyDown(e: KeyboardEvent) {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setSelectedIndex((selectedIndex + 1) % suggestions.length);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-
-      setSelectedIndex(Math.max(-1, selectedIndex - 1));
-    } else if (e.key === "Enter") {
-      onSubmit(selectedValue);
-    }
-  }
-
-  React.useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  });
-
   const showSuggestions =
     suggestions.length > 0 && hasFocus && value && value.length > 3;
 
   return (
-    <div
-      className={classNames("relative", className)}
-      onPointerEnter={() => setHasHover(true)}
-      onPointerLeave={() => setHasHover(false)}
-    >
-      <div className="absolute z-10 flex w-full flex-col rounded-lg border border-nobel-500 bg-white">
-        <form
-          className="flex h-full w-full items-center px-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit(value);
-          }}
-        >
-          {includeSubmitButton && (
-            <button
-              className="h-fill flex flex-shrink-0 items-center justify-center rounded-lg pe-2"
-              type="submit"
-            >
-              <RiSearchLine className="align-self-middle h-6 w-6 text-3xl text-nobel-500" />
-            </button>
-          )}
+    <div className={classNames("relative", className)}>
+      <form
+        className="absolute z-10 flex w-full flex-col rounded-lg border border-nobel-500 bg-white"
+        onPointerEnter={() => setHasHover(true)}
+        onPointerLeave={() => setHasHover(false)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(selectedValue);
+        }}
+      >
+        <div className="flex h-full w-full items-center px-2">
+          <button
+            className="h-fill flex flex-shrink-0 items-center justify-center rounded-lg pe-2"
+            type="submit"
+          >
+            <RiSearchLine className="align-self-middle h-6 w-6 text-3xl text-nobel-500" />
+          </button>
           <input
             className="my-2 flex-grow bg-transparent placeholder-neutral-400 focus:outline-none"
-            type="search"
             placeholder={placeholder ?? "Search..."}
             value={selectedValue}
             minLength={3}
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => setHasFocus(true)}
             onBlur={() => setHasFocus(hasHover)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setSelectedIndex((selectedIndex + 1) % suggestions.length);
+              } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setSelectedIndex(Math.max(-1, selectedIndex - 1));
+              }
+            }}
           />
-        </form>
+        </div>
         {showSuggestions && (
           <ul className="z-10 w-full p-1">
             {suggestions.map(({ value, key }, i) => (
@@ -100,12 +81,12 @@ export default function SearchBar({
                 className="overflow-clip whitespace-nowrap rounded p-1 capitalize hover:cursor-pointer hover:bg-nobel-500 hover:text-white data-[selected=true]:bg-nobel-500 data-[selected=true]:text-white"
                 onClick={() => onSubmit(value)}
               >
-                {renderSuggestion ? renderSuggestion({ key, value }) : value}
+                {value}
               </li>
             ))}
           </ul>
         )}
-      </div>
+      </form>
     </div>
   );
 }

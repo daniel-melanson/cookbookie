@@ -1,7 +1,6 @@
 import React from "react";
 import SearchBar from "./SearchBar";
 import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
-import Link from "next/link";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useRouter } from "next/router";
 
@@ -35,7 +34,6 @@ export default function NavigationBarSearch({
   return (
     <SearchBar
       className="h-10 w-1/2 xl:w-1/4"
-      includeSubmitButton
       value={value}
       onChange={setValue}
       onSubmit={(value) => void router.push(createUpdatedQueryParamURL(value))}
