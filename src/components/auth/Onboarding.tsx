@@ -7,24 +7,39 @@ import FormDateField from "../form/FormDateField";
 import FormSubmit from "../form/FormSubmit";
 import FormSelectField from "../form/FormSelectField";
 import { api } from "~/utils/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { Tag } from "@prisma/client";
 
-interface infoType {
+interface InfoType {
   firstName: string;
   unitSystem?: "US" | "METRIC";
   lastName?: string | undefined;
   dateOfBirth?: Date | undefined;
 }
+
 export default function Onboarding() {
-  const [isLoading, setLoading] = useState(false);
+  const [tags, setTags] = useState<Tag[]>([]);
   const mutation = api.users.setUserInfo.useMutation();
+  const res = api.tag.getAllTagNames.useQuery();
   const router = useRouter();
+  // const test = api.users.getUserInfo.useQuery();
+  // console.log(test);
+  useEffect(() => {
+    if (res.isSuccess) {
+      setTags(res.data);
+    } else {
+      // console.log(res.error);
+      setTags([{ id: "error", name: "error", kindName: "error" }]);
+    }
+  }, [res.isSuccess, res.data]);
+
   async function handleSubmit(data: Record<string, unknown>) {
-    console.log(data);
-    mutation.mutate(data as unknown as infoType);
+    mutation.mutate(data as unknown as InfoType);
 
     if (mutation.isSuccess) {
       await router.push("/");
+    } else {
+      console.log(mutation.error);
     }
   }
 
@@ -51,6 +66,18 @@ export default function Onboarding() {
           </label>
           <br />
         </FormRadioField>
+        {/* useEffect and have search term as dependency */}
+        <FormSelectField
+          label="Dietary Restrictions"
+          name="allergens"
+          options={tags}
+        >
+          {tags.map((e) => (
+            <option key={e.id} value={e.name}>
+              {e.name.charAt(0).toUpperCase() + e.name.slice(1)}
+            </option>
+          ))}
+        </FormSelectField>
         <FormSubmit isLoading={mutation.isLoading} text={"Continue"} />
       </AuthForm>
     </FormDataProvider>

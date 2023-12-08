@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { hash } from "bcrypt";
 import { z } from "zod";
 import { password } from "~/utils/validators";
+import type { Tag } from "@prisma/client";
 
 import {
   createTRPCRouter,
@@ -50,6 +51,7 @@ export const userRouter = createTRPCRouter({
       lastName: z.string().optional(),
       dateOfBirth: z.date().optional(),
       unitSystem: z.enum(["US", "METRIC"]).optional(),
+      allergens: z.array(z.custom<Tag>()).optional()
     }),
   ).mutation(async ({ctx, input}) => {
     await ctx.prisma.user.update({where: {
@@ -60,9 +62,17 @@ export const userRouter = createTRPCRouter({
       lastName: input.lastName ?? undefined,
       dateOfBirth: input.dateOfBirth ?? undefined,
       unitSystem: input.unitSystem ?? undefined,
+      // allergens: {
+      //   connect: [{}]
+      // }
+  }, include: {
+    allergens: true
   } })
   }),
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+  // for testing purposes
+  getUserInfo: protectedProcedure.query(({ctx}) => {
+    return ctx.prisma.user.findUnique({where: {
+      email: "test1@test.com"
+    }});
   }),
 });
