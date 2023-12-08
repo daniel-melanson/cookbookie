@@ -3,7 +3,7 @@ import React from "react";
 import NavigationBar from "~/components/NavigationBar";
 
 import PageBase from "~/components/PageBase";
-import SearchBar from "~/components/SearchBar";
+import PrimarySearchBar from "~/components/PrimarySearchBar";
 
 type Props = React.PropsWithChildren<{
   href: string;
@@ -29,7 +29,7 @@ export default function Page() {
       <NavigationBar />
       <main className="lg:mx-10">
         <div className="home-image-banner flex h-[400px] flex-col items-center justify-center transition-colors lg:rounded-bl-lg lg:rounded-br-lg">
-          <SearchBar />
+          <PrimarySearchBar />
           <div className="mt-4 flex w-3/4 flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0 lg:w-1/2">
             <EmojiLink href="/recipes" emoji="🍲" text="Browse Recipes" />
             <EmojiLink

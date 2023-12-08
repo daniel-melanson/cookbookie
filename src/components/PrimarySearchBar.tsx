@@ -24,7 +24,7 @@ function SearchButton() {
   );
 }
 
-export default function SearchBar() {
+export default function PrimarySearchBar() {
   return (
     <form
       className="align-center flex w-3/4 items-center space-x-2 rounded-lg bg-white p-1 shadow-xl transition-all  lg:w-1/2"
