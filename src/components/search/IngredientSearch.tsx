@@ -1,53 +1,19 @@
 import React from "react";
-import { type OneOf, type RouterOutputs, api } from "~/utils/api";
+import Select from "react-select";
+import { api } from "~/utils/api";
 import { useDebounce } from "@uidotdev/usehooks";
-import * as S from "@radix-ui/react-scroll-area";
-import { RiAddFill, RiSubtractLine } from "react-icons/ri";
+import { RiSubtractLine } from "react-icons/ri";
 
-export type IngredientEmbed = OneOf<
-  RouterOutputs["ingredients"]["getSearchSuggestions"]
->;
-
-function IngredientResults({
-  ingredients,
-  onSelect,
-}: {
-  ingredients: IngredientEmbed[];
-  onSelect: (ingredient: IngredientEmbed) => void;
-}) {
-  return (
-    <div className="absolute top-7">
-      <S.Root className="h-[225px] overflow-hidden rounded border-[1px] border-nobel-600 bg-white shadow-lg">
-        <S.Viewport className="h-full w-full rounded">
-          <div className="px-4 py-2.5">
-            {ingredients.map((ingredient) => (
-              <div
-                className="flex items-center justify-between border-b-[1px] border-neutral-200 p-1 text-sm capitalize hover:cursor-pointer hover:rounded hover:bg-nobel-500 hover:text-white"
-                onClick={() => onSelect(ingredient)}
-                key={ingredient.id}
-              >
-                {ingredient.name}
-                <RiAddFill className="min-w-[16px]" />
-              </div>
-            ))}
-          </div>
-        </S.Viewport>
-        <S.Scrollbar
-          className="flex w-2.5 touch-none select-none p-0.5 transition-colors duration-[160ms]  ease-out"
-          orientation="vertical"
-        >
-          <S.Thumb className="flex-1 rounded-[10px] bg-nobel-600 before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']" />
-        </S.Scrollbar>
-      </S.Root>
-    </div>
-  );
+interface Embed {
+  id: string;
+  name: string;
 }
 
 function IngredientPill({
   ingredient,
   onRemove,
 }: {
-  ingredient: IngredientEmbed;
+  ingredient: Embed;
   onRemove: () => void;
 }) {
   return (
@@ -67,7 +33,7 @@ function IngredientPill({
   );
 }
 
-const cache = new Map<string, IngredientEmbed>();
+const cache = new Map<string, Embed>();
 
 export default function IngredientSearch({
   ingredientIds,
@@ -78,7 +44,7 @@ export default function IngredientSearch({
 }) {
   const ingredientIdSet = new Set(ingredientIds);
 
-  const ingredients: IngredientEmbed[] = [];
+  const ingredients: Embed[] = [];
   const uncovered: string[] = [];
   for (const id of ingredientIds) {
     if (cache.has(id)) {
@@ -101,46 +67,70 @@ export default function IngredientSearch({
 
   ingredients.sort((a, b) => a.name.length - b.name.length);
 
-  const [filter, setFilter] = React.useState("");
-  const debouncedFilter = useDebounce(filter, 500);
-  const searchQuery = api.ingredients.getSearchSuggestions.useQuery(debouncedFilter, {
-    enabled: debouncedFilter.length > 0,
-  });
+  const [input, setInput] = React.useState("");
+  const debouncedInput = useDebounce(input, 300);
+
+  const isEnabled = debouncedInput.length > 0;
+  const suggestionsQuery = api.ingredients.getSearchSuggestions.useQuery(
+    debouncedInput,
+    { enabled: isEnabled, refetchOnWindowFocus: false },
+  );
 
   return (
     <div className="relative space-y-2">
-      <input
-        className="h-7 w-full rounded border-[1px] border-nobel-500 px-1 py-1 text-sm outline-none disabled:bg-neutral-200"
-        value={filter}
-        disabled={ingredientIds.length >= 5}
+      <Select
+        isMulti
+        isClearable
+        isSearchable
+        hideSelectedOptions
+        closeMenuOnSelect={false}
         placeholder="Add ingredients..."
-        onChange={(e) => setFilter(e.target.value)}
+        inputValue={input}
+        isLoading={isEnabled && suggestionsQuery.isLoading}
+        onInputChange={setInput}
+        value={ingredients.map(({ id, name }) => ({ value: id, label: name }))}
+        onChange={(values) => {
+          onChange(values.map(({ value }) => value));
+        }}
+        options={
+          suggestionsQuery.data?.map(({ id, name }) => ({
+            value: id,
+            label: name,
+          })) ?? []
+        }
+        styles={{
+          control: (provided) => ({
+            ...provided,
+          }),
+          option: (base) => ({
+            ...base,
+            textTransform: "capitalize",
+          }),
+          menu: (base) => ({
+            ...base,
+            borderColor: "rgb(159 148 148)",
+          }),
+          multiValue: (base) => ({
+            ...base,
+            textTransform: "capitalize",
+          }),
+          multiValueRemove: (base) => ({
+            ...base,
+            backgroundColor: "transparent",
+          }),
+        }}
       />
-      <div className="flex flex-wrap p-1">
-        {ingredients.map((ingredient) => (
-          <IngredientPill
-            key={ingredient.id}
-            ingredient={ingredient}
-            onRemove={() =>
-              onChange(ingredientIds.filter((id) => id !== ingredient.id))
-            }
-          />
-        ))}
-      </div>
-      {searchQuery.isSuccess && filter !== "" && (
-        <IngredientResults
-          ingredients={searchQuery.data.filter(
-            ({ id }) => !ingredientIdSet.has(id),
-          )}
-          onSelect={(ingredient) => {
-            setFilter("");
-
-            cache.set(ingredient.id, ingredient);
-
-            onChange([...ingredientIds, ingredient.id]);
-          }}
-        />
-      )}
+      {/* <div className="flex flex-wrap p-1"> */}
+      {/*   {ingredients.map((ingredient) => ( */}
+      {/*     <IngredientPill */}
+      {/*       key={ingredient.id} */}
+      {/*       ingredient={ingredient} */}
+      {/*       onRemove={() => */}
+      {/*         onChange(ingredientIds.filter((id) => id !== ingredient.id)) */}
+      {/*       } */}
+      {/*     /> */}
+      {/*   ))} */}
+      {/* </div> */}
     </div>
   );
 }

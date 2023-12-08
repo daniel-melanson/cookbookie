@@ -38,7 +38,7 @@ export default function SearchBar({
   return (
     <div className={classNames("relative", className)}>
       <form
-        className="absolute z-10 flex w-full flex-col rounded-lg border border-nobel-500 bg-white"
+        className="absolute z-10 flex w-full flex-col rounded-lg border border-nobel-400 bg-white transition-colors focus-within:border-nobel-600 hover:border-nobel-600"
         onPointerEnter={() => setHasHover(true)}
         onPointerLeave={() => setHasHover(false)}
         onSubmit={(e) => {
