@@ -27,25 +27,26 @@ export default function Onboarding() {
   useEffect(() => {
     if (res.isSuccess) {
       setTags(res.data);
+    } else if (res.isLoading) {
+      setTags([{ id: "loading", name: "Loading...", kindName: "loading" }]);
     } else {
       // console.log(res.error);
       setTags([{ id: "error", name: "error", kindName: "error" }]);
     }
-  }, [res.isSuccess, res.data]);
+  }, [res.isSuccess, res.data, res.isLoading]);
 
-  async function handleSubmit(data: Record<string, unknown>) {
+  function handleSubmit(data: Record<string, unknown>) {
     mutation.mutate(data as unknown as InfoType);
 
+    while (mutation.isLoading);
     if (mutation.isSuccess) {
-      await router.push("/");
-    } else {
-      console.log(mutation.error);
+      void router.push("/");
     }
   }
 
   return (
     <FormDataProvider>
-      <AuthForm name="About You" onSubmit={(e) => void handleSubmit(e)}>
+      <AuthForm name="About You" onSubmit={handleSubmit}>
         <FormTextField
           name="firstName"
           type="text"

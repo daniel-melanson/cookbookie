@@ -51,10 +51,10 @@ export const userRouter = createTRPCRouter({
       lastName: z.string().optional(),
       dateOfBirth: z.date().optional(),
       unitSystem: z.enum(["US", "METRIC"]).optional(),
-      allergens: z.array(z.custom<Tag>()).optional()
+      allergens: z.array(z.object({id: z.string()})).optional()
     }),
   ).mutation(async ({ctx, input}) => {
-    await ctx.prisma.user.update({where: {
+    const res = await ctx.prisma.user.update({where: {
       email: ctx.session.user.email ?? undefined,
     },
   data: {
@@ -62,12 +62,13 @@ export const userRouter = createTRPCRouter({
       lastName: input.lastName ?? undefined,
       dateOfBirth: input.dateOfBirth ?? undefined,
       unitSystem: input.unitSystem ?? undefined,
-      // allergens: {
-      //   connect: [{}]
-      // }
+      allergens: {
+        connect: input.allergens ?? undefined,
+      }
   }, include: {
-    allergens: true
-  } })
+    allergens: true,
+  }});
+  console.log(res.allergens);
   }),
   // for testing purposes
   getUserInfo: protectedProcedure.query(({ctx}) => {
