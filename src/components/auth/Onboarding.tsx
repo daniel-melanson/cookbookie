@@ -10,12 +10,15 @@ import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
 import type { Tag } from "@prisma/client";
 
-interface InfoType {
+type InfoType = {
   firstName: string;
   unitSystem?: "US" | "METRIC";
   lastName?: string | undefined;
   dateOfBirth?: Date | undefined;
-}
+  allergens?: {
+    id: string;
+  }[];
+};
 
 export default function Onboarding() {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -36,12 +39,10 @@ export default function Onboarding() {
   }, [res.isSuccess, res.data, res.isLoading]);
 
   function handleSubmit(data: Record<string, unknown>) {
-    mutation.mutate(data as unknown as InfoType);
-
-    while (mutation.isLoading);
-    if (mutation.isSuccess) {
-      void router.push("/");
-    }
+    mutation.mutate(data as InfoType);
+  }
+  if (mutation.isSuccess) {
+    void router.push("/");
   }
 
   return (
