@@ -73,7 +73,7 @@ export default function Onboarding() {
         <FormSelectField
           label="Dietary Restrictions"
           name="allergens"
-          options={tags}
+          // options={tags}
         >
           {tags.map((e) => (
             <option key={e.name} value={e.id}>
