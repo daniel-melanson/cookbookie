@@ -39,6 +39,7 @@ export default function Onboarding() {
   }, [res.isSuccess, res.data, res.isLoading]);
 
   function handleSubmit(data: Record<string, unknown>) {
+    console.log(data as InfoType);
     mutation.mutate(data as InfoType);
   }
   if (mutation.isSuccess) {
@@ -75,7 +76,7 @@ export default function Onboarding() {
           options={tags}
         >
           {tags.map((e) => (
-            <option key={e.id} value={e.name}>
+            <option key={e.name} value={e.id}>
               {e.name.charAt(0).toUpperCase() + e.name.slice(1)}
             </option>
           ))}
