@@ -1,25 +1,23 @@
 import React from "react";
 
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { P, match } from "ts-pattern";
-import { type ZodRawShape, z } from "zod";
-
-import SearchResults, {
-  type SearchResultsProps,
-} from "~/components/search/SearchResults";
+import { z, type ZodRawShape } from "zod";
 import NavigationBar from "~/components/NavigationBar";
 import PageBase from "~/components/PageBase";
-
-import {
-  SearchArgsProvider,
-  type SearchFilters,
-  type SearchData,
-  type SearchReducer,
-} from "~/contexts/SearchContext";
-import { integerParam, param, stringParam } from "~/utils/validators";
 import NavigationBarSearch, {
   type NavigationBarSearchProps,
 } from "~/components/search/NavigationBarSearch";
+import SearchResults, {
+  type SearchResultsProps,
+} from "~/components/search/SearchResults";
+import {
+  SearchArgsProvider,
+  type SearchData,
+  type SearchFilters,
+  type SearchReducer,
+} from "~/contexts/SearchContext";
+import { integerParam, param, stringParam } from "~/utils/validators";
 
 type Props<T extends ZodRawShape, U> = {
   filterForm: React.ReactNode;
@@ -117,13 +115,7 @@ export default function Page<T extends ZodRawShape, U>({
         reducer={reducer}
         initialValue={searchArgs}
       >
-        <NavigationBar>
-          <NavigationBarSearch
-            initialQuery={searchArgs.query}
-            useSuggestions={useSuggestions}
-            createUpdatedQueryParamURL={(q) => updateSearchParam("query", q)}
-          />
-        </NavigationBar>
+        <NavigationBar />
         <main className="mx-5 mt-5 min-h-screen content-center space-y-6">
           <div className="container mx-auto flex space-x-4">
             {filterForm}
