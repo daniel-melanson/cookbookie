@@ -1,17 +1,16 @@
-import React from "react";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import {
-  RiFridgeLine,
-  RiFridgeFill,
-  RiCalendarLine,
-  RiCalendarFill,
-  RiBookmarkLine,
   RiBookmarkFill,
+  RiBookmarkLine,
+  RiCalendarFill,
+  RiCalendarLine,
+  RiFridgeFill,
+  RiFridgeLine,
 } from "react-icons/ri";
 import IconLink from "~/components/IconLink";
-import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
 
-export default function NavigationBar({ children }: React.PropsWithChildren) {
+export default function NavigationBar() {
   const { /*data: session ,*/ status } = useSession();
 
   return (
@@ -19,7 +18,6 @@ export default function NavigationBar({ children }: React.PropsWithChildren) {
       <h1 className="font-cursive text-3xl">
         <Link href="/">CookBookie</Link>
       </h1>
-      {children}
       <div className="flex items-center justify-end space-x-4 text-3xl">
         {status === "authenticated" ? (
           <>
@@ -49,7 +47,7 @@ export default function NavigationBar({ children }: React.PropsWithChildren) {
           </>
         ) : (
           <Link
-            className="rounded p-2 text-lg transition-colors hover:bg-neutral-200"
+            className="rounded bg-neutral-950 px-3 py-2 text-lg text-white shadow-lg transition-colors hover:bg-neutral-800"
             href="/login"
           >
             Sign In

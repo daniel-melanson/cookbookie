@@ -11,7 +11,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { z, ZodError, type ZodObject } from "zod";
 
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
@@ -106,6 +106,31 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+export const searchProcedure = <T extends z.ZodRawShape>(filters: T) =>
+  t.procedure.input(
+    z.object({
+      page: z.number().min(1).int().default(1),
+      query: z.string().min(3).max(64).optional(),
+      filters: z.object(filters).optional(),
+      orderBy: z.enum(["relevance", "popularity", "created-at"]).optional(),
+    }),
+  );
+
+export const getSearchSuggestionsProcedure = () =>
+  publicProcedure.input(
+    z
+      .string()
+      .min(3)
+      .max(64)
+      .transform((v) => v.toLowerCase().trim().replace(/\s+/g, " ")),
+  );
+
+export interface SearchResults<T> {
+  results: T[];
+  totalCount: number;
+  pageCount: number;
+}
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {

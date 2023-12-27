@@ -37,7 +37,10 @@
     "next-auth": "^4.24.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-icons": "^4.12.0",
+    "react-modal": "^3.16.1",
+    "react-select": "^5.8.0",
     "superjson": "^1.13.3",
     "ts-pattern": "^5.0.5",
     "zod": "^3.22.4"

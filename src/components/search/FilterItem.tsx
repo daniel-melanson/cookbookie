@@ -1,8 +1,8 @@
 import React from "react";
 import T from "./Tooltip";
 import { match } from "ts-pattern";
-import { MdClear } from "react-icons/md";
 import classNames from "classnames";
+import { RiAddLine, RiSubtractLine } from "react-icons/ri";
 
 interface Props {
   label: string;
@@ -17,21 +17,19 @@ interface FilterButtonProps {
   onClick: () => void;
   hint: string;
 }
+
 function FilterButton({ hint, kind, onClick }: FilterButtonProps) {
   return (
     <T hint={hint}>
       <button
         type="button"
         onClick={onClick}
-        className={classNames(
-          "ml-auto w-5 text-sm",
-          match(kind)
-            .with("add", () => "rotate-45 hover:text-blue-500")
-            .with("clear", () => "text-md rotate-0 text-red-400")
-            .exhaustive(),
-        )}
+        className={classNames("ml-auto w-5", kind === "clear" && "text-md")}
       >
-        <MdClear />
+        {match(kind)
+          .with("add", () => <RiAddLine />)
+          .with("clear", () => <RiSubtractLine />)
+          .exhaustive()}
       </button>
     </T>
   );
@@ -46,7 +44,15 @@ export default function FilterItem({
 }: React.PropsWithChildren<Props>) {
   return (
     <>
-      <div className="flex w-full items-center text-lg font-medium text-nobel-600">
+      <div
+        className={classNames(
+          "flex w-full items-center text-lg font-medium transition-colors",
+          onAdd && "text-nobel-400 hover:cursor-pointer hover:text-nobel-600",
+          onClear && "text-nobel-600 hover:cursor-pointer hover:text-red-400",
+          !onAdd && !onClear && "text-nobel-600",
+        )}
+        onClick={onAdd}
+      >
         <h2>{label}</h2>
         {onClear && (
           <FilterButton kind="clear" hint="Clear" onClick={onClear} />

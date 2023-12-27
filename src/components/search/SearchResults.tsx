@@ -1,6 +1,15 @@
 import React from "react";
+import { type SearchResults as TSearchResults } from "~/server/api/trpc";
 import * as Select from "@radix-ui/react-select";
 import { RiArrowDownSLine, RiCheckFill } from "react-icons/ri";
+import {
+  type SearchData,
+  useSearchArgs,
+  useSearchArgsDispatch,
+  type SearchFilters,
+} from "~/contexts/SearchContext";
+import PageSelect from "./PageSelect";
+import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 
 function SortOption({ value, label }: { value: string; label: string }) {
   return (
@@ -34,11 +43,11 @@ function SortSelection({
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="overflow-hidden rounded border-[1px] border-nobel-500 bg-white">
+          <Select.Content className="overflow-hidden rounded border border-nobel-500 bg-white">
             <Select.Viewport className="p-1.5">
               <SortOption value="relevance" label="Relevance" />
               <SortOption value="popularity" label="Popularity" />
-              <SortOption value="created-at" label="Created At" />
+              <SortOption value="created-at" label="Newest" />
             </Select.Viewport>
           </Select.Content>
         </Select.Portal>
@@ -47,28 +56,52 @@ function SortSelection({
   );
 }
 
-interface Props {
-  count?: number;
-  sort: string;
-  query?: string;
-  onSortChange: (v: string) => void;
+export interface SearchResultsProps<T> {
+  useSearch: (
+    args: SearchData<SearchFilters>,
+  ) => UseTRPCQueryResult<TSearchResults<T>, unknown>;
+  makeGrid: (results?: T[]) => React.ReactNode;
+  createUpdatedPageParamURL: (page: number) => string;
 }
 
-export default function SearchResults({
-  children,
-  sort,
-  query,
-  onSortChange,
-}: React.PropsWithChildren<Props>) {
+export default function SearchResults<T>({
+  makeGrid,
+  createUpdatedPageParamURL,
+  useSearch: useQuery,
+}: SearchResultsProps<T>) {
+  const args = useSearchArgs();
+  const dispatch = useSearchArgsDispatch();
+
+  const query = useQuery(args);
+
   return (
     <div className="w-full space-y-4">
       <div className="flex place-content-between">
-        <h2 className="text-2xl font-bold">
-          {query ? `Results for "${query}"` : "Results"}
+        <h2 className="text-xl font-bold text-nobel-600">
+          {args.query ? (
+            <>
+              Results for{" "}
+              <span className="font-medium italic text-neutral-900">
+                {args.query}
+              </span>
+            </>
+          ) : (
+            "Results"
+          )}
         </h2>
-        <SortSelection value={sort} onChange={onSortChange} />
+        <SortSelection
+          value={args.sort ?? (args.query ? "relevance" : "popularity")}
+          onChange={(v) => dispatch({ kind: "set", key: "sort", value: v })}
+        />
       </div>
-      {children}
+      {makeGrid(query.isSuccess ? query.data.results : undefined)}
+      {query.isSuccess && (
+        <PageSelect
+          page={args.page ?? 1}
+          totalPages={query.data.pageCount}
+          createUpdatedPageParamURL={createUpdatedPageParamURL}
+        />
+      )}
     </div>
   );
 }

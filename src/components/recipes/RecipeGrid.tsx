@@ -1,9 +1,11 @@
+import { type Recipe } from "@prisma/client";
 import React from "react";
-import { type RouterOutputs } from "~/utils/api";
 import RecipeCard from "~/components/recipes/RecipeCard";
 
+const STUB_ARRAY = Array.from({ length: 48 }, (_, i) => i);
+
 interface Props {
-  recipes?: RouterOutputs["recipes"]["search"]["recipes"];
+  recipes?: Recipe[];
 }
 
 export default function RecipeGrid({ recipes }: Props) {
@@ -13,7 +15,7 @@ export default function RecipeGrid({ recipes }: Props) {
         ? recipes.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} />
           ))
-        : Array.from({ length: 48 }, (_, i) => (
+        : STUB_ARRAY.map((i) => (
             <div
               className="w-max-[100%] animate-pulse overflow-clip rounded bg-neutral-200"
               key={i}

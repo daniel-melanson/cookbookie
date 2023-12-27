@@ -33,7 +33,7 @@ export default function Footer() {
           <Link href="/recipes">Recipes</Link>
         </Item>
         <Item>
-          <Link href="/Ingredients">Ingredients</Link>
+          <Link href="/ingredients">Ingredients</Link>
         </Item>
       </ul>
       <ul>

@@ -16,10 +16,8 @@ function PageNavLink({
 }: React.PropsWithChildren<EdgeButtonProps>) {
   const isPrev = direction === "prev";
   const className = classNames(
-    "flex items-center border-y-2 border-neutral-300 text-lg",
-    isPrev
-      ? "rounded-bl-lg rounded-tl-lg border-l-2"
-      : "rounded-br-lg rounded-tr-lg border-r-2",
+    "flex items-center border-y border-nobel-500 text-lg",
+    isPrev ? "rounded-l-lg border-l" : "rounded-r-lg border-r",
     isPrev ? "pl-1 pr-3" : "pl-3 pr-1",
     href
       ? "text-neutral-800 hover:bg-neutral-200"
@@ -39,7 +37,7 @@ function PageNavLink({
 
 function PageElipsis() {
   return (
-    <div className="disable-select border-y-2 border-l-2 border-neutral-300 px-3 text-lg">
+    <div className="disable-select border-y border-l border-neutral-300 px-3 text-lg">
       ...
     </div>
   );
@@ -48,30 +46,36 @@ function PageElipsis() {
 interface Props {
   page: number;
   totalPages: number;
-  createLink: (page: number) => string;
+  createUpdatedPageParamURL: (page: number) => string;
 }
 
-export default function PageSelect({ page, totalPages, createLink }: Props) {
+export default function PageSelect({
+  page,
+  totalPages,
+  createUpdatedPageParamURL: createURL,
+}: Props) {
   function PageOption({ value }: { value: number }) {
     const isLastPage = value === totalPages;
     const isCurrentPage = value === page;
-    const isNextToCurrent = value - 1 === page;
+    const isNextPage = value - 1 === page;
 
-    const baseClassNames = classNames(
-      "border-y-2 px-3 py-1 text-lg",
-      isLastPage ? "border-r-2" : "",
-      isNextToCurrent ? "border-l-0" : "border-l-2",
+    const className = classNames(
+      "px-3 py-1 text-lg",
       isCurrentPage
-        ? "disable-select border-x-2 border-neutral-800 font-bold"
-        : "border-neutral-300 hover:bg-neutral-200",
+        ? "disable-select border-x-2 border-y-2 border-nobel-800 font-bold"
+        : classNames(
+            "border-y border-nobel-500 hover:bg-neutral-200",
+            isLastPage && "border-r",
+            !isNextPage && "border-l",
+          ),
     );
 
     return isCurrentPage ? (
-      <div key={value} className={baseClassNames}>
+      <div key={value} className={className}>
         {value}
       </div>
     ) : (
-      <Link key={value} className={baseClassNames} href={createLink(value)}>
+      <Link key={value} className={className} href={createURL(value)}>
         {value}
       </Link>
     );
@@ -106,7 +110,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
       <div className="flex rounded-xl shadow">
         <PageNavLink
           direction="prev"
-          href={page > 1 ? createLink(page - 1) : undefined}
+          href={page > 1 ? createURL(page - 1) : undefined}
         >
           <RiArrowLeftSLine /> Previous
         </PageNavLink>
@@ -120,7 +124,7 @@ export default function PageSelect({ page, totalPages, createLink }: Props) {
         })}
         <PageNavLink
           direction="next"
-          href={page < totalPages ? createLink(page + 1) : undefined}
+          href={page < totalPages ? createURL(page + 1) : undefined}
         >
           Next <RiArrowRightSLine />
         </PageNavLink>
