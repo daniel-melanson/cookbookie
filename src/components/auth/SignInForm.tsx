@@ -40,7 +40,12 @@ export default function SignInForm({ setForm }: AuthFormProps) {
         onClearServerErrors={() => setError(undefined)}
       >
         <FormEmailField errorMessage={error} />
-        <FormTextField name="password" type={"password"} />
+        <FormTextField
+          name="password"
+          type={"password"}
+          label="Password"
+          required
+        />
         <FormSubmit isLoading={isLoading} text={"Sign In"} />
         <div className="w-fill flex h-[24px] justify-center">
           <p

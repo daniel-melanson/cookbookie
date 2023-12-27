@@ -7,7 +7,7 @@ export default function FormEmailField({
   errorMessage: serverErrorMessage,
 }: FormEmailFieldProps) {
   return (
-    <FormTextField name="email" type={"email"}>
+    <FormTextField name="email" type={"email"} label="Email" required>
       <FormErrorMessage
         match="typeMismatch"
         message="Please enter a valid email."

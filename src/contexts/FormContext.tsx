@@ -1,7 +1,8 @@
 import React from "react";
 
-export type FormValue = string | boolean | number;
-export type FormData = Record<string, FormValue | FormValue[]>;
+// TODO figure try to use somethings that is not an unknown array for fields such as allergens
+export type FormValues = string | boolean | Date | number | unknown[];
+export type FormData = Record<string, FormValues>;
 export type FormDataAction = FormData;
 
 const FormDataContext = React.createContext<FormData>({});

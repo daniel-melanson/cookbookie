@@ -17,7 +17,7 @@ export default function SignupPasswordField() {
       : undefined;
 
   return (
-    <FormTextField name="password" type={"password"}>
+    <FormTextField name="password" type={"password"} label="Password" required>
       {validatorResult &&
         !validatorResult.success &&
         validatorResult.error.issues.map((e) => (

@@ -2,17 +2,22 @@ import * as Form from "@radix-ui/react-form";
 import FormTextInput, { type InputProps } from "./FormTextInput";
 import FormErrorMessage from "./FormErrorMessage";
 
+interface TextFieldProps extends InputProps {
+  label: string;
+}
 export default function FormTextField({
   name,
   type,
   children,
-}: React.PropsWithChildren<InputProps>) {
-  name = name.toLowerCase();
-  const label = name.charAt(0).toUpperCase() + name.slice(1);
+  required,
+  label,
+}: React.PropsWithChildren<TextFieldProps>) {
+  // name = name.toLowerCase();
+  // const label = name.charAt(0).toUpperCase() + name.slice(1);
 
   return (
     <Form.Field className="relative w-full" name={name}>
-      <FormTextInput name={name} type={type} />
+      <FormTextInput name={name} type={type} required={required} />
       <Form.Label asChild>
         <label
           htmlFor={name}
@@ -23,7 +28,7 @@ export default function FormTextField({
       </Form.Label>
       <FormErrorMessage
         match="valueMissing"
-        message={"Please enter your " + name}
+        message={"Please enter your " + label}
       />
       {children}
     </Form.Field>

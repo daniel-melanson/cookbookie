@@ -12,7 +12,7 @@ export default function FormSubmit({
   return (
     <Form.Submit className="w-full" asChild disabled={isLoading}>
       <button
-        className="flex h-[48px] w-full items-center justify-center rounded bg-neutral-950 text-white transition-shadow hover:bg-neutral-800"
+        className="flex h-[48px] w-full items-center justify-center rounded bg-neutral-950 text-white transition-colors  hover:bg-neutral-800"
         type="submit"
       >
         {isLoading ? <LoadingSpinner /> : text}
