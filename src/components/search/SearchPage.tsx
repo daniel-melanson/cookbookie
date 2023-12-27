@@ -5,9 +5,6 @@ import { P, match } from "ts-pattern";
 import { z, type ZodRawShape } from "zod";
 import NavigationBar from "~/components/NavigationBar";
 import PageBase from "~/components/PageBase";
-import NavigationBarSearch, {
-  type NavigationBarSearchProps,
-} from "~/components/search/NavigationBarSearch";
 import SearchResults, {
   type SearchResultsProps,
 } from "~/components/search/SearchResults";
@@ -22,15 +19,13 @@ import { integerParam, param, stringParam } from "~/utils/validators";
 type Props<T extends ZodRawShape, U> = {
   filterForm: React.ReactNode;
   filterValidator: T;
-} & Omit<SearchResultsProps<U>, "createUpdatedPageParamURL"> &
-  Omit<NavigationBarSearchProps, "createUpdatedQueryParamURL">;
+} & Omit<SearchResultsProps<U>, "createUpdatedPageParamURL">;
 
 export default function Page<T extends ZodRawShape, U>({
   filterForm,
   filterValidator,
   makeGrid,
   useSearch,
-  useSuggestions,
 }: Props<T, U>) {
   const router = useRouter();
   const pathname = usePathname();
