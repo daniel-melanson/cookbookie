@@ -14,23 +14,23 @@ import {
 
 const validate = (Model) => ({
   create({ args, query }) {
-    args.data = Model.parse(args.data);
+    args.data = Model.passthrough().parse(args.data);
 
     return query(args);
   },
   update({ args, query }) {
-    args.data = Model.partial().parse(args.data);
+    args.data = Model.passthrough().partial().parse(args.data);
 
     return query(args);
   },
   updateMany({ args, query }) {
-    args.data = Model.partial().parse(args.data);
+    args.data = Model.passthrough().partial().parse(args.data);
 
     return query(args);
   },
   upsert({ args, query }) {
-    args.create = Model.parse(args.create);
-    args.update = Model.partial().parse(args.update);
+    args.create = Model.passthrough().parse(args.create);
+    args.update = Model.passthrough().partial().parse(args.update);
 
     return query(args);
   },
